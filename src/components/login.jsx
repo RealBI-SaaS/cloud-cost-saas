@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
@@ -187,6 +189,8 @@ const Login = () => {
             : "Don't have an account? Sign up"}
         </button>
       </div>
+
+      <Button>Button</Button>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Landing from "./Landing";
 import HomeAuthenticated from "./HomeAuthenticated";
+import HomeNew from "./HomeNew";
 
 const Home = () => {
   const { user, loading, setUser, fetchUserData } = useUser();

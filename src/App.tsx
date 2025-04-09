@@ -25,6 +25,8 @@ import { useLocation } from "react-router-dom";
 import { OrganizationProvider } from "./context/OrganizationContext";
 import NavigationManagement from "./components/org/NavigationsManagement";
 import { MenuProvider } from "./context/MenuContext";
+import OrganizationDetailsPage from "./components/OrganizationDetail";
+import { Toaster } from "sonner";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -50,7 +52,8 @@ function App() {
           <MenuProvider>
             <Nav />
             <AiChat />
-            <div className="w-full  bg-gray-300 grid grid-cols-1 border-red-800  mx-auto ">
+            <Toaster toastOptions={{ duration: 3000 }} />
+            <div className="w-full   grid grid-cols-1 border-red-800  mx-auto ">
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
@@ -64,6 +67,14 @@ function App() {
                   }
                 />
 
+                <Route
+                  path="/organization-detail"
+                  element={
+                    <ProtectedRoute>
+                      <OrganizationDetailsPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/organizations/:id"
                   element={
