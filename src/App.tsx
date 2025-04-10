@@ -46,93 +46,86 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <UserProvider>
-      <OrganizationProvider>
-        <Router className="grid grid-cols-1">
-          <MenuProvider>
-            <Nav />
-            <AiChat />
-            <Toaster toastOptions={{ duration: 3000 }} />
-            <div className="w-full   grid grid-cols-1 border-red-800  mx-auto ">
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/" element={<Navigate to="/home" />} />
-                <Route
-                  path="/manage-all"
-                  element={
-                    <ProtectedRoute>
-                      <ManageAll />
-                    </ProtectedRoute>
-                  }
-                />
+    <Router className="grid grid-cols-1">
+      <MenuProvider>
+        <Nav />
+        <AiChat />
+        <Toaster toastOptions={{ duration: 3000 }} />
+        <div className="w-full   grid grid-cols-1 border-red-800  mx-auto ">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route
+              path="/manage-all"
+              element={
+                <ProtectedRoute>
+                  <ManageAll />
+                </ProtectedRoute>
+              }
+            />
 
-                <Route
-                  path="/organization-detail"
-                  element={
-                    <ProtectedRoute>
-                      <OrganizationDetailsPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/organizations/:id"
-                  element={
-                    <ProtectedRoute>
-                      <OrganizationDetails />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/manage-all/navigations"
-                  element={
-                    <ProtectedRoute>
-                      <NavigationManagement />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/account"
-                  element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  }
-                />
+            <Route
+              path="/organization-detail"
+              element={
+                <ProtectedRoute>
+                  <OrganizationDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/organizations/:id"
+              element={
+                <ProtectedRoute>
+                  <OrganizationDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/manage-all/navigations"
+              element={
+                <ProtectedRoute>
+                  <NavigationManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              }
+            />
 
-                <Route
-                  path="/create-company"
-                  element={
-                    <ProtectedRoute>
-                      <CreateCompany />
-                    </ProtectedRoute>
-                  }
-                />
+            <Route
+              path="/create-company"
+              element={
+                <ProtectedRoute>
+                  <CreateCompany />
+                </ProtectedRoute>
+              }
+            />
 
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
-                <Route
-                  path="/ask-email-verification"
-                  element={<AskEmailVerificatioin />}
-                />
-                <Route
-                  path="/reset-password"
-                  element={<AskForPasswordReset />}
-                />
-                <Route
-                  path="/password/reset/confirm/:uid/:token"
-                  element={<ResetPassword />}
-                />
-                <Route
-                  path="/accept-invitation/:token"
-                  element={<AcceptInvitation />}
-                />
-              </Routes>
-            </div>
-          </MenuProvider>
-        </Router>
-      </OrganizationProvider>
-    </UserProvider>
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
+            <Route
+              path="/ask-email-verification"
+              element={<AskEmailVerificatioin />}
+            />
+            <Route path="/reset-password" element={<AskForPasswordReset />} />
+            <Route
+              path="/password/reset/confirm/:uid/:token"
+              element={<ResetPassword />}
+            />
+            <Route
+              path="/accept-invitation/:token"
+              element={<AcceptInvitation />}
+            />
+          </Routes>
+        </div>
+      </MenuProvider>
+    </Router>
   );
 }
 
