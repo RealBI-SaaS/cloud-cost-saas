@@ -20,7 +20,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useOrg } from "@/context/OrganizationContext";
-import { StarOff, Plus, ChevronsUpDown } from "lucide-react";
+import { StarOff, Plus, ChevronsUpDown, FolderX } from "lucide-react";
 import { useEffect, useState } from "react";
 
 let orgs = [
@@ -32,10 +32,17 @@ let orgs = [
 
 export function OrganizationSelector() {
   const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
-  const [activeOrg, setActiveOrg] = useState({
-    name: currentOrg.name,
-    logo: StarOff,
-  });
+  const [activeOrg, setActiveOrg] = useState(
+    currentOrg?.name
+      ? {
+        name: currentOrg.name,
+        logo: StarOff,
+      }
+      : {
+        name: "select ",
+        logo: StarOff,
+      },
+  );
   const { state } = useSidebar();
   //populate with userorgs
   useEffect(() => {
@@ -54,7 +61,13 @@ export function OrganizationSelector() {
   useEffect(() => {
     if (userOrgs.length > 0 && !currentOrg) {
       setCurrentOrg(userOrgs[0]);
+
       //setSelectedOrg(userOrgs[0]); // Update local state
+    } else {
+      setActiveOrg({
+        name: currentOrg.name,
+        logo: StarOff,
+      });
     }
   }, [userOrgs, currentOrg, setCurrentOrg]);
 
