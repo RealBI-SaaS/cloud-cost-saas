@@ -32,6 +32,7 @@ export function SideBarUser() {
   const navigate = useNavigate();
   const { isMobile } = useSidebar();
   const { user } = useUser();
+  const { state } = useSidebar();
 
   return (
     user && (
@@ -63,7 +64,7 @@ export function SideBarUser() {
                   </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
-                <ChevronsUpDown className="ml-auto size-4" />
+                { state == "expanded" &&<ChevronsUpDown className="ml-auto size-4" />}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -102,8 +103,8 @@ export function SideBarUser() {
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <Link to="/account">
-                  <DropdownMenuItem
+              <Link to="/account?section=profile">
+              <DropdownMenuItem
                   //onClick={() => {
                   //  console.log("XXX");
                   //  navigate("/account");
@@ -115,10 +116,15 @@ export function SideBarUser() {
                 </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
+              <Link to="/logout">
+
               <DropdownMenuItem>
+
                 <LogOut />
                 Log out
               </DropdownMenuItem>
+              </Link>
+
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

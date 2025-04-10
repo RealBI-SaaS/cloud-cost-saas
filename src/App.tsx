@@ -48,8 +48,8 @@ function App() {
   return (
     <div className="grid grid-cols-1">
       <MenuProvider>
-        <Nav />
-        <AiChat />
+        {/* <Nav /> */}
+        {/* <AiChat /> */}
         <Toaster toastOptions={{ duration: 3000 }} />
         <div className="w-full   grid grid-cols-1 border-red-800  mx-auto ">
           <Routes>

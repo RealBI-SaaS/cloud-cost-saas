@@ -61,7 +61,7 @@ export default function OrganizationSettings() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mx-10 my-5">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -93,7 +93,7 @@ export default function OrganizationSettings() {
               </h3>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="orgName">Organization Name</Label>
+                  {/* <Label htmlFor="orgName">Organization Name</Label> */}
                   <Input
                     id="orgName"
                     value={newOrgName}

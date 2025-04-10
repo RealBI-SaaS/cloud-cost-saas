@@ -135,7 +135,7 @@ export default function AccountSettings({ section = "profile" }: { section?: str
   return (
     <div className="space-y-6">
       {activeSection === "profile" && (
-        <Card>
+        <Card className="m-10 p-5">
           <CardHeader>
             <div className="flex items-center gap-2">
               <User className="h-5 w-5" />
@@ -179,15 +179,15 @@ export default function AccountSettings({ section = "profile" }: { section?: str
                 />
               </div>
             </CardContent>
-            <CardFooter>
-              <Button type="submit">Save Changes</Button>
+            <CardFooter className="mt-5">
+              <Button type="submit" className="text-white">Save Changes</Button>
             </CardFooter>
           </form>
         </Card>
       )}
 
       {activeSection === "password" && (
-        <Card>
+        <Card className="m-10 p-5">
           <CardHeader>
             <div className="flex items-center gap-2">
               <KeyRound className="h-5 w-5" />
@@ -207,6 +207,7 @@ export default function AccountSettings({ section = "profile" }: { section?: str
                   type="password"
                   value={passwords.currentPassword}
                   onChange={handlePasswordChange}
+                  className="w-80"
                 />
               </div>
               <div className="space-y-2">
@@ -217,12 +218,15 @@ export default function AccountSettings({ section = "profile" }: { section?: str
                   type="password"
                   value={passwords.newPassword}
                   onChange={handlePasswordChange}
+                  className="w-80"
+
                 />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="mt-5">
               <Button
                 type="submit"
+                variant="destructive"
                 disabled={
                   !passwords.currentPassword || !passwords.newPassword
                 }

@@ -301,9 +301,9 @@ export default function OrganizationDetailsPage() {
   };
 
   return (
-    <div className="container py-10">
+    <div className="container mx-auto px-4 py-10">
       <div className="mb-8">
-        <div
+        {/* <div
           className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
           onClick={() => {
             navigate("/account");
@@ -311,7 +311,7 @@ export default function OrganizationDetailsPage() {
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Account Settings
-        </div>
+        </div> */}
 
         <div className="flex items-center gap-3">
           <Building2 className="h-6 w-6" />
@@ -319,8 +319,8 @@ export default function OrganizationDetailsPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="details" className="space-y-6">
-        <TabsList>
+      <Tabs defaultValue="details" className="w-full space-y-6">
+        <TabsList className="w-full">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="members">Members</TabsTrigger>
           <TabsTrigger value="invitations">Invitations</TabsTrigger>
@@ -328,7 +328,7 @@ export default function OrganizationDetailsPage() {
 
         {/* Organization Details Tab */}
         <TabsContent value="details">
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>Organization Information</CardTitle>
               <CardDescription>
@@ -416,7 +416,7 @@ export default function OrganizationDetailsPage() {
 
         {/* Members Tab */}
         <TabsContent value="members">
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -556,7 +556,7 @@ export default function OrganizationDetailsPage() {
 
         {/* Invitations Tab */}
         <TabsContent value="invitations">
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>Pending Invitations</CardTitle>
               <CardDescription>

@@ -24,6 +24,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -71,6 +72,7 @@ const items = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { state } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -86,7 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span className="hidden md:block">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -97,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuButton asChild>
                   <Link to="/account?section=organizations">
                     <Building2 />
-                    <span>Organization</span>
+                    <span className="hidden md:block">Organizations</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -108,8 +110,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuItem>
                     <SidebarMenuButton>
                       <Settings className="size-4" />
-                      <span>Account</span>
-                      <ChevronDown className="ml-auto size-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                      <span className="group-data-[state=collapsed]:hidden">Account</span>
+                      {state == "expanded" && <ChevronDown className="ml-auto size-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </CollapsibleTrigger>
@@ -118,14 +120,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild>
                         <Link to="/account?section=profile">
-                          <span>Profile</span>
+                          <span className="group-data-[state=collapsed]:hidden">Profile</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild>
                         <Link to="/account?section=password">
-                          <span>Password</span>
+                          <span className="group-data-[state=collapsed]:hidden">Password</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>

@@ -7,22 +7,34 @@ import "antd/dist/reset.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { OrganizationProvider } from "@/context/OrganizationContext";
 import { AppSidebar } from "@/components/app-sidebar";
-import { UserProvider } from "@/context/UserContext";
+import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
+
+const AppWrapper = () => {
+  const { user } = useUser();
+
+  if (!user) {
+    return <App />;
+  }
+
+  return (
+    <OrganizationProvider>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full">
+          <SidebarTrigger />
+          <App />
+        </main>
+      </SidebarProvider>
+    </OrganizationProvider>
+  );
+};
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <UserProvider>
-        <OrganizationProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main>
-              <SidebarTrigger />
-              <App />
-            </main>
-          </SidebarProvider>
-        </OrganizationProvider>
+        <AppWrapper />
       </UserProvider>
     </BrowserRouter>
   </StrictMode>,
