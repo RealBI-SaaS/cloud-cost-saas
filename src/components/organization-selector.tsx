@@ -31,9 +31,12 @@ let orgs = [
 ];
 
 export function OrganizationSelector() {
-  const [activeOrg, setActiveOrg] = useState(orgs[0]);
+  const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
+  const [activeOrg, setActiveOrg] = useState({
+    name: currentOrg.name,
+    logo: StarOff,
+  });
   const { state } = useSidebar();
-  const { userOrgs, setCurrentOrg } = useOrg();
   //populate with userorgs
   useEffect(() => {
     if (userOrgs) {
@@ -47,6 +50,13 @@ export function OrganizationSelector() {
     }
     console.log("orgg", userOrgs, orgs);
   }, [userOrgs]);
+
+  useEffect(() => {
+    if (userOrgs.length > 0 && !currentOrg) {
+      setCurrentOrg(userOrgs[0]);
+      //setSelectedOrg(userOrgs[0]); // Update local state
+    }
+  }, [userOrgs, currentOrg, setCurrentOrg]);
 
   useEffect(() => {
     console.log("new org", activeOrg);

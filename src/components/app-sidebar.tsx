@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { OrganizationSelector } from "@/components/organization-selector";
+import { NavigationsList } from "@/components/navigation-list";
 // Menu items.
 const items = [
   {
@@ -79,6 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <NavigationsList />
       </SidebarContent>
     </Sidebar>
   );

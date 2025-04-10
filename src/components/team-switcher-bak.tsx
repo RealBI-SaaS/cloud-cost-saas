@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown, Plus, StarOff } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -34,7 +34,7 @@ export function TeamSwitcher({
     name: string;
     logo: React.ElementType;
     plan: string;
-  } | null>(null); // start as null
+  } | null>({ name: currentOrg.name, logo: StarOff, plan: "plan" }); // start as null
 
   // Set initial active team once teams are populated
 
@@ -54,7 +54,6 @@ export function TeamSwitcher({
       setCurrentOrg(matchedOrg);
     }
   }, [activeTeam, userOrgs, currentOrg]);
-
 
   if (!activeTeam) {
     return null; // or a loader
