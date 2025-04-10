@@ -1,8 +1,9 @@
 import SideMenu from "./menu/ManageAllSideMenu";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Account from "./Account";
 import Organizations from "./Organizations";
 import NavigationManagement from "./org/NavigationsManagement";
+import { useSearchParams } from "react-router-dom";
 
 const menuItems = [
   {
@@ -33,7 +34,15 @@ const menuItems = [
 ];
 
 function ManageAll() {
-  const [selectedMenu, setSelectedMenu] = useState("sub1");
+  const [searchParams] = useSearchParams();
+  const [selectedMenu, setSelectedMenu] = useState(searchParams.get("section") === "organizations" ? "sub4" : "sub1");
+
+  useEffect(() => {
+    const section = searchParams.get("section");
+    if (section) {
+      setSelectedMenu(section === "organizations" ? "sub4" : "sub1");
+    }
+  }, [searchParams]);
 
   const selectedComponent = menuItems.find(
     (item) => item.key === selectedMenu,

@@ -46,7 +46,7 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <Router className="grid grid-cols-1">
+    <div className="grid grid-cols-1">
       <MenuProvider>
         <Nav />
         <AiChat />
@@ -125,7 +125,7 @@ function App() {
           </Routes>
         </div>
       </MenuProvider>
-    </Router>
+    </div>
   );
 }
 

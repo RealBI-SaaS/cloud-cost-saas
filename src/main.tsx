@@ -8,20 +8,23 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { OrganizationProvider } from "@/context/OrganizationContext";
 import { AppSidebar } from "@/components/app-sidebar";
 import { UserProvider } from "@/context/UserContext";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <UserProvider>
-      <OrganizationProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            <App />
-          </main>
-        </SidebarProvider>
-      </OrganizationProvider>
-    </UserProvider>
+    <BrowserRouter>
+      <UserProvider>
+        <OrganizationProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <main>
+              <SidebarTrigger />
+              <App />
+            </main>
+          </SidebarProvider>
+        </OrganizationProvider>
+      </UserProvider>
+    </BrowserRouter>
   </StrictMode>,
 );
 
