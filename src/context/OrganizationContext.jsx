@@ -19,7 +19,7 @@ export const OrganizationProvider = ({ children }) => {
   const [userOrgs, setUserOrgs] = useState([]);
   const { user } = useUser();
   //the organization th user is working on
-  const [currentOrg, setCurrentOrg] = useState(null);
+  const [currentOrg, setCurrentOrg] = useState("");
   //const [loading, setLoading] = useState(true);
   const { loading, setLoading } = useUser();
 
@@ -40,20 +40,7 @@ export const OrganizationProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }; //
-  //const fetchUserOrganizations = async () => {
-  //  try {
-  //    const response = await get_users_orgs();
-  //    setUserOrgs(response.data?.results || []);
-  //    if (userOrgs.length > 0) {
-  //      setCurrentOrg(userOrgs[0]);
-  //    }
-  //  } catch (err) {
-  //    console.error("Error fetching organization data:", err);
-  //  } finally {
-  //    setLoading(false);
-  //  }
-  //};
+  };
 
   const fetchUserOrganizations = async () => {
     try {

@@ -20,7 +20,7 @@ const HomeAuthenticated = () => {
 
   return (
     <div className="border flex justify-around items-center">
-      <HomeOrgMenu onItemClick={handleItemClick} />{" "}
+      {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
       <div className="max-w-4xl mx-auto ">
         {/* Conditionally render content based on the selected item */}
