@@ -338,7 +338,7 @@ export default function OrganizationDetailsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="org-name">Organization Name</Label>
+                  <Label htmlFor="org-name" className="!text-xs">Organization Name</Label>
                   {!isEditingOrg && (
                     <Button
                       variant="ghost"
@@ -357,7 +357,7 @@ export default function OrganizationDetailsPage() {
                       value={orgName}
                       onChange={(e) => setOrgName(e.target.value)}
                     />
-                    <Button size="sm" onClick={handleUpdateOrg}>
+                    <Button size="sm" className="!text-white" onClick={handleUpdateOrg}>
                       Save
                     </Button>
                     <Button
@@ -376,8 +376,8 @@ export default function OrganizationDetailsPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label>Created On</Label>
-                <div>
+                <Label className="!text-xs">Created On</Label>
+                <div className="!text-lg">
                   {organization && organization.created_at
                     ? format(organization.created_at, "MMM d, yyyy")
                     : "Invalid date"}{" "}
@@ -404,7 +404,7 @@ export default function OrganizationDetailsPage() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteOrg}>
+                    <AlertDialogAction className="!text-white" onClick={handleDeleteOrg}>
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -427,7 +427,7 @@ export default function OrganizationDetailsPage() {
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button>
+                    <Button className="!text-white">
                       <UserPlus className="h-4 w-4 mr-2" />
                       Invite User
                     </Button>
@@ -476,7 +476,7 @@ export default function OrganizationDetailsPage() {
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button type="submit" disabled={!newInvite.email}>
+                        <Button type="submit" className="!text-white" disabled={!newInvite.email}>
                           Send Invitation
                         </Button>
                       </DialogFooter>
@@ -613,7 +613,7 @@ export default function OrganizationDetailsPage() {
                   </p>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button className="mt-4">
+                      <Button className="mt-4 !text">
                         <UserPlus className="h-4 w-4 mr-2" />
                         Invite User
                       </Button>
