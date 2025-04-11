@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { validatePassword } from "../utils/auth/password_validate";
+import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -15,7 +25,6 @@ const Login = () => {
     last_name: "",
   });
 
-  // const [error, setError] = useState('');
   const { error, setError } = useUser();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -43,23 +52,21 @@ const Login = () => {
           setLoading(false);
           return;
         }
-        const response = await signup(formData);
-        // After successful signup, login automatically
-
-        //await login(formData.email, formData.password);
+        await signup(formData);
         navigate("/ask-email-verification", {
           state: { user_email: formData.email },
         });
       } else {
         await login(formData.email, formData.password);
         const from = location.state?.from?.pathname || "/home";
-        //console.log(location, location.state, from);
         navigate(from, { replace: true });
       }
     } catch (err) {
+      toast("hi", {
+        title: "Error",
+        description: err?.response?.data?.message || "An error occurred during login, try again or another account",
+      });
       console.log(err?.response?.data);
-      //setError(err?.response?.data);
-      // error message already set in context
     } finally {
       setLoading(false);
     }
@@ -87,110 +94,122 @@ const Login = () => {
   };
 
   return (
-    <div className="signin-container rounded-md p-4 m-10 flex flex-col justify-center gap-4 items-center">
-      <p className="text-2xl font-bold">{isSignUp ? "Sign Up" : "Login"}</p>
-      <button
-        onClick={handleGoogleSignIn}
-        disabled={loading}
-        className=" w-100 border border-black rounded-md p-2 flex flex-row items-center justify-center gap-2 hover:bg-gray-50 disabled:opacity-50"
+    <div className="flex flex-col gap-6 max-w-md mx-auto p-4 mt-20">
+      <Card className="w-100">
+        <CardHeader>
+          <CardTitle>{isSignUp ? "Create an account" : "Login to your account"}</CardTitle>
+          <CardDescription>
+            {isSignUp 
+              ? "Enter your information below to create your account"
+              : "Enter your email below to login to your account"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              className="w-full"
+            >
+              <FcGoogle className="mr-2 h-4 w-4" />
+              Sign in with Google
+            </Button>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {isSignUp && (
+              <div className="grid gap-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="grid gap-1">
+                    <Label htmlFor="first_name">First name</Label>
+                    <Input
+                      id="first_name"
+                      name="first_name"
+                      value={formData.first_name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-1">
+                    <Label htmlFor="last_name">Last name</Label>
+                    <Input
+                      id="last_name"
+                      name="last_name"
+                      value={formData.last_name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="grid gap-1">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="m@example.com"
+                required
+              />
+            </div>
+
+            <div className="grid gap-1">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            {error && <p className="text-sm text-red-500">{error}</p>}
+
+            <Button type="submit" disabled={loading} className="!text-white">
+              {loading
+                ? isSignUp
+                  ? "Signing up..."
+                  : "Signing in..."
+                : isSignUp
+                  ? "Sign Up"
+                  : "Sign In"}
+            </Button>
+
+            {!isSignUp && (
+              <Button variant="link" className="text-sm" asChild>
+                <a href="/reset-password">Forgot password?</a>
+              </Button>
+            )}
+          </form>
+        </CardContent>
+      </Card>
+
+      <Button
+        variant="link"
+        className="text-sm !text-gray-700"
+        onClick={() => setIsSignUp(!isSignUp)}
       >
-        <FcGoogle size={32} />
-        Sign in with Google
-      </button>
-      <div className="or-txt w-100">
-        <span>or</span>
-      </div>
-      <div className="signin-container rounded-md py-4 bg-gray-100 w-100">
-        <form
-          onSubmit={handleSubmit}
-          className="signin-form rounded-md flex flex-col gap-4"
-        >
-          {isSignUp && (
-            <>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleInputChange}
-                  placeholder="First Name"
-                  className="form-input border border-black rounded-sm p-2 w-full mx-0"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleInputChange}
-                  placeholder="Last Name"
-                  className="form-input border border-black rounded-sm p-2 w-full mx-0"
-                  required
-                />
-              </div>
-            </>
-          )}
-          <div className="form-group">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="example@gmail.com"
-              className="form-input border border-black rounded-sm p-2 w-full mx-0"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Password"
-              className="form-input border border-black rounded-sm p-2 w-full"
-              required
-            />
-          </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className=" border border-indigo-500 p-2 rounded-md bg-indigo-500 hover:bg-indigo-400 shadow-md"
-          >
-            {loading
-              ? isSignUp
-                ? "Signing up..."
-                : "Signing in..."
-              : isSignUp
-                ? "Sign Up"
-                : "Sign In"}
-          </button>
-        </form>
-        {!isSignUp && (
-          <a
-            href="/reset-password"
-            className="text-sm mt-2 text-muted hover:underline"
-          >
-            Forgot password?
-          </a>
-        )}
-      </div>
-      <div className="">
-        <button
-          onClick={() => setIsSignUp(!isSignUp)}
-          className="text-sm mt-2 text-muted hover:underline"
-        >
-          {isSignUp
-            ? "Already have an account? Sign in"
-            : "Don't have an account? Sign up"}
-        </button>
-      </div>
-
-      <Button>Button</Button>
+        {isSignUp
+          ? "Already have an account? Sign in"
+          : "Don't have an account? Sign up"}
+      </Button>
     </div>
   );
 };

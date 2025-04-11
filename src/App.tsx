@@ -51,7 +51,7 @@ function App() {
         {/* <Nav /> */}
         {/* <AiChat /> */}
         <Toaster toastOptions={{ duration: 3000 }} />
-        <div className="w-full   grid grid-cols-1 border-red-800  mx-auto ">
+        <div className="w-full   grid grid-cols-1   mx-auto ">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />
