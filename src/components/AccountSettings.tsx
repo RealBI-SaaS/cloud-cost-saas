@@ -40,7 +40,11 @@ export const accountNavItems: NavItem[] = [
   },
 ];
 
-export default function AccountSettings({ section = "profile" }: { section?: string }) {
+export default function AccountSettings({
+  section = "profile",
+}: {
+  section?: string;
+}) {
   const navigate = useNavigate();
   const { user, setUser, fetchUserData } = useUser();
   const [activeSection, setActiveSection] = useState(section);
@@ -180,7 +184,9 @@ export default function AccountSettings({ section = "profile" }: { section?: str
               </div>
             </CardContent>
             <CardFooter className="mt-5">
-              <Button type="submit" className="text-white">Save Changes</Button>
+              <Button type="submit" className="!text-white hover:!bg-gray-800">
+                Save Changes
+              </Button>
             </CardFooter>
           </form>
         </Card>
@@ -219,7 +225,6 @@ export default function AccountSettings({ section = "profile" }: { section?: str
                   value={passwords.newPassword}
                   onChange={handlePasswordChange}
                   className="w-80"
-
                 />
               </div>
             </CardContent>
@@ -227,9 +232,8 @@ export default function AccountSettings({ section = "profile" }: { section?: str
               <Button
                 type="submit"
                 variant="destructive"
-                disabled={
-                  !passwords.currentPassword || !passwords.newPassword
-                }
+                className="!text-black"
+                disabled={!passwords.currentPassword || !passwords.newPassword}
               >
                 Update Password
               </Button>
@@ -239,4 +243,4 @@ export default function AccountSettings({ section = "profile" }: { section?: str
       )}
     </div>
   );
-} 
+}
