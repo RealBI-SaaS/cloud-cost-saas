@@ -5,6 +5,13 @@ import { useUser } from "../context/UserContext";
 import { useOrg } from "../context/OrganizationContext";
 import HomeOrgMenu from "./menu/HomeOrgMenu";
 import { useState } from "react";
+import PowerBIEmbed from "./powerbi/PowerBIEmbed"
+// Sample credentials from Power BI dev sandbox (safe for demo use only)
+const embedConfig = {
+  embedUrl: "https://app.powerbi.com/reportEmbed?reportId=d63f5ef5-8dcf-4cbd-a17a-8aa49f83af61&groupId=4ac55bdc-66f5-49b2-b85a-d421f1d1df3a",
+  accessToken: "H4sIAAAAAAAEAKtWKkktLlGyUqoFALJmAk0EAAAA",
+  reportId: "d63f5ef5-8dcf-4cbd-a17a-8aa49f83af61"
+};
 const HomeAuthenticated = () => {
   const { user } = useUser();
   const { currentOrg } = useOrg();
@@ -20,6 +27,11 @@ const HomeAuthenticated = () => {
 
   return (
     <div className="pt-20 flex justify-around items-center">
+<PowerBIEmbed
+  reportId={embedConfig.reportId}
+  embedUrl={embedConfig.embedUrl}
+  accessToken={embedConfig.accessToken}
+/>
       {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
       <div className="max-w-4xl mx-auto ">
