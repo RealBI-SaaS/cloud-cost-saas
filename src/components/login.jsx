@@ -64,7 +64,9 @@ const Login = () => {
     } catch (err) {
       toast("hi", {
         title: "Error",
-        description: err?.response?.data?.message || "An error occurred during login, try again or another account",
+        description:
+          err?.response?.data?.message ||
+          "An error occurred during login, try again or another account",
       });
       console.log(err?.response?.data);
     } finally {
@@ -94,12 +96,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-md mx-auto p-4 mt-20">
-      <Card className="w-100">
+    <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6 max-w-md mx-auto ">
+      <Card className="w-100 ">
         <CardHeader>
-          <CardTitle>{isSignUp ? "Create an account" : "Login to your account"}</CardTitle>
+          <CardTitle>
+            {isSignUp ? "Create an account" : "Login to your account"}
+          </CardTitle>
           <CardDescription>
-            {isSignUp 
+            {isSignUp
               ? "Enter your information below to create your account"
               : "Enter your email below to login to your account"}
           </CardDescription>
@@ -116,7 +120,7 @@ const Login = () => {
               <FcGoogle className="mr-2 h-4 w-4" />
               Sign in with Google
             </Button>
-            
+
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />

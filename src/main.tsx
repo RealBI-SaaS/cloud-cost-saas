@@ -13,6 +13,7 @@ import { BrowserRouter } from "react-router-dom";
 const AppWrapper = () => {
   const { user } = useUser();
 
+  //logic not to display the sidebar with unauthenticated user
   if (!user) {
     return <App />;
   }
@@ -21,8 +22,8 @@ const AppWrapper = () => {
     <OrganizationProvider>
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">
-          <SidebarTrigger />
+        <main className="w-full h-full relative">
+          <SidebarTrigger className="fixed" />
           <App />
         </main>
       </SidebarProvider>
@@ -39,5 +40,3 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </StrictMode>,
 );
-
-
