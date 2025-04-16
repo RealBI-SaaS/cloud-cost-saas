@@ -71,8 +71,7 @@ import {
   User,
 } from "lucide-react";
 //import { format } from "date-fns";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 // Sample data - in a real app, you would fetch this based on the organization ID
@@ -323,7 +322,6 @@ export default function OrganizationDetailsPage() {
         <TabsList className="w-full">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="members">Members</TabsTrigger>
-          <TabsTrigger value="invitations">Invitations</TabsTrigger>
         </TabsList>
 
         {/* Organization Details Tab */}
@@ -338,7 +336,9 @@ export default function OrganizationDetailsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="org-name" className="!text-xs">Organization Name</Label>
+                  <Label htmlFor="org-name" className="!text-xs">
+                    Organization Name
+                  </Label>
                   {!isEditingOrg && (
                     <Button
                       variant="ghost"
@@ -357,7 +357,11 @@ export default function OrganizationDetailsPage() {
                       value={orgName}
                       onChange={(e) => setOrgName(e.target.value)}
                     />
-                    <Button size="sm" className="!text-white" onClick={handleUpdateOrg}>
+                    <Button
+                      size="sm"
+                      className="!text-white"
+                      onClick={handleUpdateOrg}
+                    >
                       Save
                     </Button>
                     <Button
@@ -404,7 +408,10 @@ export default function OrganizationDetailsPage() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction className="!text-white" onClick={handleDeleteOrg}>
+                    <AlertDialogAction
+                      className="!text-white"
+                      onClick={handleDeleteOrg}
+                    >
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -476,7 +483,11 @@ export default function OrganizationDetailsPage() {
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button type="submit" className="!text-white" disabled={!newInvite.email}>
+                        <Button
+                          type="submit"
+                          className="!text-white"
+                          disabled={!newInvite.email}
+                        >
                           Send Invitation
                         </Button>
                       </DialogFooter>
@@ -552,11 +563,8 @@ export default function OrganizationDetailsPage() {
               )}
             </CardContent>
           </Card>
-        </TabsContent>
-
-        {/* Invitations Tab */}
-        <TabsContent value="invitations">
-          <Card className="w-full">
+          {/*pending invitations */}
+          <Card className="w-full mt-5">
             <CardHeader>
               <CardTitle>Pending Invitations</CardTitle>
               <CardDescription>
@@ -609,66 +617,8 @@ export default function OrganizationDetailsPage() {
                     No pending invitations
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    Invite new members to join your organization.
+                    Invite new members to join your organization above.
                   </p>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="mt-4 !text">
-                        <UserPlus className="h-4 w-4 mr-2" />
-                        Invite User
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Invite New User</DialogTitle>
-                        <DialogDescription>
-                          Send an invitation to join your organization.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <form onSubmit={handleInviteUser}>
-                        <div className="space-y-4 py-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="invite-email-2">Email</Label>
-                            <Input
-                              id="invite-email-2"
-                              type="email"
-                              placeholder="user@example.com"
-                              value={newInvite.email}
-                              onChange={(e) =>
-                                setNewInvite({
-                                  ...newInvite,
-                                  email: e.target.value,
-                                })
-                              }
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="invite-role-2">Role</Label>
-                            <Select
-                              value={newInvite.role}
-                              onValueChange={(value) =>
-                                setNewInvite({ ...newInvite, role: value })
-                              }
-                            >
-                              <SelectTrigger id="invite-role-2">
-                                <SelectValue placeholder="Select a role" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="admin">Admin</SelectItem>
-                                <SelectItem value="member">Member</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <Button type="submit" disabled={!newInvite.email}>
-                            Send Invitation
-                          </Button>
-                        </DialogFooter>
-                      </form>
-                    </DialogContent>
-                  </Dialog>
                 </div>
               )}
             </CardContent>

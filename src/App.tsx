@@ -27,6 +27,10 @@ import NavigationManagement from "./components/org/NavigationsManagement";
 import { MenuProvider } from "./context/MenuContext";
 import OrganizationDetailsPage from "./components/OrganizationDetail";
 import { Toaster } from "sonner";
+import SettingsLayout from "./components/layout/SettingsLayout";
+import MainLayout from "./components/layout/MainLayout";
+import AccountInfo from "./components/account/AccountInfo";
+import AccountPassword from "./components/account/AccountPassword";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -47,65 +51,74 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <div className="grid grid-cols-1">
-      <MenuProvider>
+      {/* <MenuProvider> */}
         {/* <Nav /> */}
         {/* <AiChat /> */}
         <Toaster toastOptions={{ duration: 3000 }} />
         <div className="w-full   grid grid-cols-1   mx-auto ">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route
-              path="/manage-all"
-              element={
-                <ProtectedRoute>
-                  <ManageAll />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/organization-detail"
-              element={
-                <ProtectedRoute>
-                  <OrganizationDetailsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/organizations/:id"
-              element={
-                <ProtectedRoute>
-                  <OrganizationDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manage-all/navigations"
-              element={
-                <ProtectedRoute>
-                  <NavigationManagement />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/account"
-              element={
-                <ProtectedRoute>
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/create-company"
-              element={
-                <ProtectedRoute>
-                  <CreateCompany />
-                </ProtectedRoute>
-              }
-            />
+              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+            {/* setting pages with */}
+            <Route element={<SettingsLayout />}>
+              <Route
+                path="/manage-all"
+                element={
+                  <ProtectedRoute>
+                    <ManageAll />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage-all/navigations"
+                element={
+                  <ProtectedRoute>
+                    <NavigationManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/account/info"
+                element={
+                  <ProtectedRoute>
+                    <AccountInfo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/account/password"
+                element={
+                  <ProtectedRoute>
+                    <AccountPassword />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-company"
+                element={
+                  <ProtectedRoute>
+                    <CreateCompany />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/organization-detail"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationDetailsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/organizations/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationDetails />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
 
             <Route path="/logout" element={<Logout />} />
             <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
@@ -124,7 +137,7 @@ function App() {
             />
           </Routes>
         </div>
-      </MenuProvider>
+      {/* </MenuProvider> */}
     </div>
   );
 }

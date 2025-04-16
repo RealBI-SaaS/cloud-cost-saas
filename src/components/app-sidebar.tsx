@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import {
   Calendar,
   Home,
@@ -24,7 +25,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  useSidebar
+  useSidebar,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -72,76 +74,34 @@ const items = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { state } = useSidebar();
+  const { state, isCollapsed } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <OrganizationSelector />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span className="hidden md:block">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-
-              {/* Organization Section */}
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/account?section=organizations">
-                    <Building2 />
-                    <span className="hidden md:block">Organizations</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              {/* Collapsible Account section */}
-              <Collapsible className="w-full group/collapsible">
-                <CollapsibleTrigger className="w-full" asChild>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <Settings className="size-4" />
-                      <span className="group-data-[state=collapsed]:hidden">Account</span>
-                      {state == "expanded" && <ChevronDown className="ml-auto size-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/account?section=profile">
-                          <span className="group-data-[state=collapsed]:hidden">Profile</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/account?section=password">
-                          <span className="group-data-[state=collapsed]:hidden">Password</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </Collapsible>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
+        <hr />
         {/* navigations list*/}
         <NavigationsList />
       </SidebarContent>
       <SidebarFooter>
+        {/*setting menu item */}
+        <SidebarMenu
+          className={clsx(state == "collapsed" ? "" : "border rounded-sm px-3")}
+        >
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link to="/manage-all">
+                <Settings />
+                <span className="hidden md:block">Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+        <hr className="" />
+
         <SideBarUser />
       </SidebarFooter>
     </Sidebar>

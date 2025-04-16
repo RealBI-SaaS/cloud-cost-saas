@@ -23,7 +23,7 @@ const AppWrapper = () => {
       <SidebarProvider>
         <AppSidebar />
         <main className="w-full h-full relative">
-          <SidebarTrigger className="fixed" />
+          <SidebarTrigger className="m-5 fixed" style={{ display: 'block', zIndex: 9999 }} />
           <App />
         </main>
       </SidebarProvider>
