@@ -2,7 +2,7 @@
 
 import {
   Folder,
-  Hand,
+  Handshake,
   Forward,
   MoreHorizontal,
   Trash2,
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useEffect } from "react";
 import { useOrg } from "@/context/OrganizationContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
@@ -37,7 +37,7 @@ export function NavigationsList() {
     {
       name: "Welcome", // Fix typo from "lable" to "label"
       key: 1,
-      icon: Hand,
+      icon: Handshake,
       url: "#",
     },
     {
@@ -65,6 +65,12 @@ export function NavigationsList() {
   //    });
   //  }
   //}, [currentOrg]);
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const isActive = (path: string) => {
+    return currentPath.includes(path);
+  };
 
   return (
     <SidebarGroup>
@@ -74,7 +80,7 @@ export function NavigationsList() {
       <SidebarMenu>
         {navigations_list.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton isActive={isActive(item.url)} asChild>
               <Link to={item.url}>
                 <item.icon />
                 <span className="group-data-[collapsible=icon]:hidden">

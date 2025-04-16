@@ -226,7 +226,9 @@ const NavigationManagement = () => {
                           variant={icon === name ? "default" : "outline"}
                           size="sm"
                           className="flex flex-col items-center gap-1 h-auto py-2"
-                          onClick={() => setIcon(name)}
+                          onClick={() => {
+                            setIcon(name);
+                          }}
                         >
                           <Icon className="h-4 w-4" />
                           <span className="text-xs">{name}</span>
