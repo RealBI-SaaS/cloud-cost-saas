@@ -22,7 +22,7 @@ import {
 import { useOrg } from "@/context/OrganizationContext";
 import { StarOff, Plus, ChevronsUpDown, FolderX } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 let orgs = [
   {
     name: "firstorg",
@@ -32,6 +32,7 @@ let orgs = [
 
 export function OrganizationSelector() {
   const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
+  const navigate = useNavigate();
   const [activeOrg, setActiveOrg] = useState(
     currentOrg?.name
       ? {
@@ -131,7 +132,9 @@ export function OrganizationSelector() {
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                   <Plus className="size-4" />
                 </div>
-                <div className="text-muted-foreground font-medium">
+                <div className="text-muted-foreground font-medium" onClick={() => {
+                  navigate("/settings/organization/list");
+                }}>   
                   Add an organization
                 </div>
               </DropdownMenuItem>

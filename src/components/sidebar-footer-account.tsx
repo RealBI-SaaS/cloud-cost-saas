@@ -103,13 +103,8 @@ export function SideBarUser() {
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-              <Link to="/account?section=profile">
-              <DropdownMenuItem
-                  //onClick={() => {
-                  //  console.log("XXX");
-                  //  navigate("/account");
-                  //}}
-                  >
+                <Link to="/settings/account/info">
+                  <DropdownMenuItem>
                     <BadgeCheck />
                     Account
                   </DropdownMenuItem>

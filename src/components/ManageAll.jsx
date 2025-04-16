@@ -4,6 +4,7 @@ import Account from "./Account";
 import Organizations from "./Organizations";
 import NavigationManagement from "./org/NavigationsManagement";
 import { useSearchParams } from "react-router-dom";
+import SettingsSidebar from "./menu/SettingSidebar";
 
 const menuItems = [
   {
@@ -35,7 +36,9 @@ const menuItems = [
 
 function ManageAll() {
   const [searchParams] = useSearchParams();
-  const [selectedMenu, setSelectedMenu] = useState(searchParams.get("section") === "organizations" ? "sub4" : "sub1");
+  const [selectedMenu, setSelectedMenu] = useState(
+    searchParams.get("section") === "organizations" ? "sub4" : "sub1",
+  );
 
   useEffect(() => {
     const section = searchParams.get("section");
@@ -49,8 +52,7 @@ function ManageAll() {
   )?.component;
 
   return (
-    <div className="grid grid-cols-6 h-full min-h-screen mt-10">
-      <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+    <div className="grid grid-cols-6 h-full mt-10 border">
       <div className="border rounded-lg shadow-md col-span-5 overflow-auto">
         <div className="w-full h-full">{selectedComponent}</div>
       </div>

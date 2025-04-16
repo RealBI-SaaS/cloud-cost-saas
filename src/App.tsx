@@ -27,7 +27,17 @@ import NavigationManagement from "./components/org/NavigationsManagement";
 import { MenuProvider } from "./context/MenuContext";
 import OrganizationDetailsPage from "./components/OrganizationDetail";
 import { Toaster } from "sonner";
-
+import SettingsLayout from "./components/layout/SettingsLayout";
+import MainLayout from "./components/layout/MainLayout";
+import AccountInfo from "./components/account/AccountInfo";
+import AccountPassword from "./components/account/AccountPassword";
+import UserOrganization from "./components/org/UserOrganizations";
+import Organizations from "./components/Organizations";
+import OrganizationDetail from "./components/OrganizationDetail";
+import OrganizationSettings from "./components/OrganizationSettings";
+import OrganizationMembers from "./components/org/OrganizationMembers";
+import DataIntegration from "./components/data/DataIntegration";
+// import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useUser();
@@ -54,58 +64,102 @@ function App() {
         <div className="w-full   grid grid-cols-1   mx-auto ">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route
-              path="/manage-all"
-              element={
-                <ProtectedRoute>
-                  <ManageAll />
-                </ProtectedRoute>
-              }
-            />
+              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+            {/* setting pages with */}
+            <Route element={<SettingsLayout />}>
+              <Route
+                path="/settings/organization/list"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationSettings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/organization/members"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationMembers />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/organization-detail"
-              element={
-                <ProtectedRoute>
-                  <OrganizationDetailsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/organizations/:id"
-              element={
-                <ProtectedRoute>
-                  <OrganizationDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manage-all/navigations"
-              element={
-                <ProtectedRoute>
-                  <NavigationManagement />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/account"
-              element={
-                <ProtectedRoute>
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
+<Route
+                path="/settings/organization/navigation"
+                element={
+                  <ProtectedRoute>
+                    <NavigationManagement />
+                  </ProtectedRoute>
+                }
+              />
+              
 
-            <Route
-              path="/create-company"
-              element={
-                <ProtectedRoute>
-                  <CreateCompany />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/manage-all"
+                element={
+                  <ProtectedRoute>
+                    <ManageAll />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage-all/navigations"
+                element={
+                  <ProtectedRoute>
+                    <NavigationManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/account/info"
+                element={
+                  <ProtectedRoute>
+                    <AccountInfo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/account/password"
+                element={
+                  <ProtectedRoute>
+                    <AccountPassword />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-company"
+                element={
+                  <ProtectedRoute>
+                    <CreateCompany />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="settings/organization/detail"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationDetailsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/organizations/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/organization/data"
+                element={
+                  <ProtectedRoute>
+                    <DataIntegration />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
 
             <Route path="/logout" element={<Logout />} />
             <Route path="/activate/:uid/:token" element={<VerifyEmail />} />

@@ -2,9 +2,11 @@
 
 import {
   Folder,
+  Hand,
   Forward,
   MoreHorizontal,
   Trash2,
+  House,
   type LucideIcon,
 } from "lucide-react";
 
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useEffect } from "react";
 import { useOrg } from "@/context/OrganizationContext";
+import { Link } from "react-router-dom";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
@@ -34,7 +37,14 @@ export function NavigationsList() {
     {
       name: "Welcome", // Fix typo from "lable" to "label"
       key: 1,
-      icon: Folder,
+      icon: Hand,
+      url: "#",
+    },
+    {
+      name: "Home", // Fix typo from "lable" to "label"
+      key: 2,
+      icon: House,
+      url: "/home",
     },
     ...navigations.map((nav) => ({
       name: nav.label, // Ensure this matches the key name in the API response
@@ -57,17 +67,23 @@ export function NavigationsList() {
   //}, [currentOrg]);
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Navigations</SidebarGroupLabel>
+    <SidebarGroup>
+      <SidebarGroupLabel className="group-data-[collapsible=icon]:sr-only">
+        Navigations
+      </SidebarGroupLabel>
       <SidebarMenu>
         {navigations_list.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
+              <Link to={item.url}>
                 <item.icon />
-                <span>{item.name}</span>
-              </a>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  {item.name}
+                </span>
+              </Link>
             </SidebarMenuButton>
+
+            {/* Optional: keep the dropdown trigger hidden on collapse */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
