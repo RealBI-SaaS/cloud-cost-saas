@@ -7,6 +7,7 @@ import {
   Map,
   Database,
   Settings,
+  MonitorCog
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -38,11 +39,44 @@ const SettingsSidebar = () => {
   };
 
   return (
-    <Sidebar collapsible="none" className="!relative mt-5">
+    <Sidebar collapsible="none" className="!relative pt-5">
       {/* <SidebarHeader>
         <p className="text-2xl font-bold text-start pt-5 pb-0 mb-0">Settings</p>
       </SidebarHeader> */}
       <SidebarContent>
+        {/* General Section  */}
+        <SidebarGroup>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive("/settings/general")}
+                  tooltip="General"
+                >
+                  <div>
+                    <MonitorCog  className="h-4 w-4" />
+                    <span>General</span>
+                  </div>
+                </SidebarMenuButton>
+
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/general/preferences")}
+                    >
+                      <Link to="/settings/general/preferences">Preferences</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+
+                  
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         {/* Account Section */}
         <SidebarGroup>
           <SidebarGroupLabel>Account</SidebarGroupLabel>
