@@ -31,7 +31,13 @@ import SettingsLayout from "./components/layout/SettingsLayout";
 import MainLayout from "./components/layout/MainLayout";
 import AccountInfo from "./components/account/AccountInfo";
 import AccountPassword from "./components/account/AccountPassword";
-
+import UserOrganization from "./components/org/UserOrganizations";
+import Organizations from "./components/Organizations";
+import OrganizationDetail from "./components/OrganizationDetail";
+import OrganizationSettings from "./components/OrganizationSettings";
+import OrganizationMembers from "./components/org/OrganizationMembers";
+import DataIntegration from "./components/data/DataIntegration";
+// import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useUser();
@@ -51,7 +57,7 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <div className="grid grid-cols-1">
-      {/* <MenuProvider> */}
+      <MenuProvider>
         {/* <Nav /> */}
         {/* <AiChat /> */}
         <Toaster toastOptions={{ duration: 3000 }} />
@@ -62,6 +68,33 @@ function App() {
               <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
+              <Route
+                path="/settings/organization/list"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationSettings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/organization/members"
+                element={
+                  <ProtectedRoute>
+                    <OrganizationMembers />
+                  </ProtectedRoute>
+                }
+              />
+
+<Route
+                path="/settings/organization/navigation"
+                element={
+                  <ProtectedRoute>
+                    <NavigationManagement />
+                  </ProtectedRoute>
+                }
+              />
+              
+
               <Route
                 path="/manage-all"
                 element={
@@ -103,7 +136,7 @@ function App() {
                 }
               />
               <Route
-                path="/organization-detail"
+                path="settings/organization/detail"
                 element={
                   <ProtectedRoute>
                     <OrganizationDetailsPage />
@@ -115,6 +148,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <OrganizationDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/organization/data"
+                element={
+                  <ProtectedRoute>
+                    <DataIntegration />
                   </ProtectedRoute>
                 }
               />
@@ -137,7 +178,7 @@ function App() {
             />
           </Routes>
         </div>
-      {/* </MenuProvider> */}
+      </MenuProvider>
     </div>
   );
 }

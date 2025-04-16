@@ -114,8 +114,8 @@ export default function AccountPassword() {
         <CardFooter className="mt-5">
           <Button
             type="submit"
-            variant="destructive"
-            className="!text-black"
+            variant="default"
+            className="!text-white"
             disabled={!passwords.currentPassword || !passwords.newPassword}
           >
             Update Password

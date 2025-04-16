@@ -1,3 +1,4 @@
+import React from "react";
 import clsx from "clsx";
 import {
   Calendar,
@@ -10,6 +11,7 @@ import {
   Lock,
   Building2,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 import {
   Sidebar,
@@ -74,7 +76,21 @@ const items = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { state, isCollapsed } = useSidebar();
+  const { state, setOpen } = useSidebar();
+  const location = useLocation();
+  
+  // Check if we're on a settings page
+  const isSettingsPage = location.pathname.includes('/settings') || 
+                        location.pathname.includes('/manage-all') || 
+                        location.pathname.includes('/create-company');
+
+  // Set initial collapsed state for settings pages
+  React.useEffect(() => {
+    if (isSettingsPage && state === 'expanded') {
+      setOpen(false);
+    }
+  }, [isSettingsPage]);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -92,7 +108,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         >
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link to="/manage-all">
+              <Link to="/settings/account/info">
                 <Settings />
                 <span className="hidden md:block">Settings</span>
               </Link>

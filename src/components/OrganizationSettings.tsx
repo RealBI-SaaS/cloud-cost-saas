@@ -57,12 +57,12 @@ export default function OrganizationSettings() {
 
   const handleOrgClick = (org: { id: number; name: string }) => {
     setCurrentOrg(org);
-    navigate('/organization-detail/');
+    navigate('/settings/organization/detail/');
   };
 
   return (
-    <div className="space-y-6 mx-10 my-5">
-      <Card>
+    <div className="space-y-6 mx-10 my-5 ">
+      <Card className="shadow-none border-none">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export default function OrganizationSettings() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={!newOrgName.trim()}>
+                  <Button type="submit" className="!text-white" disabled={!newOrgName.trim()}>
                     Create
                   </Button>
                 </div>
