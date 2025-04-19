@@ -19,8 +19,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Home, Building2, Settings, User, Lock, Map, Database, Calendar, Inbox, Search, ChevronDown, Pencil, Trash2, Plus, X  } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Home,
+  Building2,
+  Settings,
+  User,
+  Lock,
+  Map,
+  Database,
+  Calendar,
+  Inbox,
+  Search,
+  ChevronDown,
+  Pencil,
+  Trash2,
+  Plus,
+  X,
+} from "lucide-react";
+import { navIcons } from "@/assets/iconMap";
 
 const NavigationManagement = () => {
   const { loading, setLoading } = useUser();
@@ -30,6 +53,7 @@ const NavigationManagement = () => {
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
   const [newNavigationLabel, setNewNavigationLabel] = useState(null);
   const [icon, setIcon] = useState("");
+  const [newIcon, setNewIcon] = useState("");
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
@@ -38,12 +62,14 @@ const NavigationManagement = () => {
       await axiosInstance.post(`/organizations/navigation/`, {
         organization: currentOrg.id,
         label,
+        icon,
       });
       toast.success("Navigation created successfully");
       setLabel("");
       fetchNavigations();
     } catch (err) {
       console.log("error creating navigation", err);
+
       toast.error("Failed to create navigation");
     } finally {
       setLoading(false);
@@ -52,13 +78,30 @@ const NavigationManagement = () => {
 
   const handleNavigationEdit = async (e) => {
     e.preventDefault();
+
+    const currentNav = navigations.find(
+      (nav) => nav.id === navigationGettingEdited,
+    );
+
+    if (
+      currentNav &&
+      newNavigationLabel === currentNav.label &&
+      newIcon === currentNav.icon
+    ) {
+      toast.info("No changes made.");
+      setNavigationGettingEdited(null);
+      return;
+    }
+
     setLoading(true);
+
     try {
       await axiosInstance.patch(
         `/organizations/navigation/${navigationGettingEdited}/`,
         {
           organization: currentOrg.id,
           label: newNavigationLabel,
+          icon: newIcon,
         },
       );
       toast.success("Navigation updated successfully");
@@ -75,12 +118,9 @@ const NavigationManagement = () => {
   const handleNavigationDelete = async (navigationId) => {
     try {
       setLoading(true);
-      await axiosInstance.delete(
-        `/organizations/navigation/${navigationId}/`,
-        {
-          organization: currentOrg.id,
-        },
-      );
+      await axiosInstance.delete(`/organizations/navigation/${navigationId}/`, {
+        organization: currentOrg.id,
+      });
       toast.success("Navigation deleted successfully");
       fetchNavigations();
     } catch (err) {
@@ -117,31 +157,76 @@ const NavigationManagement = () => {
                       >
                         {navigationGettingEdited === navigation.id ? (
                           <form
-                            className="flex items-center gap-2 w-full"
+                            className="flex flex-col gap-4 w-full p-4 "
                             onSubmit={handleNavigationEdit}
                           >
-                            <Input
-                              value={newNavigationLabel}
-                              onChange={(e) => setNewNavigationLabel(e.target.value)}
-                              className="flex-1"
-                              placeholder="Navigation label"
-                            />
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setNavigationGettingEdited(null)}
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
-                            <Button type="submit" size="sm" className="!text-white">
-                              Save
-                            </Button>
+                            <div className="flex flex-col gap-1">
+                              <label
+                                htmlFor="navigation-label"
+                                className="text-sm font-medium text-gray-700"
+                              >
+                                Navigation Label
+                              </label>
+                              <Input
+                                id="navigation-label"
+                                value={newNavigationLabel}
+                                onChange={(e) =>
+                                  setNewNavigationLabel(e.target.value)
+                                }
+                                className="w-full"
+                                placeholder="Enter navigation label"
+                              />
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                              <span className="text-sm font-medium text-gray-700">
+                                Select an Icon
+                              </span>
+                              <div className="grid grid-cols-4 gap-2 p-2 border rounded-md">
+                                {Object.entries(navIcons).map(
+                                  ([name, Icon]) => (
+                                    <Button
+                                      key={name}
+                                      type="button"
+                                      variant={
+                                        newIcon === name ? "default" : "outline"
+                                      }
+                                      size="sm"
+                                      className="flex flex-col items-center gap-1 h-auto py-2"
+                                      onClick={() => setNewIcon(name)}
+                                    >
+                                      <Icon className="h-4 w-4" />
+                                      <span className="text-xs">{name}</span>
+                                    </Button>
+                                  ),
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between items-center">
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={() => setNavigationGettingEdited(null)}
+                              >
+                                <X className="h-4 w-4" />
+                                cancel
+                              </Button>
+                              <Button
+                                type="submit"
+                                size="sm"
+                                className="!text-white"
+                              >
+                                Save
+                              </Button>
+                            </div>
                           </form>
                         ) : (
                           <>
                             <div className="flex items-center gap-4">
-                              <span className="text-muted-foreground">{ind + 1}.</span>
+                              <span className="text-muted-foreground">
+                                {ind + 1}.
+                              </span>
                               <span>{navigation.label}</span>
                             </div>
                             <div className="flex items-center gap-2">
@@ -151,6 +236,7 @@ const NavigationManagement = () => {
                                 onClick={() => {
                                   setNavigationGettingEdited(navigation.id);
                                   setNewNavigationLabel(navigation.label);
+                                  setNewIcon(navigation.icon); // 👈 set icon being edited
                                 }}
                               >
                                 <Pencil className="h-4 w-4" />
@@ -163,17 +249,24 @@ const NavigationManagement = () => {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>
+                                      Are you sure?
+                                    </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      This will permanently delete the navigation "{navigation.label}".
-                                      This action cannot be undone.
+                                      This will permanently delete the
+                                      navigation "{navigation.label}". This
+                                      action cannot be undone.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
                                     <AlertDialogAction
-                                    className="!text-white"
-                                      onClick={() => handleNavigationDelete(navigation.id)}
+                                      className="!text-white"
+                                      onClick={() =>
+                                        handleNavigationDelete(navigation.id)
+                                      }
                                     >
                                       Delete
                                     </AlertDialogAction>
@@ -187,7 +280,9 @@ const NavigationManagement = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-muted-foreground">No navigations available. Create one below!</p>
+                  <p className="text-muted-foreground">
+                    No navigations available. Create one below!
+                  </p>
                 )}
               </div>
               <div className="space-y-4">
@@ -198,31 +293,17 @@ const NavigationManagement = () => {
                       id="navigation-label"
                       value={label}
                       onChange={(e) => setLabel(e.target.value)}
+                      required
                       placeholder="Enter navigation label"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Select Icon</Label>
                     <div className="grid grid-cols-4 gap-2 p-2 border rounded-md">
-                      {Object.entries({
-                        Home: Home,
-                        Building: Building2,
-                        Settings: Settings,
-                        User: User,
-                        Lock: Lock,
-                        Map: Map,
-                        Database: Database,
-                        Calendar: Calendar,
-                        Inbox: Inbox,
-                        Search: Search,
-                        ChevronDown: ChevronDown,
-                        Plus: Plus,
-                        Pencil: Pencil,
-                        Trash: Trash2,
-                        X: X
-                      }).map(([name, Icon]) => (
+                      {Object.entries(navIcons).map(([name, Icon]) => (
                         <Button
                           key={name}
+                          type="button"
                           variant={icon === name ? "default" : "outline"}
                           size="sm"
                           className="flex flex-col items-center gap-1 h-auto py-2"
@@ -236,7 +317,7 @@ const NavigationManagement = () => {
                       ))}
                     </div>
                   </div>
-                  <Button type="submit" className="w-full sm:w-auto !text-white">
+                  <Button type="submit" className="w-full sm:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Navigation
                   </Button>

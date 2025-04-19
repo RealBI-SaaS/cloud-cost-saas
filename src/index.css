@@ -15,13 +15,13 @@
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground : oklch(0.145 0 0);
+  --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary : oklch(0.205 0 0);
-  --primary-foreground: oklch(0.98 0 0);
+  --primary: #eb5e28;
+  --primary-foreground: white;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -47,10 +47,10 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.home-org-menu {
-  width: 250px;
-}
-
+/*.home-org-menu {*/
+/*  width: 250px;*/
+/*}*/
+/**/
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -124,11 +124,11 @@
 }
 
 @layer base {
- * {
-   @apply border-border outline-ring/50;
- }
+  * {
+    @apply border-border outline-ring/50;
+  }
 
- body {
-   @apply bg-background text-foreground;
- }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

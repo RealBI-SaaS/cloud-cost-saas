@@ -3,14 +3,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export function GeneralSettings() {
   return (
-    <div className="space-y-6 mt-10 p-5">
-      <Card>
+    <div className="space-y-6 mt-10 p-5 w-2/3  ">
+      <Card className="border-none shadow-none">
         <CardHeader>
           <CardTitle>Appearance</CardTitle>
           <CardDescription>
             Customize how RealBI looks on your device
           </CardDescription>
         </CardHeader>
+        <hr />
         <CardContent>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">

@@ -20,7 +20,7 @@ const HomeAuthenticated = () => {
   };
 
   return (
-    <div className=" flex grid grid-cols-1 justify-around items-center border w-full h-full  ">
+    <div className=" flex grid grid-cols-1 justify-around items-center w-full h-full  ">
       {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
 

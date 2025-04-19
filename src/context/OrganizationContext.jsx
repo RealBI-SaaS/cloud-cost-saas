@@ -60,6 +60,7 @@ export const OrganizationProvider = ({ children }) => {
   };
   //create org
   const createOrganization = async (orgName) => {
+    console.log("new req");
     try {
       //const token = localStorage.getItem('access_token');
       const response = await axiosInstance.post(
@@ -70,24 +71,25 @@ export const OrganizationProvider = ({ children }) => {
       if (response.status === 201) {
         //onOrganizationCreated();
         //setOrgName("");
-        fetchUserOrganizations();
+        await fetchUserOrganizations();
       } else {
         throw new Error("Failed to create company");
       }
     } catch (error) {
       console.error("Error creating company:", error);
+      throw error;
     }
   };
   useEffect(() => {
     fetchUserOrganizations();
 
-    console.log("organizations fetched");
+    // console.log("organizations fetched");
   }, [user]);
 
   useEffect(() => {
     fetchNavigations();
 
-    console.log("navigations fetched");
+    // console.log("navigations fetched");
   }, [currentOrg]);
 
   return (

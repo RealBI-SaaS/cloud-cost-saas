@@ -56,7 +56,7 @@ export function OrganizationSelector() {
         });
       });
     }
-    console.log("orgg", userOrgs, orgs);
+    // console.log("orgg", userOrgs, orgs);
   }, [userOrgs]);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export function OrganizationSelector() {
   }, [userOrgs, currentOrg, setCurrentOrg]);
 
   useEffect(() => {
-    console.log("new org", activeOrg);
+    // console.log("new org", activeOrg);
     const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
     if (matchedOrg) {
       setCurrentOrg(matchedOrg);

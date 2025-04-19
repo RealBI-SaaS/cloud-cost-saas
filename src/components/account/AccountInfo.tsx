@@ -53,6 +53,14 @@ export default function AccountInfo() {
     }
   };
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const mainColor = getComputedStyle(root).getPropertyValue(
+      "--primary-foreground",
+    );
+    console.log("Main color:", mainColor.trim());
+  }, []);
+
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader>
@@ -60,9 +68,7 @@ export default function AccountInfo() {
           <User className="h-5 w-5" />
           <CardTitle>Personal Information</CardTitle>
         </div>
-        <CardDescription>
-          Update your personal details here.
-        </CardDescription>
+        <CardDescription>Update your personal details here.</CardDescription>
       </CardHeader>
       <hr />
       <form onSubmit={handleProfileUpdate}>
@@ -100,11 +106,9 @@ export default function AccountInfo() {
           </div>
         </CardContent>
         <CardFooter className="mt-10">
-          <Button type="submit" className="!text-white hover:!bg-gray-800">
-            Save Changes
-          </Button>
+          <Button type="submit">Save Changes</Button>
         </CardFooter>
       </form>
     </Card>
   );
-} 
+}

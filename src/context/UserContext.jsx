@@ -92,9 +92,10 @@ export const UserProvider = ({ children }) => {
       const userData = await fetchUserData(access);
       setUser(userData);
       return userData;
-    } catch (err) {}
-    setError(err.response?.data?.detail || "Login failed");
-    throw err;
+    } catch (error) {
+      setError(error.response?.data?.detail?.message || "Login failed");
+      throw error;
+    }
   };
 
   const signup = async (userData) => {

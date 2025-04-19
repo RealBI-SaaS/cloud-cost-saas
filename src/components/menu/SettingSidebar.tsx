@@ -7,7 +7,8 @@ import {
   Map,
   Database,
   Settings,
-  MonitorCog
+  MonitorCog,
+  Hammer,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -25,10 +26,11 @@ import {
   SidebarMenuSubButton,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-
+import { useUser } from "@/context/UserContext";
 const SettingsSidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { user } = useUser();
 
   const isActive = (path: string) => {
     return currentPath.includes(path);
@@ -56,7 +58,7 @@ const SettingsSidebar = () => {
                   tooltip="General"
                 >
                   <div>
-                    <MonitorCog  className="h-4 w-4" />
+                    <MonitorCog className="h-4 w-4" />
                     <span>General</span>
                   </div>
                 </SidebarMenuButton>
@@ -67,11 +69,11 @@ const SettingsSidebar = () => {
                       asChild
                       isActive={isActiveExact("/settings/general/preferences")}
                     >
-                      <Link to="/settings/general/preferences">Preferences</Link>
+                      <Link to="/settings/general/preferences">
+                        Preferences
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
-
-                  
                 </SidebarMenuSub>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -88,10 +90,10 @@ const SettingsSidebar = () => {
                   isActive={isActive("/settings/account")}
                   tooltip="Account"
                 >
-                  <div>
+                  <Link to="/settings/account/info">
                     <User className="h-4 w-4" />
                     <span>Account</span>
-                  </div>
+                  </Link>
                 </SidebarMenuButton>
 
                 <SidebarMenuSub>
@@ -184,6 +186,45 @@ const SettingsSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+
+        {/* admin Section */}
+        {user?.is_staff && (
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive("/settings/admin")}
+                  tooltip="Organization"
+                >
+                      <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
+                      <Hammer  className="h-4 w-4" />
+                    <span>Admin Protal</span>
+                  </Link>
+                </SidebarMenuButton>
+
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/organization/backend")}
+                    >
+                      <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
+                        Backend Admin Portal
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+
+                 
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
   );

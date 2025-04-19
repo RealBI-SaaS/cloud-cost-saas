@@ -29,6 +29,7 @@ import {
 import { useEffect } from "react";
 import { useOrg } from "@/context/OrganizationContext";
 import { Link, useLocation } from "react-router-dom";
+import { navIcons, defaultIcon } from "@/assets/iconMap";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
@@ -49,7 +50,7 @@ export function NavigationsList() {
     ...navigations.map((nav) => ({
       name: nav.label, // Ensure this matches the key name in the API response
       key: nav.id, // Use ID as the unique key
-      icon: Folder, // Add icons if needed
+      icon: navIcons[nav?.icon] || defaultIcon, // Add icons if needed
     })),
   ];
   //useEffect(() => {

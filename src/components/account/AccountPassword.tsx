@@ -23,7 +23,7 @@ import change_password from "@/utils/auth/change_password";
 export default function AccountPassword() {
   const navigate = useNavigate();
   const { user } = useUser();
-  
+
   // Password state
   const [passwords, setPasswords] = useState({
     currentPassword: "",
@@ -81,9 +81,7 @@ export default function AccountPassword() {
           <KeyRound className="h-5 w-5" />
           <CardTitle>Update Password</CardTitle>
         </div>
-        <CardDescription>
-          Change your account password here.
-        </CardDescription>
+        <CardDescription>Change your account password here.</CardDescription>
       </CardHeader>
       <hr />
       <form onSubmit={handlePasswordUpdate}>
@@ -115,7 +113,6 @@ export default function AccountPassword() {
           <Button
             type="submit"
             variant="default"
-            className="!text-white"
             disabled={!passwords.currentPassword || !passwords.newPassword}
           >
             Update Password
@@ -124,4 +121,4 @@ export default function AccountPassword() {
       </form>
     </Card>
   );
-} 
+}

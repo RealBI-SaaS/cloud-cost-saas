@@ -5,9 +5,9 @@ import SettingsSidebar from "../menu/SettingSidebar";
 const SettingsLayout = () => {
   return (
     <SidebarProvider>
-      <div className="flex h-full">
+      <div className="flex h-full min-w-full">
         <SettingsSidebar />
-        <div className="flex-1  w-258">
+        <div className="flex-1 ">
           <Outlet />
         </div>
       </div>
