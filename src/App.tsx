@@ -11,7 +11,6 @@ import Home from "./components/Home";
 import Nav from "./components/Nav";
 import Account from "./components/Account";
 import Logout from "./components/logout";
-import "./index.css";
 import { useUser } from "./context/UserContext";
 import CreateCompany from "./components/CreateCompany";
 import VerifyEmail from "./components/auth/VerifyEmail";
@@ -75,8 +74,8 @@ function App() {
         <div className="w-full   grid grid-cols-1   mx-auto ">
           <Routes>
             <Route path="/login" element={<Login />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
               <Route
@@ -96,7 +95,7 @@ function App() {
                 }
               />
 
-<Route
+              <Route
                 path="/settings/organization/navigation"
                 element={
                   <ProtectedRoute>
@@ -104,7 +103,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              
 
               <Route
                 path="/manage-all"
@@ -139,7 +137,7 @@ function App() {
                 }
               />
 
-<Route
+              <Route
                 path="/settings/general/preferences"
                 element={
                   <ProtectedRoute>
@@ -196,7 +194,6 @@ function App() {
               path="/accept-invitation/:token"
               element={<AcceptInvitation />}
             />
-            
           </Routes>
         </div>
       </MenuProvider>

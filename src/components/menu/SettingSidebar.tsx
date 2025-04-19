@@ -7,7 +7,7 @@ import {
   Map,
   Database,
   Settings,
-  MonitorCog
+  MonitorCog,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -56,7 +56,7 @@ const SettingsSidebar = () => {
                   tooltip="General"
                 >
                   <div>
-                    <MonitorCog  className="h-4 w-4" />
+                    <MonitorCog className="h-4 w-4" />
                     <span>General</span>
                   </div>
                 </SidebarMenuButton>
@@ -67,11 +67,11 @@ const SettingsSidebar = () => {
                       asChild
                       isActive={isActiveExact("/settings/general/preferences")}
                     >
-                      <Link to="/settings/general/preferences">Preferences</Link>
+                      <Link to="/settings/general/preferences">
+                        Preferences
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
-
-                  
                 </SidebarMenuSub>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -88,10 +88,10 @@ const SettingsSidebar = () => {
                   isActive={isActive("/settings/account")}
                   tooltip="Account"
                 >
-                  <div>
+                  <Link to="/settings/account/info">
                     <User className="h-4 w-4" />
                     <span>Account</span>
-                  </div>
+                  </Link>
                 </SidebarMenuButton>
 
                 <SidebarMenuSub>

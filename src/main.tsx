@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import "antd/dist/reset.css";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { OrganizationProvider } from "@/context/OrganizationContext";
@@ -23,7 +22,10 @@ const AppWrapper = () => {
       <SidebarProvider>
         <AppSidebar />
         <main className="w-full h-full relative">
-          <SidebarTrigger className="m-5 fixed" style={{ display: 'block', zIndex: 9999 }} />
+          <SidebarTrigger
+            className="m-5 fixed"
+            style={{ display: "block", zIndex: 9999 }}
+          />
           <App />
         </main>
       </SidebarProvider>
