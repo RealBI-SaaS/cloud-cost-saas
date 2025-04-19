@@ -61,14 +61,18 @@ const Login = () => {
         const from = location.state?.from?.pathname || "/home";
         navigate(from, { replace: true });
       }
-    } catch (err) {
-      toast("hi", {
-        title: "Error",
-        description:
-          err?.response?.data?.message ||
-          "An error occurred during login, try again or another account",
-      });
-      console.log(err?.response?.data);
+    } catch (error) {
+      // if (err?.status == 401){
+      //   toast("hi", {
+      //     title: "Error",
+      //     description:
+      //       err?.response?.data?.message ||
+      //       "An error occurred during login, try again or another account",
+      //   });
+      // }
+      console.log(error)
+      toast.error(error?.response?.data?.detail || "An error occurred during login, try again or another account");
+      console.log(error?.response?.data);
     } finally {
       setLoading(false);
     }
@@ -184,7 +188,7 @@ const Login = () => {
               />
             </div>
 
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
 
             <Button type="submit" disabled={loading} className="!text-white">
               {loading

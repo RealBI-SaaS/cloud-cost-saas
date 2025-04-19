@@ -35,7 +35,9 @@ export default function OrganizationSettings() {
   const { createOrganization, userOrgs, setCurrentOrg } = useOrg();
   const [showNewOrgForm, setShowNewOrgForm] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
-  const [organizations, setOrganizations] = useState<{ id: number; name: string }[]>([]);
+  const [organizations, setOrganizations] = useState<
+    { id: number; name: string }[]
+  >([]);
 
   useEffect(() => {
     const orgs = userOrgs.map((org) => ({
@@ -45,19 +47,21 @@ export default function OrganizationSettings() {
     setOrganizations(orgs);
   }, [userOrgs]);
 
-  const handleCreateOrg = (e: React.FormEvent) => {
+  const handleCreateOrg = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newOrgName.trim()) {
       createOrganization(newOrgName);
       toast.success(`${newOrgName} has been created successfully.`);
       setNewOrgName("");
       setShowNewOrgForm(false);
+    } else {
+      toast.error("Invalid organization name.");
     }
   };
 
   const handleOrgClick = (org: { id: number; name: string }) => {
     setCurrentOrg(org);
-    navigate('/settings/organization/detail/');
+    navigate("/settings/organization/detail/");
   };
 
   return (
@@ -109,7 +113,11 @@ export default function OrganizationSettings() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="!text-white" disabled={!newOrgName.trim()}>
+                  <Button
+                    type="submit"
+                    className="!text-white"
+                    disabled={!newOrgName.trim()}
+                  >
                     Create
                   </Button>
                 </div>
@@ -140,4 +148,4 @@ export default function OrganizationSettings() {
       </Card>
     </div>
   );
-} 
+}

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Building2, Pencil, Trash2 } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
+import axiosInstance from "@/axios/axiosInstance";
 
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
@@ -49,22 +50,33 @@ export default function OrganizationDetailsPage() {
   };
 
   // Handle organization deletion
-  const handleDeleteOrg = () => {
+  const handleDeleteOrg = async () => {
+    try {
+      await axiosInstance.delete(
+        `/organizations/organization/${currentOrg.id}/`,
+      );
+    } catch (error) {
+      console.error("Error deleting organization:", error);
+
+      toast.error("Opps, organization deleted unsuccessfully");
+    } finally {
+      toast.success("Organization deleted successfully");
+
+      window.location.href = "/settings/organization/list";
+    }
+
     // Here you would typically send the delete request to your API
-    toast.success("Organization deleted successfully");
     // Redirect to organizations list or dashboard
-    window.location.href = "/account-settings";
   };
 
   return (
     <div className="container mx-auto px-4 py-10">
       <div className="mb-8">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 border-bottom">
           <Building2 className="h-6 w-6" />
           <h1 className="text-3xl font-bold">{currentOrg?.name}</h1>
         </div>
       </div>
-    <hr />
       <Card className="w-full shadow-none border-none ">
         <CardHeader>
           <CardTitle>Organization Information</CardTitle>
@@ -72,6 +84,7 @@ export default function OrganizationDetailsPage() {
             View and manage your organization details.
           </CardDescription>
         </CardHeader>
+        <hr />
         <CardContent className="space-y-4 ">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
@@ -101,8 +114,9 @@ export default function OrganizationDetailsPage() {
                           Are you absolutely sure?
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete
-                          the organization and remove all associated data.
+                          This action cannot be undone. This will permanently
+                          delete the organization and remove all associated
+                          data.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -149,9 +163,12 @@ export default function OrganizationDetailsPage() {
             )}
           </div>
           <div className="space-y-2 ">
-            <Label className="!text-xs">Created On {currentOrg?.created_at
+            <Label className="!text-xs">
+              Created On{" "}
+              {currentOrg?.created_at
                 ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
-                : "Invalid date"}</Label>
+                : "Invalid date"}
+            </Label>
             {/* <div className="!text-lg">
               {currentOrg?.created_at
                 ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
@@ -159,8 +176,7 @@ export default function OrganizationDetailsPage() {
             </div> */}
           </div>
         </CardContent>
-        <CardFooter>
-        </CardFooter>
+        <CardFooter></CardFooter>
       </Card>
     </div>
   );
