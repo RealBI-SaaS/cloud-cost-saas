@@ -71,14 +71,13 @@ export default function OrganizationDetailsPage() {
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 border-bottom">
-          <Building2 className="h-6 w-6" />
-          <h1 className="text-3xl font-bold">{currentOrg?.name}</h1>
-        </div>
-      </div>
       <Card className="w-full shadow-none border-none ">
         <CardHeader>
+          <div className="flex items-center gap-3 border-bottom mb-5">
+            <Building2 className="h-6 w-6" />
+            <h1 className="text-3xl font-bold">{currentOrg?.name}</h1>
+          </div>
+
           <CardTitle>Organization Information</CardTitle>
           <CardDescription>
             View and manage your organization details.

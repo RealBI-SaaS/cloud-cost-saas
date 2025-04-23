@@ -8,6 +8,7 @@ import { OrganizationProvider } from "@/context/OrganizationContext";
 import { AppSidebar } from "@/components/app-sidebar";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const AppWrapper = () => {
   const { user } = useUser();
@@ -19,16 +20,18 @@ const AppWrapper = () => {
 
   return (
     <OrganizationProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="w-full h-full relative">
-          <SidebarTrigger
-            className="m-5 fixed"
-            style={{ display: "block", zIndex: 9999 }}
-          />
-          <App />
-        </main>
-      </SidebarProvider>
+      <ThemeProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="w-full h-full relative">
+            <SidebarTrigger
+              className="m-5 fixed bottom-0"
+              style={{ display: "block" }}
+            />
+            <App />
+          </main>
+        </SidebarProvider>
+      </ThemeProvider>
     </OrganizationProvider>
   );
 };

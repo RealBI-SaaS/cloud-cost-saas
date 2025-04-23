@@ -45,12 +45,11 @@ const Home = () => {
       }
     };
     //console.log("searchParams");
-    console.log(searchParams);
     handleTokenParams();
   }, [searchParams, setUser]);
 
   if (loading) {
-     return (
+    return (
       <div className="flex justify-center items-center h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">

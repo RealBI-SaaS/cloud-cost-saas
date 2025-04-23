@@ -20,7 +20,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useOrg } from "@/context/OrganizationContext";
-import { StarOff, Plus, ChevronsUpDown, FolderX } from "lucide-react";
+import { StarOff, Plus, ChevronsUpDown, FolderX, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 let orgs = [
@@ -67,7 +67,7 @@ export function OrganizationSelector() {
     } else {
       setActiveOrg({
         name: currentOrg.name,
-        logo: StarOff,
+        logo: Circle,
       });
     }
   }, [userOrgs, currentOrg, setCurrentOrg]);
@@ -120,24 +120,10 @@ export function OrganizationSelector() {
                   }}
                   className="gap-2 p-2"
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border">
-                    <org.logo className="size-3.5 shrink-0" />
-                  </div>
                   {org.name}
                   <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
                 </DropdownMenuItem>
               ))}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-2 p-2">
-                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                  <Plus className="size-4" />
-                </div>
-                <div className="text-muted-foreground font-medium" onClick={() => {
-                  navigate("/settings/organization/list");
-                }}>   
-                  Add an organization
-                </div>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

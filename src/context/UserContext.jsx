@@ -117,6 +117,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user");
+    //localStorage.removeItem("theme");
     setUser(null);
     window.location.href = "/login";
   };

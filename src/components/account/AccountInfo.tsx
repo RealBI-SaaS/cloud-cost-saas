@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import axiosInstance from "@/axios/axiosInstance";
 import { Button } from "@/components/ui/button";
@@ -14,26 +12,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { User } from "lucide-react";
+import { Pencil, User } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 
 export default function AccountInfo() {
   const { user, setUser, fetchUserData } = useUser();
 
-  // User profile state
   const [profile, setProfile] = useState({
     firstName: user.first_name,
     lastName: user.last_name,
     email: user.email,
   });
 
-  // Handle profile form changes
+  const [isEditing, setIsEditing] = useState(false);
+
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle profile update
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -41,26 +38,26 @@ export default function AccountInfo() {
         first_name: profile.firstName,
         last_name: profile.lastName,
       });
-      // Fetch updated user data to ensure we have all fields
+
       const accessToken = localStorage.getItem("access_token");
       const updatedUserData = await fetchUserData(accessToken);
       setUser(updatedUserData);
-
       toast.success("Profile updated successfully");
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating user:", error);
       toast.error("Failed to update profile");
     }
   };
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const mainColor = getComputedStyle(root).getPropertyValue(
-      "--primary-foreground",
-    );
-    console.log("Main color:", mainColor.trim());
-  }, []);
-
+  //
+  //useEffect(() => {
+  //  const root = document.documentElement;
+  //  const mainColor = getComputedStyle(root).getPropertyValue(
+  //    "--primary-foreground",
+  //  );
+  //  console.log("Main color:", mainColor.trim());
+  //}, []);
+  //
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader>
@@ -71,44 +68,68 @@ export default function AccountInfo() {
         <CardDescription>Update your personal details here.</CardDescription>
       </CardHeader>
       <hr />
-      <form onSubmit={handleProfileUpdate}>
-        <CardContent className="space-y-4 ">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                name="firstName"
-                value={profile.firstName}
-                onChange={handleProfileChange}
-              />
+      {isEditing ? (
+        <form onSubmit={handleProfileUpdate}>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  value={profile.firstName}
+                  onChange={handleProfileChange}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  value={profile.lastName}
+                  onChange={handleProfileChange}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                name="lastName"
-                value={profile.lastName}
-                onChange={handleProfileChange}
-              />
+          </CardContent>
+          <CardFooter className="mt-10 flex justify-between">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">Save Changes</Button>
+          </CardFooter>
+        </form>
+      ) : (
+        <>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div>
+                <p className="text-xs font-thin">First Name</p>
+                <p className="px-3 pl-0 py-2 text-lg">{profile.firstName}</p>
+              </div>
+              <div>
+                <p className="text-xs font-thin">Last Name</p>
+                <p className="px-3 pl-0 py-2 text-lg">{profile.lastName}</p>
+              </div>
+              <Button
+                variant="ghost"
+                className="px-0"
+                onClick={() => setIsEditing(true)}
+              >
+                <Pencil />
+              </Button>
             </div>
-          </div>
-          <div className="space-y-2 mt-5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={profile.email}
-              onChange={handleProfileChange}
-              disabled
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="mt-10">
-          <Button type="submit">Save Changes</Button>
-        </CardFooter>
-      </form>
+            <div className="mt-5">
+              <p className="text-xs font-thin">Email</p>
+              <p className="px-3 pl-0 py-2 text-md">{profile.email}</p>
+            </div>
+          </CardContent>
+        </>
+      )}
     </Card>
   );
 }
