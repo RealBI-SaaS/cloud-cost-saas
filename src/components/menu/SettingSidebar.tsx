@@ -105,16 +105,15 @@ const SettingsSidebar = () => {
                       <Link to="/settings/account/info">Account Info</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
-                  {!user.is_google_user && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={isActiveExact("/settings/account/password")}
-                      >
-                        <Link to="/settings/account/password">Password</Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
+                  {/* TODO: hide for google users >> {!user.is_google_user && ( */}
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/account/password")}
+                    >
+                      <Link to="/settings/account/password">Password</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
                 </SidebarMenuSub>
               </SidebarMenuItem>
             </SidebarMenu>

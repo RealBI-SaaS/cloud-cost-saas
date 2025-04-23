@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 type ThemeMode = "light" | "dark" | "system";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [theme, setTheme] = useState<ThemeMode>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as ThemeMode | null;

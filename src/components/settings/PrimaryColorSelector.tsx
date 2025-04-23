@@ -31,7 +31,7 @@ export function PrimaryColorPicker() {
     const root = document.documentElement;
     root.style.setProperty("--primary", newColor);
 
-    const lighter = lighten(newColor, 20);
+    const lighter = lighten(newColor, 30);
     root.style.setProperty("--sidebar-accent", lighter);
   };
   return (

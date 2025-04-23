@@ -120,9 +120,6 @@ export function OrganizationSelector() {
                   }}
                   className="gap-2 p-2"
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border">
-                    <org.logo className="size-3.5 shrink-0" />
-                  </div>
                   {org.name}
                   <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
                 </DropdownMenuItem>

@@ -78,15 +78,16 @@ const items = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, setOpen } = useSidebar();
   const location = useLocation();
-  
+
   // Check if we're on a settings page
-  const isSettingsPage = location.pathname.includes('/settings') || 
-                        location.pathname.includes('/manage-all') || 
-                        location.pathname.includes('/create-company');
+  const isSettingsPage =
+    location.pathname.includes("/settings") ||
+    location.pathname.includes("/manage-all") ||
+    location.pathname.includes("/create-company");
 
   // Set initial collapsed state for settings pages
   React.useEffect(() => {
-    if (isSettingsPage && state === 'expanded') {
+    if (isSettingsPage && state === "expanded") {
       setOpen(false);
     }
   }, [isSettingsPage]);
@@ -108,7 +109,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         >
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link to="/settings/account/info">
+              <Link to="/settings/general/preferences">
                 <Settings />
                 <span className="hidden md:block">Settings</span>
               </Link>

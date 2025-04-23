@@ -25,11 +25,14 @@ const Login = () => {
     last_name: "",
   });
 
-  const { error, setError } = useUser();
+  const { error, setError, login, signup, user } = useUser();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, signup } = useUser();
+
+  if (user) {
+    navigate("/home");
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,14 +73,16 @@ const Login = () => {
       //       "An error occurred during login, try again or another account",
       //   });
       // }
-      console.log(error)
-      toast.error(error?.response?.data?.detail || "An error occurred during login, try again or another account");
+      console.log(error);
+      toast.error(
+        error?.response?.data?.detail ||
+        "An error occurred during login, try again or another account",
+      );
       console.log(error?.response?.data);
     } finally {
       setLoading(false);
     }
   };
-
   const handleGoogleSignIn = async () => {
     const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     const state = crypto.randomUUID(16).toString("hex");
