@@ -10,30 +10,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 
-function lighten(color: string, percent: number): string {
-  const amt = Math.round(255 * (percent / 100));
-  return color
-    .replace(/^#/, "")
-    .replace(/.{2}/g, (hex) =>
-      Math.min(255, parseInt(hex, 16) + amt)
-        .toString(16)
-        .padStart(2, "0"),
-    )
-    .padEnd(6, "0")
-    .replace(/^/, "#");
-}
-
+//function lighten(color: string, percent: number): string {
+//  const amt = Math.round(255 * (percent / 100));
+//  return color
+//    .replace(/^#/, "")
+//    .replace(/.{2}/g, (hex) =>
+//      Math.min(255, parseInt(hex, 16) + amt)
+//        .toString(16)
+//        .padStart(2, "0"),
+//    )
+//    .padEnd(6, "0")
+//    .replace(/^/, "#");
+//}
+//
+import { useThemeContext } from "@/context/ThemeContext";
 export function PrimaryColorPicker() {
   const colorInputRef = useRef<HTMLInputElement>(null);
+  const { setPrimaryColor } = useThemeContext();
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newColor = e.target.value;
-    const root = document.documentElement;
-    root.style.setProperty("--primary", newColor);
-
-    const lighter = lighten(newColor, 30);
-    root.style.setProperty("--sidebar-accent", lighter);
+    setPrimaryColor(e.target.value);
   };
+  //const colorInputRef = useRef<HTMLInputElement>(null);
+  //
+  //const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //  const newColor = e.target.value;
+  //  const root = document.documentElement;
+  //  root.style.setProperty("--primary", newColor);
+  //
+  //  const lighter = lighten(newColor, 30);
+  //  root.style.setProperty("--sidebar-accent", lighter);
+  //};
   return (
     <>
       <input

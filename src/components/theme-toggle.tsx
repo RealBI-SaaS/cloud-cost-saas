@@ -8,40 +8,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 
-type ThemeMode = "light" | "dark" | "system";
+import { useThemeContext } from "@/context/ThemeContext";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<ThemeMode>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") as ThemeMode | null;
-    const system = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    if (saved === "dark" || saved === "light") {
-      setTheme(saved);
-    } else if (saved === "system" || !saved) {
-      setTheme(system ? "dark" : "light");
-    }
-  }, []);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-
-    const applyTheme = (mode: ThemeMode) => {
-      const systemDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
-      const resolved =
-        mode === "system" ? (systemDark ? "dark" : "light") : mode;
-
-      root.classList.remove("light", "dark");
-      root.classList.add(resolved);
-    };
-
-    localStorage.setItem("theme", theme);
-    applyTheme(theme);
-  }, [theme]);
-
+  const { theme, setTheme } = useThemeContext();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
