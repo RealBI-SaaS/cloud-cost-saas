@@ -54,7 +54,7 @@ const SettingsSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/settings/general")}
+                  //isActive={isActive("/settings/general")}
                   tooltip="General"
                 >
                   <div>
@@ -87,7 +87,7 @@ const SettingsSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/settings/account")}
+                  //isActive={isActive("/settings/account")}
                   tooltip="Account"
                 >
                   <Link to="/settings/account/info">
@@ -105,15 +105,16 @@ const SettingsSidebar = () => {
                       <Link to="/settings/account/info">Account Info</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/account/password")}
-                    >
-                      <Link to="/settings/account/password">Password</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+                  {!user.is_google_user && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact("/settings/account/password")}
+                      >
+                        <Link to="/settings/account/password">Password</Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
                 </SidebarMenuSub>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -128,7 +129,7 @@ const SettingsSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={isActive("/settings/organization")}
+                  //isActive={isActive("/settings/organization")}
                   tooltip="Organization"
                 >
                   <Link to="/settings/organization/list">
@@ -187,41 +188,40 @@ const SettingsSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-
         {/* admin Section */}
         {user?.is_staff && (
-        <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive("/settings/admin")}
-                  tooltip="Organization"
-                >
-                      <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
-                      <Hammer  className="h-4 w-4" />
-                    <span>Admin Protal</span>
-                  </Link>
-                </SidebarMenuButton>
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    //isActive={isActive("/settings/admin")}
+                    tooltip="Organization"
+                  >
+                    <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
+                      <Hammer className="h-4 w-4" />
+                      <span>Admin Protal</span>
+                    </Link>
+                  </SidebarMenuButton>
 
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/organization/backend")}
-                    >
-                      <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
-                        Backend Admin Portal
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                 
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-            </SidebarMenu>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact(
+                          "/settings/organization/backend",
+                        )}
+                      >
+                        <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
+                          Backend Admin Portal
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </SidebarMenuItem>
+              </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         )}

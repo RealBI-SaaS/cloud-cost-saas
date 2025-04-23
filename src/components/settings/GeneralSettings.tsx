@@ -1,5 +1,12 @@
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { PrimaryColorPicker } from "./PrimaryColorSelector";
 
 export function GeneralSettings() {
   return (
@@ -24,6 +31,21 @@ export function GeneralSettings() {
           </div>
         </CardContent>
       </Card>
+
+      <Card className="border-none shadow-none">
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <h3 className="text-sm font-medium">Colors</h3>
+              <p className="text-sm text-muted-foreground">
+                Select your main color
+              </p>
+            </div>
+
+            <PrimaryColorPicker />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
-} 
+}
