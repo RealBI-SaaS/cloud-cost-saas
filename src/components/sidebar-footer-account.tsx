@@ -7,6 +7,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  Settings,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -64,7 +65,9 @@ export function SideBarUser() {
                   </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
-                { state == "expanded" &&<ChevronsUpDown className="ml-auto size-4" />}
+                {state == "expanded" && (
+                  <ChevronsUpDown className="ml-auto size-4" />
+                )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -102,24 +105,23 @@ export function SideBarUser() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
+
               <DropdownMenuGroup>
-                <Link to="/settings/account/info">
+                <Link to="/settings/general/preferences">
                   <DropdownMenuItem>
-                    <BadgeCheck />
-                    Account
+                    <Settings />
+                    Settings
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>
+
               <DropdownMenuSeparator />
               <Link to="/logout">
-
-              <DropdownMenuItem>
-
-                <LogOut />
-                Log out
-              </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LogOut />
+                  Log out
+                </DropdownMenuItem>
               </Link>
-
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

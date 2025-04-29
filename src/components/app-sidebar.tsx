@@ -89,14 +89,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   React.useEffect(() => {
     if (isSettingsPage && state === "expanded") {
       setOpen(false);
+    } else {
+      setOpen(true);
     }
   }, [isSettingsPage]);
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <OrganizationSelector />
-      </SidebarHeader>
+      {state == "expanded" ? (
+        <SidebarHeader>
+          <p>RealBI</p>
+        </SidebarHeader>
+      ) : (
+        <></>
+      )}
       <SidebarContent>
         <hr />
         {/* navigations list*/}
@@ -104,18 +110,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         {/*setting menu item */}
-        <SidebarMenu
-          className={clsx(state == "collapsed" ? "" : "border rounded-sm px-3")}
-        >
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/settings/general/preferences">
-                <Settings />
-                <span className="hidden md:block">Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+
+        <OrganizationSelector />
 
         <hr className="" />
 

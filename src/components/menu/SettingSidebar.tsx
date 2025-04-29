@@ -9,6 +9,8 @@ import {
   Settings,
   MonitorCog,
   Hammer,
+  Home,
+  ChevronLeft,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -25,6 +27,7 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   SidebarTrigger,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { useUser } from "@/context/UserContext";
 const SettingsSidebar = () => {
@@ -225,6 +228,18 @@ const SettingsSidebar = () => {
           </SidebarGroup>
         )}
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu className="text-sm mb-5 px-3 ">
+          <Link to="/home">
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <ChevronLeft />
+                Back to home
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </Link>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };
