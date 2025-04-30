@@ -38,6 +38,7 @@ import OrganizationMembers from "./components/org/OrganizationMembers";
 import DataIntegration from "./components/data/DataIntegration";
 import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { Loading } from "@/misc/loading";
+import CompanyDetails from "./components/company/CompanyDetail";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -136,6 +137,16 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path="/settings/company/details"
+                element={
+                  <ProtectedRoute>
+                    <CompanyDetails />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route
                 path="/create-company"
                 element={

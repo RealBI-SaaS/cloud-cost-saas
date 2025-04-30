@@ -1,4 +1,3 @@
-"use client";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import type React from "react";
@@ -30,45 +29,42 @@ import { Building2, Pencil, Trash2 } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 
-export default function OrganizationDetailsPage() {
+export default function CompanyDetails() {
   const navigate = useNavigate();
-  const { currentOrg } = useOrg();
-  const [orgName, setOrgName] = useState(currentOrg?.name || "");
+  const { userComp } = useOrg();
+  const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
 
   useEffect(() => {
-    if (currentOrg?.name) {
-      setOrgName(currentOrg.name);
-    }
-  }, [currentOrg]);
+    console.log(userComp);
+  }, [userComp]);
 
   // Handle organization name update
-  const handleUpdateOrg = () => {
-    // TODO: handle update
+  const handleCompanyUpdate = () => {
     // Here you would typically send the updated org name to your API
-    toast.success("Organization updated successfully");
+    toast.success("Company updated successfully");
     setIsEditingOrg(false);
   };
 
   // Handle organization deletion
-  const handleDeleteOrg = async () => {
-    try {
-      await axiosInstance.delete(
-        `/organizations/organization/${currentOrg.id}/`,
-      );
-    } catch (error) {
-      console.error("Error deleting organization:", error);
+  //const handleDeleteOrg = async () => {
+  //  try {
+  //    await axiosInstance.delete(
+  //      `/organizations/organization/${currentOrg.id}/`,
+  //    );
+  //  } catch (error) {
+  //    console.error("Error deleting organization:", error);
+  //
+  //    toast.error("Opps, organization deleted unsuccessfully");
+  //  } finally {
+  //    toast.success("Organization deleted successfully");
+  //
+  //    window.location.href = "/settings/organization/list";
+  //  }
 
-      toast.error("Opps, organization deleted unsuccessfully");
-    } finally {
-      toast.success("Organization deleted successfully");
-
-      window.location.href = "/settings/organization/list";
-    }
-
-    // Here you would typically send the delete request to your API
-    // Redirect to organizations list or dashboard
-  };
+  // Here you would typically send the delete request to your API
+  // Redirect to organizations list or dashboard
+  //};
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -76,10 +72,10 @@ export default function OrganizationDetailsPage() {
         <CardHeader>
           <div className="flex items-center gap-3 border-bottom mb-5">
             <Building2 className="h-6 w-6" />
-            <h1 className="text-3xl font-bold">{currentOrg?.name}</h1>
+            <h1 className="text-3xl font-bold">{userComp?.name}</h1>
           </div>
 
-          <CardTitle>Organization Information</CardTitle>
+          <CardTitle>Comapny </CardTitle>
           <CardDescription>
             View and manage your organization details.
           </CardDescription>
@@ -89,7 +85,7 @@ export default function OrganizationDetailsPage() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="org-name" className="!text-xs">
-                Organization Name
+                Company Name
               </Label>
               {!isEditingOrg && (
                 <div className="flex items-center gap-2">
@@ -101,35 +97,6 @@ export default function OrganizationDetailsPage() {
                     <Pencil className="h-4 w-4 mr-1" />
                     Edit
                   </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the organization and remove all associated
-                          data.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="!text-white"
-                          onClick={handleDeleteOrg}
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </div>
               )}
             </div>
@@ -137,13 +104,13 @@ export default function OrganizationDetailsPage() {
               <div className="flex items-center gap-2">
                 <Input
                   id="org-name"
-                  value={orgName}
-                  onChange={(e) => setOrgName(e.target.value)}
+                  value={compName}
+                  onChange={(e) => setCompName(e.target.value)}
                 />
                 <Button
                   size="sm"
                   className="!text-white"
-                  onClick={handleUpdateOrg}
+                  onClick={handleCompanyUpdate}
                 >
                   Save
                 </Button>
@@ -151,7 +118,7 @@ export default function OrganizationDetailsPage() {
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    setOrgName(currentOrg?.name || "");
+                    setCompName(userComp?.name || "");
                     setIsEditingOrg(false);
                   }}
                 >
@@ -159,14 +126,14 @@ export default function OrganizationDetailsPage() {
                 </Button>
               </div>
             ) : (
-              <div className="text-lg font-medium">{orgName}</div>
+              <div className="text-lg font-medium">{compName}</div>
             )}
           </div>
           <div className="space-y-2 ">
             <Label className="!text-xs">
               Created On{" "}
-              {currentOrg?.created_at
-                ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
+              {userComp?.created_at
+                ? format(new Date(userComp.created_at), "MMM d, yyyy")
                 : "Invalid date"}
             </Label>
             {/* <div className="!text-lg">

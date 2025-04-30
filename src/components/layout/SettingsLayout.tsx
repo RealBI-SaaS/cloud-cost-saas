@@ -25,9 +25,11 @@ const SettingsLayout = () => {
   //
   return (
     <SidebarProvider>
-      <div className="flex h-full min-w-full">
-        <SettingsSidebar />
-        <div className="flex-1 ">
+      <div className="flex h-screen min-w-full overflow-hidden">
+        <aside className="overflow-y-auto h-full">
+          <SettingsSidebar />
+        </aside>
+        <div className="flex-1 h-full overflow-y-auto ">
           <Outlet />
         </div>
       </div>

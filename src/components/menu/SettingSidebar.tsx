@@ -11,6 +11,8 @@ import {
   Hammer,
   Home,
   ChevronLeft,
+  UsersRound,
+  UserRound,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -30,7 +32,9 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { useUser } from "@/context/UserContext";
-const SettingsSidebar = () => {
+const SettingsSidebar = ({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { user } = useUser();
@@ -44,10 +48,15 @@ const SettingsSidebar = () => {
   };
 
   return (
-    <Sidebar collapsible="none" className="!relative pt-5">
-      {/* <SidebarHeader>
+    <Sidebar
+      collapsible="none"
+      className="!relative h-full overflow-y-auto"
+      {...props}
+    >
+      <SidebarHeader>
         <p className="text-2xl font-bold text-start pt-5 pb-0 mb-0">Settings</p>
-      </SidebarHeader> */}
+      </SidebarHeader>
+      <hr />
       <SidebarContent>
         {/* General Section  */}
         <SidebarGroup>
@@ -94,7 +103,7 @@ const SettingsSidebar = () => {
                   tooltip="Account"
                 >
                   <Link to="/settings/account/info">
-                    <User className="h-4 w-4" />
+                    <UserRound />
                     <span>Account</span>
                   </Link>
                 </SidebarMenuButton>
@@ -123,6 +132,38 @@ const SettingsSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Company Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Company</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  //isActive={isActive("/settings/organization")}
+                  tooltip="Company"
+                >
+                  <Link to="settings/company/details">
+                    <Building className="h-4 w-4" />
+                    <span>Company</span>
+                  </Link>
+                </SidebarMenuButton>
+
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/company/details")}
+                    >
+                      <Link to="settings/company/details">Your Company</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         {/* Organization Section */}
         <SidebarGroup>
           <SidebarGroupLabel>Organization</SidebarGroupLabel>
@@ -135,7 +176,7 @@ const SettingsSidebar = () => {
                   tooltip="Organization"
                 >
                   <Link to="/settings/organization/list">
-                    <Building className="h-4 w-4" />
+                    <UsersRound />
                     <span>Organization</span>
                   </Link>
                 </SidebarMenuButton>
@@ -172,6 +213,19 @@ const SettingsSidebar = () => {
                     >
                       <Link to="/settings/organization/navigation">
                         Navigations
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact(
+                        "/settings/organization/navigation",
+                      )}
+                    >
+                      <Link to="/settings/organization/navigation">
+                        Colors and Preferences
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
