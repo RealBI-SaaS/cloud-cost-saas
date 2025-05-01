@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Account from "./components/Account";
 import Logout from "./components/logout";
 import { useUser } from "./context/UserContext";
-import CreateCompany from "./components/CreateCompany";
+import CreateCompany from "./components/company/CreateCompany";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import AskEmailVerificatioin from "./components/auth/AskEmailVerification";
 import AskForPasswordReset from "./components/auth/AskForPasswordReset";
@@ -73,13 +73,11 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route element={<MainLayout />}>
-
             <Route path="/home" element={<Home />} />
 
             <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
-
               <Route
                 path="/settings/organization/list"
                 element={
@@ -156,15 +154,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
-              <Route
-                path="/create-company"
-                element={
-                  <ProtectedRoute>
-                    <CreateCompany />
-                  </ProtectedRoute>
-                }
-              />
               <Route
                 path="settings/organization/detail"
                 element={
@@ -199,6 +188,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/company/create"
+            element={
+              <ProtectedRoute>
+                <CreateCompany />{" "}
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/logout" element={<Logout />} />
           <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
           <Route

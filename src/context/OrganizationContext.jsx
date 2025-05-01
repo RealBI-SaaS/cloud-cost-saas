@@ -55,7 +55,7 @@ export const OrganizationProvider = ({ children }) => {
   const fetchUserCompany = async () => {
     if (user.is_staff) {
       const response = await axiosInstance.get(
-        `http://localhost:8000/organizations/company/${userComp.id}/`,
+        `/organizations/company/${userComp.id}/`,
       );
       //console.log(response.data);
       if (response.data) {

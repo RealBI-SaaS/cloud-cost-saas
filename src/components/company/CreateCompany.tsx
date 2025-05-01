@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
+import { Building2 } from "lucide-react";
+import axiosInstance from "@/axios/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
+export default function CreateCompany() {
+  const navigate = useNavigate();
+  const [companyName, setCompanyName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleCreate = async () => {
+    if (!companyName.trim()) {
+      toast.error("Company name cannot be empty.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axiosInstance.post("/organizations/company/", {
+        name: companyName,
+      });
+
+      if (response.status !== 201) {
+        throw new Error("Unexpected response status: " + response.status);
+      }
+
+      const data = await response.data;
+      toast.success("Company created successfully!");
+      navigate("/home");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className=" h-screen flex flex-col justify-around">
+      <Card className="max-w-md w-3/4 mx-auto mt-10 p-6 shadow-md">
+        <CardContent>
+          <div className="flex items-center gap-2 mb-4">
+            <Building2 className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Create Your Company</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            To continue, please enter your company name.
+          </p>
+          <Input
+            placeholder="Enter company name"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            className="mb-4"
+          />
+          <Button onClick={handleCreate} disabled={loading} className="w-full">
+            {loading ? "Creating..." : "Create Company"}
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
