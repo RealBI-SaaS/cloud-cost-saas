@@ -1,6 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import get_users_orgs from "../utils/org/get_users_organizations";
-import get_user_comp from "../utils/org/get_user_comp";
+import { get_users_orgs, get_user_comp } from "../utils/org/fetchers";
 import axiosInstance from "../axios/axiosInstance";
 import CreateOrganization from "../components/org/CreateOrganization";
 import { useUser } from "./UserContext";
@@ -26,6 +25,14 @@ export const OrganizationProvider = ({ children }) => {
   const { loading, setLoading } = useUser();
 
   const [navigations, setNavigations] = useState([]);
+
+
+
+
+  // New: Admin-related state
+  const [allCompanies, setAllCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [companySearch, setCompanySearch] = useState("");
 
   //fetch navigations
   const fetchNavigations = async () => {
@@ -65,8 +72,12 @@ export const OrganizationProvider = ({ children }) => {
 
       setUserOrgs(organizations);
 
+      //console.log(organizations);
       if (organizations.length > 0) {
-        setCurrentOrg(organizations[0]); // Ensure currentOrg is set correctly
+        const matchedOrg = organizations.find(
+          (org) => org.id === currentOrg?.id,
+        );
+        setCurrentOrg(matchedOrg || organizations[0]);
       }
     } catch (err) {
       console.error("Error fetching organization data:", err);
@@ -116,10 +127,12 @@ export const OrganizationProvider = ({ children }) => {
         loading,
         currentOrg,
         setCurrentOrg,
+        fetchUserOrganizations,
         createOrganization,
         navigations,
         fetchNavigations,
         userComp,
+        fetchUserCompany,
       }}
     >
       {children}

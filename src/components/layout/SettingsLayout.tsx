@@ -29,7 +29,7 @@ const SettingsLayout = () => {
         <aside className="overflow-y-auto h-full">
           <SettingsSidebar />
         </aside>
-        <div className="flex-1 h-full overflow-y-auto ">
+        <div className="flex-1 h-full overflow-y-auto  ">
           <Outlet />
         </div>
       </div>

@@ -155,7 +155,7 @@ const SettingsSidebar = ({
                       asChild
                       isActive={isActiveExact("/settings/company/details")}
                     >
-                      <Link to="settings/company/details">Your Company</Link>
+                      <Link to="settings/company/details">Details</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>

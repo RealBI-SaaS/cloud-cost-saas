@@ -29,10 +29,11 @@ import {
 import { Building2, Pencil, Trash2 } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
+import { edit_user_org } from "@/utils/org/editors";
 
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
-  const { currentOrg } = useOrg();
+  const { currentOrg, fetchUserOrganizations } = useOrg();
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
 
@@ -43,9 +44,12 @@ export default function OrganizationDetailsPage() {
   }, [currentOrg]);
 
   // Handle organization name update
-  const handleUpdateOrg = () => {
+  const handleUpdateOrg = async () => {
     // TODO: handle update
     // Here you would typically send the updated org name to your API
+    const res = await edit_user_org(currentOrg.id, { name: orgName });
+    fetchUserOrganizations();
+    console.log(res);
     toast.success("Organization updated successfully");
     setIsEditingOrg(false);
   };
@@ -71,8 +75,8 @@ export default function OrganizationDetailsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <Card className="w-full shadow-none border-none ">
+    <div className="container mx-auto px-4 py-10 ">
+      <Card className="w-full shadow-none border-none w-3/4">
         <CardHeader>
           <div className="flex items-center gap-3 border-bottom mb-5">
             <Building2 className="h-6 w-6" />
@@ -144,6 +148,7 @@ export default function OrganizationDetailsPage() {
                   size="sm"
                   className="!text-white"
                   onClick={handleUpdateOrg}
+                  disabled={orgName == currentOrg?.name}
                 >
                   Save
                 </Button>

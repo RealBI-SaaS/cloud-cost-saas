@@ -65,7 +65,7 @@ export default function OrganizationSettings() {
   };
 
   return (
-    <div className="space-y-6 mx-10 my-5 ">
+    <div className="space-y-6 mx-10 my-5 w-3/4">
       <Card className="shadow-none border-none">
         <CardHeader>
           <div className="flex items-center justify-between">

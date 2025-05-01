@@ -9,20 +9,25 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
+import { CompanyProvider } from "./context/CompanyContext";
 
 const AppWrapper = () => {
   const { user } = useUser();
 
   //logic not to display the sidebar with unauthenticated user
   if (!user) {
-    return <App />;
+    return (
+      <CompanyProvider>
+        <App />
+      </CompanyProvider>
+    );
   }
 
   return (
     <OrganizationProvider>
-      <ThemeProvider>
-        <SidebarProvider>
-          <AppSidebar />
+      <CompanyProvider>
+        <ThemeProvider>
+
           <main className="w-full h-full relative">
             {/* <SidebarTrigger
               className="m-5 fixed bottom-0"
@@ -30,8 +35,8 @@ const AppWrapper = () => {
             /> */}
             <App />
           </main>
-        </SidebarProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </CompanyProvider>
     </OrganizationProvider>
   );
 };

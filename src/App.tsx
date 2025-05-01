@@ -39,6 +39,11 @@ import DataIntegration from "./components/data/DataIntegration";
 import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { Loading } from "@/misc/loading";
 import CompanyDetails from "./components/company/CompanyDetail";
+import AdminSignIn from "@/components/admin/AdminSignIn";
+
+import { AppSidebar } from "@/components/app-sidebar";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -58,18 +63,23 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <div className="grid grid-cols-1 ">
-      <MenuProvider>
-        {/* <Nav /> */}
-        {/* <AiChat /> */}
-        <Toaster toastOptions={{ duration: 3000 }} />
-        <div className="w-full   grid grid-cols-1   mx-auto ">
-          <Routes>
-            <Route path="/login" element={<Login />} />
+    <MenuProvider>
+      {/* <Nav /> */}
+      {/* <AiChat /> */}
+      <Toaster toastOptions={{ duration: 3000 }} />
+      <div className="w-full   grid grid-cols-1   mx-auto ">
+        <Routes>
+          {/*components with sidebar */}
+
+          <Route path="/login" element={<Login />} />
+          <Route element={<MainLayout />}>
+
             <Route path="/home" element={<Home />} />
+
             <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
+
               <Route
                 path="/settings/organization/list"
                 element={
@@ -180,26 +190,33 @@ function App() {
                 }
               />
             </Route>
-
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
-            <Route
-              path="/ask-email-verification"
-              element={<AskEmailVerificatioin />}
-            />
-            <Route path="/reset-password" element={<AskForPasswordReset />} />
-            <Route
-              path="/password/reset/confirm/:uid/:token"
-              element={<ResetPassword />}
-            />
-            <Route
-              path="/accept-invitation/:token"
-              element={<AcceptInvitation />}
-            />
-          </Routes>
-        </div>
-      </MenuProvider>
-    </div>
+          </Route>
+          <Route
+            path="/admin/signin"
+            element={
+              <ProtectedRoute>
+                <AdminSignIn />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
+          <Route
+            path="/ask-email-verification"
+            element={<AskEmailVerificatioin />}
+          />
+          <Route path="/reset-password" element={<AskForPasswordReset />} />
+          <Route
+            path="/password/reset/confirm/:uid/:token"
+            element={<ResetPassword />}
+          />
+          <Route
+            path="/accept-invitation/:token"
+            element={<AcceptInvitation />}
+          />
+        </Routes>
+      </div>
+    </MenuProvider>
   );
 }
 

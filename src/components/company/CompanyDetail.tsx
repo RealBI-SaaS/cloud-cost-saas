@@ -28,10 +28,11 @@ import {
 import { Building2, Pencil, Trash2 } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
+import { edit_user_comp } from "@/utils/org/editors";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
-  const { userComp } = useOrg();
+  const { userComp, fetchUserCompany } = useOrg();
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
 
@@ -40,8 +41,13 @@ export default function CompanyDetails() {
   }, [userComp]);
 
   // Handle organization name update
-  const handleCompanyUpdate = () => {
+  const handleCompanyUpdate = async () => {
     // Here you would typically send the updated org name to your API
+    const res = await edit_user_comp(userComp?.id, { name: compName });
+    console.log(compName);
+    console.log(res);
+    fetchUserCompany();
+
     toast.success("Company updated successfully");
     setIsEditingOrg(false);
   };
@@ -68,14 +74,13 @@ export default function CompanyDetails() {
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <Card className="w-full shadow-none border-none ">
+      <Card className="w-full shadow-none border-none w-3/4">
         <CardHeader>
           <div className="flex items-center gap-3 border-bottom mb-5">
             <Building2 className="h-6 w-6" />
             <h1 className="text-3xl font-bold">{userComp?.name}</h1>
           </div>
 
-          <CardTitle>Comapny </CardTitle>
           <CardDescription>
             View and manage your organization details.
           </CardDescription>
@@ -85,7 +90,7 @@ export default function CompanyDetails() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="org-name" className="!text-xs">
-                Company Name
+                Name
               </Label>
               {!isEditingOrg && (
                 <div className="flex items-center gap-2">
@@ -111,6 +116,7 @@ export default function CompanyDetails() {
                   size="sm"
                   className="!text-white"
                   onClick={handleCompanyUpdate}
+                  disabled={compName == userComp?.name}
                 >
                   Save
                 </Button>
@@ -131,7 +137,6 @@ export default function CompanyDetails() {
           </div>
           <div className="space-y-2 ">
             <Label className="!text-xs">
-              Created On{" "}
               {userComp?.created_at
                 ? format(new Date(userComp.created_at), "MMM d, yyyy")
                 : "Invalid date"}
