@@ -1,5 +1,9 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { get_users_orgs, get_user_comp } from "../utils/org/fetchers";
+import {
+  get_users_orgs,
+  get_user_comp,
+  fetchCompOrgs,
+} from "../utils/org/fetchers";
 import axiosInstance from "../axios/axiosInstance";
 import CreateOrganization from "../components/org/CreateOrganization";
 import { useUser } from "./UserContext";
@@ -26,14 +30,11 @@ export const OrganizationProvider = ({ children }) => {
 
   const [navigations, setNavigations] = useState([]);
 
-
-
-
   // New: Admin-related state
-  const [allCompanies, setAllCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const [companySearch, setCompanySearch] = useState("");
-
+  //const [allCompanies, setAllCompanies] = useState([]);
+  //const [selectedCompany, setSelectedCompany] = useState(null);
+  //const [companySearch, setCompanySearch] = useState("");
+  //
   //fetch navigations
   const fetchNavigations = async () => {
     if (!currentOrg) return; // Prevent running if currentOrg is undefined
@@ -52,10 +53,22 @@ export const OrganizationProvider = ({ children }) => {
   };
 
   const fetchUserCompany = async () => {
+    if (user.is_staff) {
+      const response = await axiosInstance.get(
+        `http://localhost:8000/organizations/company/${userComp.id}/`,
+      );
+      //console.log(response.data);
+      if (response.data) {
+        setUserComp(response.data);
+      }
+
+      return;
+    }
     try {
       const response = await get_user_comp();
+      //or use from localstorage
       const comp = response.data?.results || [];
-      console.log(comp);
+      //console.log(comp);
 
       setUserComp(comp[0]);
     } catch (err) {
@@ -66,9 +79,27 @@ export const OrganizationProvider = ({ children }) => {
   };
 
   const fetchUserOrganizations = async () => {
+    //if (user.is_staff) {
+    //  const response = await fetchCompOrgs(userComp.id);
+    //  console.log(response.data);
+    //  setUserOrgs(response.data);
+    //  return;
+    //}
     try {
-      const response = await get_users_orgs();
-      const organizations = response.data?.results || [];
+      let organizations;
+      if (user.is_staff && currentOrg?.id) {
+        const response = await fetchCompOrgs(userComp.id);
+        //console.log("**:");
+        //console.log(response);
+
+        organizations = response || [];
+        //setUserOrgs(response.data);
+        //return;
+      } else {
+        const response = await get_users_orgs();
+
+        organizations = response.data?.results || [];
+      }
 
       setUserOrgs(organizations);
 
@@ -87,12 +118,12 @@ export const OrganizationProvider = ({ children }) => {
   };
   //create org
   const createOrganization = async (orgName) => {
-    console.log("new req");
+    //console.log("new req");
     try {
       //const token = localStorage.getItem('access_token');
       const response = await axiosInstance.post(
         "/organizations/organization/",
-        { name: orgName },
+        { name: orgName, company: userComp.id },
       );
 
       if (response.status === 201) {
@@ -110,7 +141,6 @@ export const OrganizationProvider = ({ children }) => {
   useEffect(() => {
     fetchUserOrganizations();
     fetchUserCompany();
-
     // console.log("organizations fetched");
   }, [user]);
 
@@ -127,6 +157,8 @@ export const OrganizationProvider = ({ children }) => {
         loading,
         currentOrg,
         setCurrentOrg,
+        setUserOrgs,
+        setUserComp,
         fetchUserOrganizations,
         createOrganization,
         navigations,

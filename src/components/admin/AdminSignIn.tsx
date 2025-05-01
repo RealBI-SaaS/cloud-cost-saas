@@ -17,8 +17,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCompany } from "@/context/CompanyContext";
+import { useOrg } from "@/context/OrganizationContext";
+import axiosInstance from "@/axios/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { fetchCompOrgs } from "@/utils/org/fetchers";
 
 export default function CompanySelector() {
+  const navigate = useNavigate();
   const { filteredCompanies, loading, searchTerm, handleSearchChange } =
     useCompany();
   const [selectedCompany, setSelectedCompany] = useState<{
@@ -27,6 +32,7 @@ export default function CompanySelector() {
   } | null>(null);
   //const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const { setUserComp, setUserOrgs, setCurrentOrg } = useOrg();
 
   //const companies = [
   //  { id: "1", name: "TechCorp" },
@@ -40,18 +46,33 @@ export default function CompanySelector() {
   //  company.name.toLowerCase().includes(search.toLowerCase()),
   //);
   //
-  const handleSignIn = () => {
+  //const fetchCompOrgs = async (comp_id) => {
+  //  const response = await axiosInstance.get(
+  //    `organizations/company/${comp_id}/organizations/`,
+  //  );
+  //  return response.data;
+  //};
+  const handleSignIn = async () => {
     if (selectedCompany) {
-      console.log(`Signed in as: ${selectedCompany.name}`);
+      console.log(`Signed in as: ${selectedCompany.id}`);
+      setUserComp(selectedCompany);
+      const orgs = await fetchCompOrgs(selectedCompany.id);
+      console.log(orgs);
+      setUserOrgs(orgs);
+      setCurrentOrg(orgs[0]);
+
+      navigate("/home");
+      //set the selected company as user's comp.
+      //set all orgs in selected company as userorganizations
     }
   };
 
   return filteredCompanies ? (
     <div className="h-screen flex flex-col justify-start  ">
-      <div className="max-w-md mx-auto grid   mt-20 p-6 border rounded-xl shadow-sm bg-white space-y-6 w-3/4">
+      <div className="max-w-md mx-auto grid   mt-20 p-6   shadow-none border rounded-md shadow-md  space-y-6 w-3/4">
         <div className="space-y-1 text-center">
           <ShieldUser className="w-15 h-16 mx-auto text-gray-700" />
-          <h1 className="text-2xl font-bold text-gray-800">Welcome, Admin</h1>
+          <h1 className="text-2xl font-bold">Welcome, Admin</h1>
           <p className="text-sm text-gray-500">Select a company to continue</p>
         </div>
 

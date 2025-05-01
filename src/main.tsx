@@ -16,18 +16,13 @@ const AppWrapper = () => {
 
   //logic not to display the sidebar with unauthenticated user
   if (!user) {
-    return (
-      <CompanyProvider>
-        <App />
-      </CompanyProvider>
-    );
+    return <App />;
   }
 
   return (
     <OrganizationProvider>
       <CompanyProvider>
         <ThemeProvider>
-
           <main className="w-full h-full relative">
             {/* <SidebarTrigger
               className="m-5 fixed bottom-0"

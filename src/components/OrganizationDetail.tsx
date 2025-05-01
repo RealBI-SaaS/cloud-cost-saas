@@ -49,7 +49,7 @@ export default function OrganizationDetailsPage() {
     // Here you would typically send the updated org name to your API
     const res = await edit_user_org(currentOrg.id, { name: orgName });
     fetchUserOrganizations();
-    console.log(res);
+    //console.log(res);
     toast.success("Organization updated successfully");
     setIsEditingOrg(false);
   };

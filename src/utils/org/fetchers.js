@@ -18,3 +18,11 @@ export const get_users_orgs = async () => {
     console.error("Error fetching organization data:", err);
   }
 };
+
+
+export const fetchCompOrgs = async (comp_id) => {
+  const response = await axiosInstance.get(
+    `organizations/company/${comp_id}/organizations/`,
+  );
+  return response.data;
+};
