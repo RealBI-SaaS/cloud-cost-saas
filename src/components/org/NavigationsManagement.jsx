@@ -43,6 +43,12 @@ import {
   Plus,
   X,
 } from "lucide-react";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { navIcons } from "@/assets/iconMap";
 
 const NavigationManagement = () => {
@@ -52,13 +58,19 @@ const NavigationManagement = () => {
   const { navigations, fetchNavigations } = useOrg();
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
   const [newNavigationLabel, setNewNavigationLabel] = useState(null);
+  //NOTE: for creation
   const [icon, setIcon] = useState("");
+  //NOTE: for edit
   const [newIcon, setNewIcon] = useState("");
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
+      if (!icon) {
+        toast.error("No Icon selected! Please select an icon.");
+        return;
+      }
       await axiosInstance.post(`/organizations/navigation/`, {
         organization: currentOrg.id,
         label,
@@ -96,7 +108,7 @@ const NavigationManagement = () => {
     setLoading(true);
 
     try {
-      await axiosInstance.patch(
+      const res = await axiosInstance.patch(
         `/organizations/navigation/${navigationGettingEdited}/`,
         {
           organization: currentOrg.id,
@@ -104,6 +116,7 @@ const NavigationManagement = () => {
           icon: newIcon,
         },
       );
+      //console.log(res);
       toast.success("Navigation updated successfully");
       setNavigationGettingEdited(null);
       fetchNavigations();
@@ -132,11 +145,13 @@ const NavigationManagement = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <Card className="w-full shadow-none border-none">
+    <div className="container mx-auto p-6 ">
+      <Card className="w-full shadow-none border-none w-3/4">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold">
-            Manage {currentOrg?.name} Navigations
+            Manage{" "}
+            <span className="underline text-primary">{currentOrg?.name}</span>{" "}
+            Navigations
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -182,25 +197,47 @@ const NavigationManagement = () => {
                               <span className="text-sm font-medium text-gray-700">
                                 Select an Icon
                               </span>
-                              <div className="grid grid-cols-4 gap-2 p-2 border rounded-md">
-                                {Object.entries(navIcons).map(
-                                  ([name, Icon]) => (
-                                    <Button
-                                      key={name}
-                                      type="button"
-                                      variant={
-                                        newIcon === name ? "default" : "outline"
-                                      }
-                                      size="sm"
-                                      className="flex flex-col items-center gap-1 h-auto py-2"
-                                      onClick={() => setNewIcon(name)}
-                                    >
-                                      <Icon className="h-4 w-4" />
-                                      <span className="text-xs">{name}</span>
-                                    </Button>
-                                  ),
-                                )}
-                              </div>
+
+                              <Collapsible>
+                                <CollapsibleTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="flex items-center gap-2"
+                                  >
+                                    <span>
+                                      {newIcon
+                                        ? `Icon: ${newIcon}`
+                                        : "Select Icon"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4" />
+                                  </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2">
+                                    {Object.entries(navIcons).map(
+                                      ([name, Icon]) => (
+                                        <Button
+                                          key={name}
+                                          type="button"
+                                          variant={
+                                            icon === name
+                                              ? "default"
+                                              : "outline"
+                                          }
+                                          size="sm"
+                                          className="flex flex-col items-center gap-1 h-auto py-2"
+                                          onClick={() => setNewIcon(name)}
+                                        >
+                                          <Icon className="h-4 w-4" />
+                                          <span className="text-xs">
+                                            {name}
+                                          </span>
+                                        </Button>
+                                      ),
+                                    )}
+                                  </div>
+                                </CollapsibleContent>
+                              </Collapsible>
                             </div>
 
                             <div className="flex justify-between items-center">
@@ -287,7 +324,10 @@ const NavigationManagement = () => {
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Create New Navigation</h3>
-                <form onSubmit={handleNavigationCreation} className="space-y-4">
+                <form
+                  onSubmit={handleNavigationCreation}
+                  className=" space-y-4"
+                >
                   <div className="space-y-2">
                     <Input
                       id="navigation-label"
@@ -298,24 +338,34 @@ const NavigationManagement = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Select Icon</Label>
-                    <div className="grid grid-cols-4 gap-2 p-2 border rounded-md">
-                      {Object.entries(navIcons).map(([name, Icon]) => (
+                    <Collapsible>
+                      <CollapsibleTrigger asChild>
                         <Button
-                          key={name}
-                          type="button"
-                          variant={icon === name ? "default" : "outline"}
-                          size="sm"
-                          className="flex flex-col items-center gap-1 h-auto py-2"
-                          onClick={() => {
-                            setIcon(name);
-                          }}
+                          variant="outline"
+                          className="flex items-center gap-2"
                         >
-                          <Icon className="h-4 w-4" />
-                          <span className="text-xs">{name}</span>
+                          <span>{icon ? `Icon: ${icon}` : "Select Icon"}</span>
+                          <ChevronDown className="h-4 w-4" />
                         </Button>
-                      ))}
-                    </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2">
+                          {Object.entries(navIcons).map(([name, Icon]) => (
+                            <Button
+                              key={name}
+                              type="button"
+                              variant={icon === name ? "default" : "outline"}
+                              size="sm"
+                              className="flex flex-col items-center gap-1 h-auto py-2"
+                              onClick={() => setIcon(name)}
+                            >
+                              <Icon className="h-4 w-4" />
+                              <span className="text-xs">{name}</span>
+                            </Button>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </div>
                   <Button type="submit" className="w-full sm:w-auto">
                     <Plus className="h-4 w-4 mr-2" />

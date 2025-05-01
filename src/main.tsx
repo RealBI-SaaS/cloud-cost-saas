@@ -9,6 +9,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
+import { CompanyProvider } from "./context/CompanyContext";
 
 const AppWrapper = () => {
   const { user } = useUser();
@@ -20,18 +21,17 @@ const AppWrapper = () => {
 
   return (
     <OrganizationProvider>
-      <ThemeProvider>
-        <SidebarProvider>
-          <AppSidebar />
+      <CompanyProvider>
+        <ThemeProvider>
           <main className="w-full h-full relative">
-            <SidebarTrigger
+            {/* <SidebarTrigger
               className="m-5 fixed bottom-0"
               style={{ display: "block" }}
-            />
+            /> */}
             <App />
           </main>
-        </SidebarProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </CompanyProvider>
     </OrganizationProvider>
   );
 };

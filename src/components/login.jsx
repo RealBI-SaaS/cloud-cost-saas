@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [redirectToAdmin, setRedirectToAdmin] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -29,6 +30,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (redirectToAdmin) {
+      navigate("/admin/signup", { replace: true });
+    }
+  }, [redirectToAdmin, navigate]);
 
   if (user) {
     navigate("/home");
@@ -60,7 +67,13 @@ const Login = () => {
           state: { user_email: formData.email },
         });
       } else {
-        await login(formData.email, formData.password);
+        const myUser = await login(formData.email, formData.password);
+        console.log(myUser);
+        if (myUser.is_staff) {
+          navigate("/admin/signin", { replace: true });
+          //setRedirectToAdmin(true);
+          return; // Stop here to avoid navigating twice
+        }
         const from = location.state?.from?.pathname || "/home";
         navigate(from, { replace: true });
       }
@@ -76,7 +89,7 @@ const Login = () => {
       console.log(error);
       toast.error(
         error?.response?.data?.detail ||
-        "An error occurred during login, try again or another account",
+          "An error occurred during login, try again or another account",
       );
       console.log(error?.response?.data);
     } finally {

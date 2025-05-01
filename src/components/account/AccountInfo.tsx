@@ -100,7 +100,7 @@ export default function AccountInfo() {
             >
               Cancel
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit" disabled={profile.lastName == user.last_name && profile.firstName == user.first_name}>Save Changes</Button>
           </CardFooter>
         </form>
       ) : (

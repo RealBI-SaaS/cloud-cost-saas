@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CreateOrganization from "./org/CreateOrganization";
 
 import UserOrganizations from "./org/UserOrganizations";
-import get_users_orgs from "../utils/org/get_users_organizations";
+import { get_users_orgs } from "@/utils/org/fetchers";
 
 function Organizations() {
   const [orgData, setOrgData] = useState([]);
@@ -40,7 +40,7 @@ function Organizations() {
   }
 
   return (
-    <div className="grid grid-cols-6 bg-gray-100 h-full ">
+    <div className="grid grid-cols-6 bg-gray-100 h-full w-3/4 bg-amber-400 ">
       <div className="col-span-5 w-full max-w-screen-lg mt-5 p-4 rounded-lg shadow-md">
         <UserOrganizations />
       </div>

@@ -209,9 +209,7 @@ export default function OrganizationMembers() {
                       {member.first_name} {member.last_name}
                     </TableCell>
                     <TableCell>{member.email}</TableCell>
-                    <TableCell className="capitalize">
-                      {member.role}
-                    </TableCell>
+                    <TableCell className="capitalize">{member.role}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -225,9 +223,7 @@ export default function OrganizationMembers() {
                             onClick={() =>
                               handleRoleChange(
                                 member.id,
-                                member.role === "admin"
-                                  ? "member"
-                                  : "admin",
+                                member.role === "admin" ? "member" : "admin",
                               )
                             }
                           >
@@ -260,7 +256,7 @@ export default function OrganizationMembers() {
       </Card>
       {/* <hr /> */}
       {/*pending invitations */}
-      <Card className="w-full mt-5 shadow-sm border-none mt-5" >
+      <Card className="w-full mt-5 shadow-sm border-none mt-5">
         <CardHeader>
           <CardTitle>Pending Invitations</CardTitle>
           <CardDescription>
@@ -294,9 +290,7 @@ export default function OrganizationMembers() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() =>
-                          handleRevokeInvitation(invitation.id)
-                        }
+                        onClick={() => handleRevokeInvitation(invitation.id)}
                       >
                         Revoke
                       </Button>
@@ -308,9 +302,7 @@ export default function OrganizationMembers() {
           ) : (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <Mail className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">
-                No pending invitations
-              </h3>
+              <h3 className="text-lg font-medium">No pending invitations</h3>
               <p className="text-muted-foreground mt-1">
                 Invite new members to join your organization above.
               </p>
@@ -320,4 +312,4 @@ export default function OrganizationMembers() {
       </Card>
     </div>
   );
-} 
+}
