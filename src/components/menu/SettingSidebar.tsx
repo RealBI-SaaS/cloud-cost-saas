@@ -220,19 +220,6 @@ const SettingsSidebar = ({
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      isActive={isActiveExact(
-                        "/settings/organization/navigation",
-                      )}
-                    >
-                      <Link to="/settings/organization/navigation">
-                        Colors and Preferences
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
                       isActive={isActiveExact("/settings/organization/data")}
                     >
                       <Link to="/settings/organization/data">Your Data</Link>
