@@ -105,7 +105,7 @@ export const OrganizationProvider = ({ children }) => {
 
       setUserOrgs(organizations);
 
-      //console.log(organizations);
+      console.log(organizations);
       if (organizations.length > 0) {
         const matchedOrg = organizations.find(
           (org) => org.id === currentOrg?.id,
@@ -143,8 +143,8 @@ export const OrganizationProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user) {
-      console.log("logout from org-cont");
-      navigate("/login");
+      //console.log("logout from org-cont");
+      //navigate("/login");
       return;
     }
     //

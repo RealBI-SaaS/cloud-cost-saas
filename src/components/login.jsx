@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import logo_only from "../../public/logo-only.png";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -122,6 +123,7 @@ const Login = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6 max-w-md mx-auto ">
+      <img src={logo_only} alt="logo" className=" h-20 object-contain " />
       <Card className="w-100 ">
         <CardHeader>
           <CardTitle>

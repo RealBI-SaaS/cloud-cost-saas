@@ -39,6 +39,7 @@ export default function OrganizationDetailsPage() {
 
   useEffect(() => {
     if (currentOrg?.name) {
+      console.log(currentOrg);
       setOrgName(currentOrg.name);
     }
   }, [currentOrg]);
@@ -95,7 +96,7 @@ export default function OrganizationDetailsPage() {
               <Label htmlFor="org-name" className="!text-xs">
                 Organization Name
               </Label>
-              {!isEditingOrg && (
+              {!isEditingOrg && currentOrg.role == "owner" && (
                 <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"

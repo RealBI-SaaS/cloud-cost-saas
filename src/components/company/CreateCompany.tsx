@@ -6,11 +6,13 @@ import { toast } from "sonner";
 import { Building2 } from "lucide-react";
 import axiosInstance from "@/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useOrg } from "@/context/OrganizationContext";
 
 export default function CreateCompany() {
   const navigate = useNavigate();
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
+  const { fetchUserCompany } = useOrg();
 
   const handleCreate = async () => {
     if (!companyName.trim()) {
@@ -34,6 +36,7 @@ export default function CreateCompany() {
     } catch (err) {
       toast.error(err.message);
     } finally {
+      fetchUserCompany();
       setLoading(false);
     }
   };

@@ -46,6 +46,7 @@ import { OrganizationSelector } from "@/components/organization-selector";
 import { NavigationsList } from "@/components/navigation-list";
 import { SideBarUser } from "@/components/sidebar-footer-account";
 import { Link } from "react-router-dom";
+import text_and_logo from "../../public/text-and-logo.png";
 // Menu items.
 const items = [
   {
@@ -98,7 +99,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       {state == "expanded" ? (
         <SidebarHeader>
-          <p>RealBI</p>
+          <img
+            src={text_and_logo}
+            alt="Logo"
+            className=" h-8 object-contain "
+          />
         </SidebarHeader>
       ) : (
         <></>
