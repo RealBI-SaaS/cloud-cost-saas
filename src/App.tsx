@@ -44,6 +44,7 @@ import AdminSignIn from "@/components/admin/AdminSignIn";
 import { AppSidebar } from "@/components/app-sidebar";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import Landing from "./components/Landing";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -72,6 +73,7 @@ function App() {
           {/*components with sidebar */}
 
           <Route path="/login" element={<Login />} />
+          <Route path="/landing" element={<Landing />} />
           <Route element={<MainLayout />}>
             <Route path="/home" element={<Home />} />
 

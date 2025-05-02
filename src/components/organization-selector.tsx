@@ -65,6 +65,7 @@ export function OrganizationSelector() {
 
       //setSelectedOrg(userOrgs[0]); // Update local state
     } else {
+      console.log(currentOrg);
       setActiveOrg({
         name: currentOrg.name,
         logo: Circle,
