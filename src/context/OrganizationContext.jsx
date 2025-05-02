@@ -7,6 +7,7 @@ import {
 import axiosInstance from "../axios/axiosInstance";
 import CreateOrganization from "../components/org/CreateOrganization";
 import { useUser } from "./UserContext";
+import { useNavigate } from "react-router-dom";
 // Create Context
 const OrganizationContext = createContext(null);
 
@@ -20,6 +21,7 @@ export const useOrg = () => {
 
 // Provider Component
 export const OrganizationProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [userOrgs, setUserOrgs] = useState([]);
   const { user } = useUser();
   //the organization th user is working on
@@ -55,7 +57,7 @@ export const OrganizationProvider = ({ children }) => {
   const fetchUserCompany = async () => {
     if (user.is_staff) {
       const response = await axiosInstance.get(
-        `http://localhost:8000/organizations/company/${userComp.id}/`,
+        `/organizations/company/${userComp.id}/`,
       );
       //console.log(response.data);
       if (response.data) {
@@ -103,7 +105,7 @@ export const OrganizationProvider = ({ children }) => {
 
       setUserOrgs(organizations);
 
-      //console.log(organizations);
+      console.log(organizations);
       if (organizations.length > 0) {
         const matchedOrg = organizations.find(
           (org) => org.id === currentOrg?.id,
@@ -138,18 +140,26 @@ export const OrganizationProvider = ({ children }) => {
       throw error;
     }
   };
+
   useEffect(() => {
-    fetchUserOrganizations();
-    fetchUserCompany();
-    // console.log("organizations fetched");
+    if (!user) {
+      //console.log("logout from org-cont");
+      //navigate("/login");
+      return;
+    }
+    //
+    // Only fetch data if user exists
+    if (!user.is_staff || userComp) {
+      fetchUserCompany();
+      fetchUserOrganizations();
+    }
   }, [user]);
 
   useEffect(() => {
-    fetchNavigations();
-
-    // console.log("navigations fetched");
+    if (currentOrg) {
+      fetchNavigations();
+    }
   }, [currentOrg]);
-
   return (
     <OrganizationContext.Provider
       value={{

@@ -36,13 +36,14 @@ export default function OrganizationSettings() {
   const [showNewOrgForm, setShowNewOrgForm] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
   const [organizations, setOrganizations] = useState<
-    { id: number; name: string }[]
+    { id: number; name: string; role: string }[]
   >([]);
 
   useEffect(() => {
     const orgs = userOrgs.map((org) => ({
       id: org.id,
       name: org.name,
+      role: org.role,
     }));
     setOrganizations(orgs);
   }, [userOrgs]);
@@ -133,14 +134,18 @@ export default function OrganizationSettings() {
                 onClick={() => handleOrgClick(org)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary ">
                     {org.name.charAt(0)}
                   </div>
                   <span className="font-medium">{org.name}</span>
                 </div>
-                <Button variant="ghost" size="icon">
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+
+                <div className="flex  items-center underline decoration-dotted text-sm justify-center">
+                  <p classname="">{org.role} </p>
+                  <Button variant="ghost" size="icon">
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

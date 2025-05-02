@@ -62,6 +62,7 @@ export const UserProvider = ({ children }) => {
       }
     };
 
+    setLoading(true);
     initializeUser();
   }, []);
 

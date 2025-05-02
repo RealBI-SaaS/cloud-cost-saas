@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -71,6 +71,20 @@ export default function CompanyDetails() {
   // Here you would typically send the delete request to your API
   // Redirect to organizations list or dashboard
   //};
+  if (!userComp) {
+    return (
+      <div className="max-w-md mx-auto mt-10 rounded-lg p-6 bg-background text-foreground">
+        <h2 className="text-lg font-semibold mb-2">No Company Found</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          You don’t have a company yet. Start by creating one to manage your
+          organization.
+        </p>
+        <Button asChild>
+          <Link to="/company/create">Create a Company</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-10">

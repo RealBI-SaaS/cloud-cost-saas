@@ -65,6 +65,8 @@ export function OrganizationSelector() {
 
       //setSelectedOrg(userOrgs[0]); // Update local state
     } else {
+      console.log("Dd");
+      console.log(currentOrg);
       setActiveOrg({
         name: currentOrg.name,
         logo: Circle,
@@ -96,7 +98,6 @@ export function OrganizationSelector() {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{activeOrg.name}</span>
-                  <span className="truncate text-xs">{activeOrg.name}</span>
                 </div>
                 {state == "expanded" && <ChevronsUpDown className="ml-auto" />}
               </SidebarMenuButton>

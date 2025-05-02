@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 //import { useNavigate, useSearchParams } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Landing from "./Landing";
 import HomeAuthenticated from "./HomeAuthenticated";
@@ -8,7 +8,7 @@ import HomeNew from "./HomeNew";
 
 const Home = () => {
   const { user, loading, setUser, fetchUserData } = useUser();
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -59,11 +59,12 @@ const Home = () => {
           <p className="text-muted-foreground animate-pulse">Loading...</p>
         </div>
       </div>
-    );;
+    );
   }
 
   if (!user) {
-    return <Landing />;
+    //return <Landing />;
+    navigate("/landing");
   } else {
     return <HomeAuthenticated />;
   }

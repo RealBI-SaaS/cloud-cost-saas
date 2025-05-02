@@ -10,15 +10,16 @@ import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { CompanyProvider } from "./context/CompanyContext";
+import Landing from "./components/Landing";
 
 const AppWrapper = () => {
   const { user } = useUser();
 
   //logic not to display the sidebar with unauthenticated user
-  if (!user) {
-    return <App />;
-  }
-
+  //if (!user) {
+  //  return <Landing />;
+  //}
+  //
   return (
     <OrganizationProvider>
       <CompanyProvider>

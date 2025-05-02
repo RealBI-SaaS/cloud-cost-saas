@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 import Account from "./components/Account";
 import Logout from "./components/logout";
 import { useUser } from "./context/UserContext";
-import CreateCompany from "./components/CreateCompany";
+import CreateCompany from "./components/company/CreateCompany";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import AskEmailVerificatioin from "./components/auth/AskEmailVerification";
 import AskForPasswordReset from "./components/auth/AskForPasswordReset";
@@ -44,6 +44,7 @@ import AdminSignIn from "@/components/admin/AdminSignIn";
 import { AppSidebar } from "@/components/app-sidebar";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import Landing from "./components/Landing";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -72,14 +73,13 @@ function App() {
           {/*components with sidebar */}
 
           <Route path="/login" element={<Login />} />
+          <Route path="/landing" element={<Landing />} />
           <Route element={<MainLayout />}>
-
             <Route path="/home" element={<Home />} />
 
             <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
-
               <Route
                 path="/settings/organization/list"
                 element={
@@ -156,15 +156,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
-              <Route
-                path="/create-company"
-                element={
-                  <ProtectedRoute>
-                    <CreateCompany />
-                  </ProtectedRoute>
-                }
-              />
               <Route
                 path="settings/organization/detail"
                 element={
@@ -199,6 +190,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/company/create"
+            element={
+              <ProtectedRoute>
+                <CreateCompany />{" "}
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/logout" element={<Logout />} />
           <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
           <Route

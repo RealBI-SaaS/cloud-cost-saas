@@ -15,10 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import logo_only from "../../public/logo-only.png";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [redirectToAdmin, setRedirectToAdmin] = useState(false);
+  //const [redirectToAdmin, setRedirectToAdmin] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,17 +31,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    if (redirectToAdmin) {
-      navigate("/admin/signup", { replace: true });
-    }
-  }, [redirectToAdmin, navigate]);
-
-  if (user) {
-    navigate("/home");
-  }
-
+  //
+  //useEffect(() => {
+  //  if (redirectToAdmin) {
+  //    navigate("/admin/signup", { replace: true });
+  //  }
+  //}, [redirectToAdmin, navigate]);
+  //
+  //useEffect(() => {
+  //  if (user) {
+  //    navigate("/home");
+  //  }
+  //}, [user]);
+  //
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -70,6 +73,7 @@ const Login = () => {
         const myUser = await login(formData.email, formData.password);
         console.log(myUser);
         if (myUser.is_staff) {
+          console.log("Admin");
           navigate("/admin/signin", { replace: true });
           //setRedirectToAdmin(true);
           return; // Stop here to avoid navigating twice
@@ -89,7 +93,7 @@ const Login = () => {
       console.log(error);
       toast.error(
         error?.response?.data?.detail ||
-          "An error occurred during login, try again or another account",
+        "An error occurred during login, try again or another account",
       );
       console.log(error?.response?.data);
     } finally {
@@ -119,6 +123,7 @@ const Login = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6 max-w-md mx-auto ">
+      <img src={logo_only} alt="logo" className=" h-20 object-contain " />
       <Card className="w-100 ">
         <CardHeader>
           <CardTitle>

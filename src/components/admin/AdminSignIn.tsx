@@ -33,6 +33,7 @@ export default function CompanySelector() {
   //const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const { setUserComp, setUserOrgs, setCurrentOrg } = useOrg();
+  console.log("on adminnn");
 
   //const companies = [
   //  { id: "1", name: "TechCorp" },
