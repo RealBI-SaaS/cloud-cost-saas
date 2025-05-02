@@ -199,7 +199,7 @@ const SettingsSidebar = ({
                       isActive={isActiveExact("/settings/organization/members")}
                     >
                       <Link to="/settings/organization/members">
-                        Members and Invitations
+                        Members
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
