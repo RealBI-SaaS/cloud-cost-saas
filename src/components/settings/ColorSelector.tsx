@@ -20,13 +20,13 @@ export function ColorPicker() {
 
   const handleColorChange = (variable: string, color: string) => {
     document.documentElement.style.setProperty(variable, color);
-    if (variable === "--primary") {
-      setPrimaryColor(color); // update context if needed
-    }
+    //if (variable === "--primary") {
+    //  setPrimaryColor(color); // update context if needed
+    //}
   };
   const resetToDefault = (variable: string) => {
     document.documentElement.style.removeProperty(variable);
-    if (variable === "--primary") setPrimaryColor(""); // Or default value
+    //if (variable === "--primary") setPrimaryColor(""); // Or default value
   };
 
   return (
