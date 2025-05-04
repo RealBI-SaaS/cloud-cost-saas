@@ -47,7 +47,7 @@ export default function CompanyDetails() {
     console.log(compName);
     console.log(res);
     fetchUserCompany();
-    fetchUserOrganizations()
+    fetchUserOrganizations();
 
     toast.success("Company updated successfully");
     setIsEditingOrg(false);
@@ -101,10 +101,13 @@ export default function CompanyDetails() {
           </CardDescription>
         </CardHeader>
         <hr />
-        <CardContent className="space-y-4 ">
+        <CardContent className="space-y-1 ">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="org-name" className="!text-xs">
+              <Label
+                htmlFor="org-name"
+                className="text-xs text-muted-foreground"
+              >
                 Name
               </Label>
               {!isEditingOrg && (
@@ -151,11 +154,12 @@ export default function CompanyDetails() {
             )}
           </div>
           <div className="space-y-2 ">
-            <Label className="!text-xs">
+            <Label className="text-xs text-muted-foreground">
               {userComp?.created_at
                 ? format(new Date(userComp.created_at), "MMM d, yyyy")
                 : "Invalid date"}
             </Label>
+
             {/* <div className="!text-lg">
               {currentOrg?.created_at
                 ? format(new Date(currentOrg.created_at), "MMM d, yyyy")

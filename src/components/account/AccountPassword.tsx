@@ -77,9 +77,9 @@ export default function AccountPassword() {
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <KeyRound className="h-5 w-5" />
-          <CardTitle>Update Password</CardTitle>
+        <div className="flex items-center gap-2 ">
+          <KeyRound className="h-7 w-7" />
+          <CardTitle className="text-3xl">Update Password</CardTitle>
         </div>
         <CardDescription>Change your account password here.</CardDescription>
       </CardHeader>
@@ -87,7 +87,12 @@ export default function AccountPassword() {
       <form onSubmit={handlePasswordUpdate}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password</Label>
+            <Label
+              htmlFor="currentPassword"
+              className="text-sm text-muted-foreground"
+            >
+              Current Password
+            </Label>
             <Input
               id="currentPassword"
               name="currentPassword"
@@ -98,7 +103,12 @@ export default function AccountPassword() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
+            <Label
+              htmlFor="newPassword"
+              className="text-sm text-muted-foreground"
+            >
+              New Password
+            </Label>
             <Input
               id="newPassword"
               name="newPassword"

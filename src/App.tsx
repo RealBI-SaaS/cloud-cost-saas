@@ -17,7 +17,7 @@ import VerifyEmail from "./components/auth/VerifyEmail";
 import AskEmailVerificatioin from "./components/auth/AskEmailVerification";
 import AskForPasswordReset from "./components/auth/AskForPasswordReset";
 import ResetPassword from "./components/auth/ResetPassword";
-import ManageAll from "./components/ManageAll";
+//import ManageAll from "./components/ManageAll";
 import OrganizationDetails from "./components/org/OrganizationDetails";
 import AcceptInvitation from "./components/org/AcceptInvitation";
 import { useLocation } from "react-router-dom";
@@ -106,14 +106,6 @@ function App() {
                 }
               />
 
-              <Route
-                path="/manage-all"
-                element={
-                  <ProtectedRoute>
-                    <ManageAll />
-                  </ProtectedRoute>
-                }
-              />
               <Route
                 path="/manage-all/navigations"
                 element={

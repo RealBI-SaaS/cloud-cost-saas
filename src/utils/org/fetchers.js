@@ -9,16 +9,15 @@ export const get_user_comp = async () => {
   }
 };
 
-export const get_users_orgs = async () => {
+export const get_users_orgs = async (url) => {
   try {
-    const response = await axiosInstance.get("/organizations/organization/");
+    const response = await axiosInstance.get(url);
     return response;
   } catch (err) {
     throw err;
     console.error("Error fetching organization data:", err);
   }
 };
-
 
 export const fetchCompOrgs = async (comp_id) => {
   const response = await axiosInstance.get(

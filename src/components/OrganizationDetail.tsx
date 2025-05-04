@@ -31,11 +31,20 @@ import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { edit_user_org } from "@/utils/org/editors";
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
+
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
   const { currentOrg, fetchUserOrganizations } = useOrg();
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (currentOrg?.name) {
@@ -67,8 +76,9 @@ export default function OrganizationDetailsPage() {
       toast.error("Opps, organization deleted unsuccessfully");
     } finally {
       toast.success("Organization deleted successfully");
+      fetchUserOrganizations();
 
-      window.location.href = "/settings/organization/list";
+      navigate("/settings/organization/list");
     }
 
     // Here you would typically send the delete request to your API
@@ -92,50 +102,72 @@ export default function OrganizationDetailsPage() {
         <hr />
         <CardContent className="space-y-4 ">
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="org-name" className="!text-xs">
-                Organization Name
+            <div className="flex items-center justify-between ">
+              <Label
+                htmlFor="org-name"
+                className="text-xs text-muted-foreground "
+              >
+                Name
               </Label>
               {!isEditingOrg && currentOrg.role == "owner" && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsEditingOrg(true)}
-                  >
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
+                <>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 p-0"
+                      >
+                        <MoreVertical className="h-4 w-4" />
                       </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the organization and remove all associated
-                          data.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="!text-white"
-                          onClick={handleDeleteOrg}
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent align="end" className="w-40">
+                      <DropdownMenuItem onClick={() => setIsEditingOrg(true)}>
+                        <Pencil className="h-4 w-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        className="text-destructive focus:text-destructive"
+                        onSelect={(e) => {
+                          event.preventDefault();
+                          setOpenDeleteDialog(true);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+
+                      <AlertDialog
+                        open={openDeleteDialog}
+                        onOpenChange={setOpenDeleteDialog}
+                      >
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the organization and remove all
+                              associated data.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="!text-white"
+                              onClick={handleDeleteOrg}
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
               )}
             </div>
             {isEditingOrg ? (
@@ -165,22 +197,39 @@ export default function OrganizationDetailsPage() {
                 </Button>
               </div>
             ) : (
-              <div className="text-lg font-medium">{orgName}</div>
+              <div className="text-xl font-medium">{orgName}</div>
             )}
           </div>
-          <div className="space-y-2 ">
-            <Label className="!text-xs">
-              Created On{" "}
-              {currentOrg?.created_at
-                ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
-                : "Invalid date"}
-            </Label>
-            {/* <div className="!text-lg">
+          <div className="grid grid-cols-2 mt-5 border-t pt-3 border-t-secondary">
+            <div>
+              <Label
+                htmlFor="comp-name"
+                className="text-xs text-muted-foreground"
+              >
+                Company
+              </Label>
+
+              <div className="text-lg font-medium">
+                {currentOrg.company_name}
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">
+                Created On{" "}
+              </Label>
+              <div className="text-lg font-medium">
+                {currentOrg?.created_at
+                  ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
+                  : "Invalid date"}
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="!text-lg">
               {currentOrg?.created_at
                 ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
                 : "Invalid date"}
             </div> */}
-          </div>
         </CardContent>
         <CardFooter></CardFooter>
       </Card>

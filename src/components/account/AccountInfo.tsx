@@ -60,10 +60,10 @@ export default function AccountInfo() {
   //
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <User className="h-5 w-5" />
-          <CardTitle>Personal Information</CardTitle>
+      <CardHeader className=" ">
+        <div className="flex items-center gap-2 text-bold">
+          <User className="h-7 w-7" />
+          <CardTitle className="text-3xl">Personal Information</CardTitle>
         </div>
         <CardDescription>Update your personal details here.</CardDescription>
       </CardHeader>
@@ -100,7 +100,15 @@ export default function AccountInfo() {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={profile.lastName == user.last_name && profile.firstName == user.first_name}>Save Changes</Button>
+            <Button
+              type="submit"
+              disabled={
+                profile.lastName == user.last_name &&
+                profile.firstName == user.first_name
+              }
+            >
+              Save Changes
+            </Button>
           </CardFooter>
         </form>
       ) : (
@@ -108,11 +116,11 @@ export default function AccountInfo() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
-                <p className="text-xs font-thin">First Name</p>
+                <p className="text-xs text-muted-foreground">First Name</p>
                 <p className="px-3 pl-0 py-2 text-lg">{profile.firstName}</p>
               </div>
               <div>
-                <p className="text-xs font-thin">Last Name</p>
+                <p className="text-xs text-muted-foreground">Last Name</p>
                 <p className="px-3 pl-0 py-2 text-lg">{profile.lastName}</p>
               </div>
               <Button
@@ -124,7 +132,7 @@ export default function AccountInfo() {
               </Button>
             </div>
             <div className="mt-5">
-              <p className="text-xs font-thin">Email</p>
+              <p className="text-xs text-muted-foreground">Email</p>
               <p className="px-3 pl-0 py-2 text-md">{profile.email}</p>
             </div>
           </CardContent>

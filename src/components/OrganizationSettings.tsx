@@ -15,6 +15,15 @@ import { toast } from "sonner";
 import { Building2, Plus, ChevronRight } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import { useNavigate } from "react-router-dom";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type NavItem = {
   title: string;
@@ -32,7 +41,14 @@ export const orgNavItems: NavItem[] = [
 
 export default function OrganizationSettings() {
   const navigate = useNavigate();
-  const { createOrganization, userOrgs, setCurrentOrg } = useOrg();
+  const {
+    createOrganization,
+    userOrgs,
+    setCurrentOrg,
+    orgsNext,
+    orgsPrevious,
+    fetchUserOrganizations,
+  } = useOrg();
   const [showNewOrgForm, setShowNewOrgForm] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
   const [organizations, setOrganizations] = useState<
@@ -151,6 +167,27 @@ export default function OrganizationSettings() {
           </div>
         </CardContent>
       </Card>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              disabled={!orgsPrevious}
+              onClick={() => {
+                fetchUserOrganizations(orgsPrevious);
+              }}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              disabled={!orgsNext}
+              onClick={() => {
+                fetchUserOrganizations(orgsNext);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

@@ -29,6 +29,8 @@ export const OrganizationProvider = ({ children }) => {
   const [userComp, setUserComp] = useState("");
   //const [loading, setLoading] = useState(true);
   const { loading, setLoading } = useUser();
+  const [orgsNext, setOrgsNext] = useState(null);
+  const [orgsPrevious, setOrgsPrevious] = useState(null);
 
   const [navigations, setNavigations] = useState([]);
 
@@ -80,7 +82,10 @@ export const OrganizationProvider = ({ children }) => {
     }
   };
 
-  const fetchUserOrganizations = async () => {
+  const fetchUserOrganizations = async (
+    url = "/organizations/organization/",
+  ) => {
+    console.log("url:", url);
     //if (user.is_staff) {
     //  const response = await fetchCompOrgs(userComp.id);
     //  console.log(response.data);
@@ -95,17 +100,23 @@ export const OrganizationProvider = ({ children }) => {
         //console.log(response);
 
         organizations = response || [];
+        //setOrgsNext(response.next);
+        //setOrgsPrevious(response.previous);
+
         //setUserOrgs(response.data);
         //return;
       } else {
-        const response = await get_users_orgs();
+        const response = await get_users_orgs(url);
 
+        //console.log(response.data);
         organizations = response.data?.results || [];
+        setOrgsNext(response.data.next);
+        setOrgsPrevious(response.data.previous);
+
+        console.log(orgsPrevious, orgsPrevious);
       }
 
       setUserOrgs(organizations);
-
-      console.log(organizations);
       if (organizations.length > 0) {
         const matchedOrg = organizations.find(
           (org) => org.id === currentOrg?.id,
@@ -175,6 +186,8 @@ export const OrganizationProvider = ({ children }) => {
         fetchNavigations,
         userComp,
         fetchUserCompany,
+        orgsNext,
+        orgsPrevious,
       }}
     >
       {children}

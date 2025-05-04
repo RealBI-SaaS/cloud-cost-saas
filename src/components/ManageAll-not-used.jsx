@@ -1,7 +1,7 @@
 import SideMenu from "./menu/ManageAllSideMenu";
 import { useState, useEffect } from "react";
 import Account from "./Account";
-import Organizations from "./Organizations";
+//import Organizations from "./Organizations";
 import NavigationManagement from "./org/NavigationsManagement";
 import { useSearchParams } from "react-router-dom";
 import SettingsSidebar from "./menu/SettingSidebar";
