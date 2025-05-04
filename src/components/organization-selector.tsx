@@ -21,11 +21,12 @@ import {
 } from "@/components/ui/sidebar";
 import { useOrg } from "@/context/OrganizationContext";
 import { StarOff, Plus, ChevronsUpDown, FolderX, Circle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 let orgs = [
   {
     name: "firstorg",
+    comp_name: "firstcomp",
     logo: StarOff,
   },
 ];
@@ -37,10 +38,12 @@ export function OrganizationSelector() {
     currentOrg?.name
       ? {
         name: currentOrg.name,
+        comp_name: currentOrg.company_name,
         logo: StarOff,
       }
       : {
         name: "select ",
+        comp_name: "-",
         logo: StarOff,
       },
   );
@@ -52,6 +55,7 @@ export function OrganizationSelector() {
       userOrgs.map((org) => {
         orgs.push({
           name: org.name,
+          comp_name: org.company_name,
           logo: StarOff,
         });
       });
@@ -69,6 +73,7 @@ export function OrganizationSelector() {
       console.log(currentOrg);
       setActiveOrg({
         name: currentOrg.name,
+        comp_name: currentOrg.company_name,
         logo: Circle,
       });
     }
@@ -98,6 +103,7 @@ export function OrganizationSelector() {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{activeOrg.name}</span>
+                  <span>{activeOrg.comp_name}</span>
                 </div>
                 {state == "expanded" && <ChevronsUpDown className="ml-auto" />}
               </SidebarMenuButton>

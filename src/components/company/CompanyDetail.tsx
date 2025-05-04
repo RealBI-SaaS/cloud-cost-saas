@@ -32,7 +32,7 @@ import { edit_user_comp } from "@/utils/org/editors";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
-  const { userComp, fetchUserCompany } = useOrg();
+  const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
 
@@ -47,6 +47,7 @@ export default function CompanyDetails() {
     console.log(compName);
     console.log(res);
     fetchUserCompany();
+    fetchUserOrganizations()
 
     toast.success("Company updated successfully");
     setIsEditingOrg(false);
