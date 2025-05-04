@@ -39,7 +39,7 @@ export function NavigationsList() {
       name: "Welcome", // Fix typo from "lable" to "label"
       key: 1,
       icon: Handshake,
-      url: "#",
+      url: "/welcome",
     },
     {
       name: "Home", // Fix typo from "lable" to "label"

@@ -45,6 +45,8 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Landing from "./components/Landing";
+import { CompanyStyles } from "./components/settings/CompanyStyles";
+import Welcome from "./components/Welcome";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -149,6 +151,14 @@ function App() {
                 }
               />
               <Route
+                path="/settings/company/styles"
+                element={
+                  <ProtectedRoute>
+                    <CompanyStyles />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="settings/organization/detail"
                 element={
                   <ProtectedRoute>
@@ -173,6 +183,14 @@ function App() {
                 }
               />
             </Route>
+            <Route
+              path="/welcome"
+              element={
+                <ProtectedRoute>
+                  <Welcome />{" "}
+                </ProtectedRoute>
+              }
+            />
           </Route>
           <Route
             path="/admin/signin"
@@ -190,7 +208,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route path="/logout" element={<Logout />} />
           <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
           <Route

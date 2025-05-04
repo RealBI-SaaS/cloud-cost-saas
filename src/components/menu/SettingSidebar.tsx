@@ -159,6 +159,16 @@ const SettingsSidebar = ({
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/company/styles")}
+                    >
+                      <Link to="settings/company/styles">Manage Colors</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -198,9 +208,7 @@ const SettingsSidebar = ({
                       asChild
                       isActive={isActiveExact("/settings/organization/members")}
                     >
-                      <Link to="/settings/organization/members">
-                        Members
-                      </Link>
+                      <Link to="/settings/organization/members">Members</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 

@@ -65,6 +65,7 @@ const Home = () => {
   if (!user) {
     //return <Landing />;
     navigate("/landing");
+    return;
   } else {
     return <HomeAuthenticated />;
   }
