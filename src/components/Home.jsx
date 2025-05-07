@@ -62,13 +62,18 @@ const Home = () => {
     );
   }
 
-  if (!user) {
-    //return <Landing />;
-    navigate("/landing");
-    return;
-  } else {
-    return <HomeAuthenticated />;
-  }
+  useEffect(() => {
+    if (!user) {
+      console.log(user, "sd");
+      //return <Landing />;
+      navigate("/landing");
+      //return;
+    } else {
+      //return <HomeAuthenticated />;
+
+      navigate("/home");
+    }
+  }, [user]);
 };
 
 export default Home;

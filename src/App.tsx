@@ -47,6 +47,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Landing from "./components/Landing";
 import { CompanyStyles } from "./components/settings/CompanyStyles";
 import Welcome from "./components/Welcome";
+import HomeAuthenticated from "./components/HomeAuthenticated";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -80,16 +81,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
           <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+
             <Route
               path="/home"
               element={
                 <ProtectedRoute>
-                  <Home />
+                  <HomeAuthenticated />
                 </ProtectedRoute>
               }
             />
-
-            <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}
             <Route element={<SettingsLayout />}>
               <Route
