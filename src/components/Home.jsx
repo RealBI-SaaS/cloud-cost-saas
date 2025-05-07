@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 //import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
@@ -9,6 +9,7 @@ import HomeNew from "./HomeNew";
 const Home = () => {
   const { user, loading, setLoading, setUser, fetchUserData } = useUser();
   const navigate = useNavigate();
+  const [isFetchingUser, setIsFetchingUser] = useState("false");
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -17,8 +18,11 @@ const Home = () => {
       const refreshToken = searchParams.get("refresh");
       //console.log("acces, red", accessToken, refreshToken);
 
+      //console.log("acces, red", accessToken, refreshToken);
+
       if (accessToken && refreshToken) {
         setLoading(true);
+        setIsFetchingUser(true);
         try {
           // Store tokens in localStorage
           localStorage.setItem("access_token", accessToken);
@@ -49,6 +53,7 @@ const Home = () => {
           console.error("Error handling token parameters:", error);
         } finally {
           setLoading(false);
+          setIsFetchingUser(false);
         }
       }
     };
