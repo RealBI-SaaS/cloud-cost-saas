@@ -76,7 +76,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !isFetchingUser) return;
     if (!user) {
       console.log(user, "sd");
       //return <Landing />;
