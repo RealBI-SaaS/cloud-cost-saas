@@ -82,8 +82,8 @@ export default function OrganizationSettings() {
   };
 
   return (
-    <div className="space-y-6 mx-10 my-5 w-3/4">
-      <Card className="shadow-none border-none">
+    <div className="space-y-6 mx-10 my-5 ">
+      <Card className="shadow-none border-none flex flex-col h-screen">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -103,7 +103,7 @@ export default function OrganizationSettings() {
             Manage your organizations and teams.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 py-5 overflow-y-auto ">
           {showNewOrgForm && (
             <form
               onSubmit={handleCreateOrg}
@@ -157,7 +157,7 @@ export default function OrganizationSettings() {
                 </div>
 
                 <div className="flex  items-center underline decoration-dotted text-sm justify-center">
-                  <p classname="">{org.role} </p>
+                  <p className="">{org.role} </p>
                   <Button variant="ghost" size="icon">
                     <ChevronRight className="h-4 w-4" />
                   </Button>
@@ -167,27 +167,6 @@ export default function OrganizationSettings() {
           </div>
         </CardContent>
       </Card>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              disabled={!orgsPrevious}
-              onClick={() => {
-                fetchUserOrganizations(orgsPrevious);
-              }}
-            />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext
-              disabled={!orgsNext}
-              onClick={() => {
-                fetchUserOrganizations(orgsNext);
-              }}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 }

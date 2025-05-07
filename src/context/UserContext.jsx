@@ -1,12 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import axiosInstance from "../axios/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 // Create User Context
 const UserContext = createContext(null);
 
 // Provider Component
 export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -120,7 +122,8 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("user");
     //localStorage.removeItem("theme");
     setUser(null);
-    window.location.href = "/login";
+    navigate("/login");
+    //window.location.href = "/login";
   };
 
   return (

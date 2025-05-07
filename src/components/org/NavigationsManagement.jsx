@@ -146,11 +146,11 @@ const NavigationManagement = () => {
 
   return (
     <div className="container mx-auto p-6 ">
-      <Card className="w-full shadow-none border-none w-3/4">
+      <Card className="w-full shadow-none border-none ">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold">
             Manage{" "}
-            <span className="underline text-primary">{currentOrg?.name}</span>{" "}
+            <span className="text-primary text-2xl">{currentOrg?.name}</span>{" "}
             Navigations
           </CardTitle>
         </CardHeader>

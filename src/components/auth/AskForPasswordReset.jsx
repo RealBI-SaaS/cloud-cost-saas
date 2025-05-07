@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import send_password_reset_email from "../../utils/auth/send_password_reset_email";
 import { toast } from "sonner";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 //a page for the user to ak for password reset email, attched on login form
 const AskForPasswordReset = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +24,7 @@ const AskForPasswordReset = () => {
       toast.error("Please enter your email address");
       return;
     }
-    
+
     setIsLoading(true);
     try {
       const response = await send_password_reset_email(email);
@@ -37,12 +44,13 @@ const AskForPasswordReset = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex flex-col min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Reset Password</CardTitle>
           <CardDescription>
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we'll send you a link to reset your
+            password.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -58,12 +66,14 @@ const AskForPasswordReset = () => {
             />
           </div>
           {message && (
-            <p className={`text-sm ${message.includes("Unexpected") ? "text-destructive" : "text-primary"}`}>
+            <p
+              className={`text-sm ${message.includes("Unexpected") ? "text-destructive" : "text-primary"}`}
+            >
               {message}
             </p>
           )}
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={handleFormSubmit}
             disabled={isLoading}
           >
@@ -71,6 +81,15 @@ const AskForPasswordReset = () => {
           </Button>
         </CardContent>
       </Card>
+      <Button
+        onClick={() => {
+          navigate("/login");
+        }}
+        variant="link"
+        className="text-sm !text-gray-700"
+      >
+        Back to Login
+      </Button>
     </div>
   );
 };

@@ -54,17 +54,20 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    <Loading />;
+    return <Loading />;
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/landing" state={{ from: location }} replace />;
   }
 
   return children;
 };
 
 function App() {
+  const { loading } = useUser();
+  if (loading) return <Loading />; // or a full-screen spinner
+
   return (
     <MenuProvider>
       {/* <Nav /> */}
@@ -77,7 +80,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
           <Route element={<MainLayout />}>
-            <Route path="/home" element={<Home />} />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="/" element={<Navigate to="/home" />} />
             {/* setting pages with */}

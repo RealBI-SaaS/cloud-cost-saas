@@ -15,9 +15,9 @@ const HomeAuthenticated = () => {
   const [selectedItem, setSelectedItem] = useState("Welcome");
 
   // Function to update the clicked label
-  const handleItemClick = (label) => {
-    setSelectedItem(label); // Update selected label
-  };
+  //const handleItemClick = (label) => {
+  //  setSelectedItem(label); // Update selected label
+  //};
 
   return (
     <div className=" flex grid grid-cols-1 justify-around items-center w-full h-full  ">

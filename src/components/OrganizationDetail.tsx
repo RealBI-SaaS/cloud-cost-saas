@@ -38,13 +38,16 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { useUser } from "@/context/UserContext";
 
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
+  const { user } = useUser();
   const { currentOrg, fetchUserOrganizations } = useOrg();
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  console.log(user);
 
   useEffect(() => {
     if (currentOrg?.name) {
@@ -109,7 +112,8 @@ export default function OrganizationDetailsPage() {
               >
                 Name
               </Label>
-              {!isEditingOrg && currentOrg.role == "owner" && (
+              {((!isEditingOrg && currentOrg.role == "owner") ||
+                (!isEditingOrg && user.is_staff)) && (
                 <>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

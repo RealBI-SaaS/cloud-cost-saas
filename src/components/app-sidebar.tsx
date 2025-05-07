@@ -47,6 +47,7 @@ import { NavigationsList } from "@/components/navigation-list";
 import { SideBarUser } from "@/components/sidebar-footer-account";
 import { Link } from "react-router-dom";
 import text_and_logo from "../../public/text-and-logo.png";
+import { useOrg } from "@/context/OrganizationContext";
 // Menu items.
 const items = [
   {
@@ -79,6 +80,7 @@ const items = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, setOpen } = useSidebar();
   const location = useLocation();
+  const { userComp } = useOrg()
 
   // Check if we're on a settings page
   const isSettingsPage =
@@ -98,13 +100,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       {state == "expanded" ? (
-        <SidebarHeader>
+        !userComp ? (<SidebarHeader>
           <img
             src={text_and_logo}
             alt="Logo"
             className=" h-8 object-contain "
           />
-        </SidebarHeader>
+        </SidebarHeader>) :
+          (
+            <p className="text-3xl text-primary px-3 py-5 bold-lg">{userComp.name}</p>)
       ) : (
         <></>
       )}

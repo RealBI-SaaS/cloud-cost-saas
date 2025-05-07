@@ -86,37 +86,38 @@ export const OrganizationProvider = ({ children }) => {
     url = "/organizations/organization/",
   ) => {
     console.log("url:", url);
-    //if (user.is_staff) {
-    //  const response = await fetchCompOrgs(userComp.id);
-    //  console.log(response.data);
-    //  setUserOrgs(response.data);
-    //  return;
-    //}
+
     try {
-      let organizations;
+      let organizations = [];
       if (user.is_staff && currentOrg?.id) {
         const response = await fetchCompOrgs(userComp.id);
-        //console.log("**:");
-        //console.log(response);
 
         organizations = response || [];
+        //console.log(organizations);
         //setOrgsNext(response.next);
         //setOrgsPrevious(response.previous);
 
         //setUserOrgs(response.data);
         //return;
       } else {
-        const response = await get_users_orgs(url);
+        let next_list_url = url;
+        while (next_list_url) {
+          const response = await get_users_orgs(next_list_url);
+          const results = response.data?.results || [];
+          organizations.push(...results);
+          next_list_url = response.data.next;
+        }
 
         //console.log(response.data);
-        organizations = response.data?.results || [];
-        setOrgsNext(response.data.next);
-        setOrgsPrevious(response.data.previous);
-
+        //organizations = response.data?.results || [];
+        //setOrgsNext(response.data.next);
+        //setOrgsPrevious(response.data.previous);
+        //
         console.log(orgsPrevious, orgsPrevious);
       }
 
       setUserOrgs(organizations);
+      //stting current org
       if (organizations.length > 0) {
         const matchedOrg = organizations.find(
           (org) => org.id === currentOrg?.id,
@@ -176,6 +177,7 @@ export const OrganizationProvider = ({ children }) => {
       value={{
         userOrgs,
         loading,
+        setLoading,
         currentOrg,
         setCurrentOrg,
         setUserOrgs,

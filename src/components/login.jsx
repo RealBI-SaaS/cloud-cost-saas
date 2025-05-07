@@ -93,7 +93,7 @@ const Login = () => {
       console.log(error);
       toast.error(
         error?.response?.data?.detail ||
-        "An error occurred during login, try again or another account",
+          "An error occurred during login, try again or another account",
       );
       console.log(error?.response?.data);
     } finally {
@@ -222,25 +222,29 @@ const Login = () => {
                   ? "Sign Up"
                   : "Sign In"}
             </Button>
-
-            {!isSignUp && (
-              <Button variant="link" className="text-sm" asChild>
-                <a href="/reset-password">Forgot password?</a>
-              </Button>
-            )}
+            <Button
+              variant="link"
+              className="text-sm !text-gray-700"
+              onClick={() => setIsSignUp(!isSignUp)}
+            >
+              {isSignUp
+                ? "Already have an account? Sign in"
+                : "Don't have an account? Sign up"}
+            </Button>
           </form>
         </CardContent>
       </Card>
-
-      <Button
-        variant="link"
-        className="text-sm !text-gray-700"
-        onClick={() => setIsSignUp(!isSignUp)}
-      >
-        {isSignUp
-          ? "Already have an account? Sign in"
-          : "Don't have an account? Sign up"}
-      </Button>
+      {!isSignUp && (
+        <Button
+          onClick={() => {
+            navigate("/reset-password");
+          }}
+          variant="link"
+          className="text-sm !text-gray-700"
+        >
+          <p className="cursor-pointer">Forgot password?</p>
+        </Button>
+      )}
     </div>
   );
 };

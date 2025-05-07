@@ -44,9 +44,12 @@ import { toast } from "sonner";
 import { UserPlus, Mail, User, MoreHorizontal } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
+import { loadEnvFile } from "process";
+import { Loading } from "@/misc/loading";
 
 export default function OrganizationMembers() {
   const { currentOrg } = useOrg();
+  const [loading, setLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
@@ -73,9 +76,12 @@ export default function OrganizationMembers() {
         setInvitations(response.data);
       } catch (error) {
         console.error("Error fetching invitations:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
+    setLoading(true);
     fetchMembers();
     fetchInvitations();
   }, [currentOrg]);
@@ -115,6 +121,7 @@ export default function OrganizationMembers() {
     }
     setNewInvite({ email: "", role: "member" });
   };
+  if (loading) return <Loading />;
 
   return (
     <div className="container mx-auto px-4 py-10 ">
@@ -122,7 +129,10 @@ export default function OrganizationMembers() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Organization Members</CardTitle>
+              <CardTitle>
+                Members in{" "}
+                <span className="text-lg text-primary">{currentOrg.name} </span>
+              </CardTitle>
               <CardDescription>
                 Manage members of your organization.
               </CardDescription>

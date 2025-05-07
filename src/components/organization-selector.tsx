@@ -103,7 +103,9 @@ export function OrganizationSelector() {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{activeOrg.name}</span>
-                  <span>{activeOrg.comp_name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {activeOrg.comp_name}
+                  </span>
                 </div>
                 {state == "expanded" && <ChevronsUpDown className="ml-auto" />}
               </SidebarMenuButton>

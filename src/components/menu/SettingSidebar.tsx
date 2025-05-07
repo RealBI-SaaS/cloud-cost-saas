@@ -155,7 +155,7 @@ const SettingsSidebar = ({
                       asChild
                       isActive={isActiveExact("/settings/company/details")}
                     >
-                      <Link to="settings/company/details">Details</Link>
+                      <Link to="settings/company/details">Your Company</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -208,7 +208,9 @@ const SettingsSidebar = ({
                       asChild
                       isActive={isActiveExact("/settings/organization/members")}
                     >
-                      <Link to="/settings/organization/members">Members</Link>
+                      <Link to="/settings/organization/members">
+                        Members and Invitations
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 
