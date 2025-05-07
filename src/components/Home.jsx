@@ -32,13 +32,14 @@ const Home = () => {
           //  },
           //);
           //
-          const response = await fetchUserData();
+          const userData = await fetchUserData();
+          setUser(userData);
 
-          if (response.ok) {
-            const userData = await response.json();
-            // Update user context directly
-            setUser(userData);
-          }
+          //if (response.ok) {
+          //const userData = await response.json();
+          // Update user context directly
+          //setUser(userData);
+          //}
         } catch (error) {
           console.error("Error handling token parameters:", error);
         }
@@ -63,6 +64,7 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if (loading) return;
     if (!user) {
       console.log(user, "sd");
       //return <Landing />;
