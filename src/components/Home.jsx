@@ -7,7 +7,7 @@ import HomeAuthenticated from "./HomeAuthenticated";
 import HomeNew from "./HomeNew";
 
 const Home = () => {
-  const { user, loading, setUser, fetchUserData } = useUser();
+  const { user, loading, setLoading, setUser, fetchUserData } = useUser();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -15,8 +15,10 @@ const Home = () => {
     const handleTokenParams = async () => {
       const accessToken = searchParams.get("access");
       const refreshToken = searchParams.get("refresh");
+      //console.log("acces, red", accessToken, refreshToken);
 
       if (accessToken && refreshToken) {
+        setLoading(true);
         try {
           // Store tokens in localStorage
           localStorage.setItem("access_token", accessToken);
@@ -32,7 +34,10 @@ const Home = () => {
           //  },
           //);
           //
+
+          //console.log("XCV");
           const userData = await fetchUserData();
+          //console.log(userData);
           setUser(userData);
 
           //if (response.ok) {
@@ -42,6 +47,8 @@ const Home = () => {
           //}
         } catch (error) {
           console.error("Error handling token parameters:", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -73,7 +80,7 @@ const Home = () => {
     } else {
       //return <HomeAuthenticated />;
 
-      navigate("/home");
+      navigate("/home/authenticated");
     }
   }, [user]);
 };

@@ -81,10 +81,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
 
             <Route
-              path="/home"
+              path="/home/authenticated"
               element={
                 <ProtectedRoute>
                   <HomeAuthenticated />

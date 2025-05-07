@@ -17,7 +17,9 @@ export const UserProvider = ({ children }) => {
   const fetchUserData = async () => {
     try {
       const response = await axiosInstance.get("/myauth/user/");
-      return response.data;
+
+      console.log("fetch", response.data);
+      //return response.data;
     } catch (err) {
       console.error("Error fetching user data:", err);
       throw err;
