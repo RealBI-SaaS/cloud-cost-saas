@@ -135,6 +135,9 @@ export const OrganizationProvider = ({ children }) => {
   //create org
   const createOrganization = async (orgName) => {
     //console.log("new req");
+    if (!userComp) {
+      return "No company to create the organization in! Create one first.";
+    }
     try {
       //const token = localStorage.getItem('access_token');
       const response = await axiosInstance.post(
@@ -151,7 +154,9 @@ export const OrganizationProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error creating company:", error);
+
       throw error;
+      //return error;
     }
   };
 
@@ -167,13 +172,10 @@ export const OrganizationProvider = ({ children }) => {
       setLoading(true);
       fetchUserCompany();
       fetchUserOrganizations();
-
     }
   }, [user]);
 
   useEffect(() => {
-
-
     if (currentOrg) {
       fetchNavigations();
     }

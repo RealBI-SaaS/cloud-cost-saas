@@ -81,16 +81,20 @@ const Home = () => {
   //}
   //
   useEffect(() => {
-    if (loading || isFetchingUser) {console.log('returned');return};
-    // if (!user) {
-      // console.log(user, "sd");
+    if (loading || isFetchingUser) {
+      console.log("returned");
+      return;
+    }
+    if (!user) {
+      console.log(user, "sd");
       //return <Landing />;
-      // navigate("/landing");
-      //return;
+      navigate("/landing");
+      return;
+    }
     // } else {
-      //return <HomeAuthenticated />;
+    //return <HomeAuthenticated />;
 
-      navigate("/home/authenticated");
+    navigate("/home/authenticated");
     // }
   }, [user, loading, isFetchingUser]);
 };

@@ -37,15 +37,15 @@ export function OrganizationSelector() {
   const [activeOrg, setActiveOrg] = useState(
     currentOrg?.name
       ? {
-          name: currentOrg.name,
-          comp_name: currentOrg.company_name,
-          logo: StarOff,
-        }
+        name: currentOrg.name,
+        comp_name: currentOrg.company_name,
+        logo: StarOff,
+      }
       : {
-          name: "select ",
-          comp_name: "-",
-          logo: StarOff,
-        },
+        name: "select ",
+        comp_name: "-",
+        logo: StarOff,
+      },
   );
   const { state } = useSidebar();
   //populate with userorgs
@@ -69,8 +69,8 @@ export function OrganizationSelector() {
 
       //setSelectedOrg(userOrgs[0]); // Update local state
     } else {
-      console.log("Dd");
-      console.log(currentOrg);
+      //console.log("Dd");
+      //console.log(currentOrg);
       setActiveOrg({
         name: currentOrg.name,
         comp_name: currentOrg.company_name,

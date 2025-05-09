@@ -67,8 +67,13 @@ export default function OrganizationSettings() {
   const handleCreateOrg = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newOrgName.trim()) {
-      createOrganization(newOrgName);
-      toast.success(`${newOrgName} has been created successfully.`);
+      const response = await createOrganization(newOrgName);
+      if (!response) {
+        toast.success(`${newOrgName} has been created successfully.`);
+      } else {
+        toast.error("organization could not be created");
+        toast.error(response);
+      }
       setNewOrgName("");
       setShowNewOrgForm(false);
     } else {

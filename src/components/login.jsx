@@ -91,10 +91,12 @@ const Login = () => {
       //   });
       // }
       console.log(error);
+      //toast.error()
       toast.error(
         error?.response?.data?.detail ||
-          "An error occurred during login, try again or another account",
+        "An error occurred, try again or another account",
       );
+      toast.error(error?.response?.data?.password[0]);
       console.log(error?.response?.data);
     } finally {
       setLoading(false);

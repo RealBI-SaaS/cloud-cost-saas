@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import axiosInstance from "@/axios/axiosInstance";
 
 //user redirected form email after signup
 const VerifyEmail = () => {
@@ -20,8 +21,8 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/auth/users/activation/`,
+        const response = await axiosInstance.post(
+          `/auth/users/activation/`,
           { uid, token },
           { headers: { "Content-Type": "application/json" } },
         );
@@ -30,27 +31,26 @@ const VerifyEmail = () => {
           setMessage("Email verified successfully!");
           toast.success("Email verified successfully!");
           //setTimeout(() => navigate("/login"), 3000);
-          navigate("/company/create");
         } else {
           setMessage("Invalid or expired activation link.");
           toast.error("Invalid or expired activation link.");
 
-          navigate("/company/create");
+          //navigate("/company/create");
         }
       } catch (error) {
         setMessage("An error occurred. Please try again.");
         toast.error("Failed to verify email. Please try again.");
-
-        navigate("/company/create");
       } finally {
         setIsLoading(false);
+
+        navigate("/login");
       }
     };
 
     if (uid && token) {
       verifyEmail();
     }
-  }, [uid, token, navigate]);
+  }, [uid, token]);
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">

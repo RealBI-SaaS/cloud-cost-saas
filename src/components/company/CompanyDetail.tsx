@@ -40,6 +40,7 @@ export default function CompanyDetails() {
 
   useEffect(() => {
     console.log(userComp);
+    setCompName(userComp.name);
   }, [userComp]);
 
   // Handle organization name update
@@ -74,115 +75,123 @@ export default function CompanyDetails() {
   // Here you would typically send the delete request to your API
   // Redirect to organizations list or dashboard
   //};
-  if (creatingCompany){
-    return <CreateCompany />
-  }
-  if (!userComp) {
+  if (userComp) {
     return (
-      <div className="container   grid grid-cols-1 justify-center mx-auto px-4 py-10">
-        <Card className="w-3/4 shadow-none border-none border border-b border-l">
+      <div className="container mx-auto px-4 py-10">
+        <Card className="w-full shadow-none border-none w-3/4">
           <CardHeader>
-            <div className="flex  items-center gap-3 border-bottom mb-1">
+            <div className="flex items-center gap-3 border-bottom mb-5">
               <Building2 className="h-6 w-6" />
-              <CardTitle>No Company Found</CardTitle>
+              <h1 className="text-3xl font-bold">{userComp?.name}</h1>
             </div>
-            <hr/>
+
             <CardDescription>
-              You don't have a company yet. Start by creating one to manage your organization.
+              View and manage your organization details.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Button onClick={()=>{setCreatingCompany(true)}}>Create a Company</Button>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <div className="container mx-auto px-4 py-10">
-      <Card className="w-full shadow-none border-none w-3/4">
-        <CardHeader>
-          <div className="flex items-center gap-3 border-bottom mb-5">
-            <Building2 className="h-6 w-6" />
-            <h1 className="text-3xl font-bold">{userComp?.name}</h1>
-          </div>
-
-          <CardDescription>
-            View and manage your organization details.
-          </CardDescription>
-        </CardHeader>
-        <hr />
-        <CardContent className="space-y-1 ">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label
-                htmlFor="org-name"
-                className="text-xs text-muted-foreground"
-              >
-                Name
-              </Label>
-              {!isEditingOrg && (
+          <hr />
+          <CardContent className="space-y-1 ">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label
+                  htmlFor="org-name"
+                  className="text-xs text-muted-foreground"
+                >
+                  Name
+                </Label>
+                {!isEditingOrg && (
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsEditingOrg(true)}
+                    >
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {isEditingOrg ? (
                 <div className="flex items-center gap-2">
+                  <Input
+                    id="org-name"
+                    value={compName}
+                    onChange={(e) => setCompName(e.target.value)}
+                  />
                   <Button
-                    variant="ghost"
                     size="sm"
-                    onClick={() => setIsEditingOrg(true)}
+                    className="!text-white"
+                    onClick={handleCompanyUpdate}
+                    disabled={compName == userComp?.name}
                   >
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setCompName(userComp?.name || "");
+                      setIsEditingOrg(false);
+                    }}
+                  >
+                    Cancel
                   </Button>
                 </div>
+              ) : (
+                <div className="text-lg font-medium">{userComp.name}</div>
               )}
             </div>
-            {isEditingOrg ? (
-              <div className="flex items-center gap-2">
-                <Input
-                  id="org-name"
-                  value={compName}
-                  onChange={(e) => setCompName(e.target.value)}
-                />
-                <Button
-                  size="sm"
-                  className="!text-white"
-                  onClick={handleCompanyUpdate}
-                  disabled={compName == userComp?.name}
-                >
-                  Save
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setCompName(userComp?.name || "");
-                    setIsEditingOrg(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <div className="text-lg font-medium">{compName}</div>
-            )}
-          </div>
-          <div className="space-y-2 ">
-            <Label className="text-xs text-muted-foreground">
-              {userComp?.created_at
-                ? format(new Date(userComp.created_at), "MMM d, yyyy")
-                : "Invalid date"}
-            </Label>
+            <div className="space-y-2 ">
+              <Label className="text-xs text-muted-foreground">
+                {userComp?.created_at
+                  ? format(new Date(userComp.created_at), "MMM d, yyyy")
+                  : "Invalid date"}
+              </Label>
 
-            {/* <div className="!text-lg">
+              {/* <div className="!text-lg">
               {currentOrg?.created_at
                 ? format(new Date(currentOrg.created_at), "MMM d, yyyy")
                 : "Invalid date"}
             </div> */}
+            </div>
+          </CardContent>
+          <CardFooter></CardFooter>
+        </Card>
+      </div>
+    );
+  }
+  if (creatingCompany) {
+    return <CreateCompany />;
+  }
+  //if (!userComp) {
+  return (
+    <div className="container   grid grid-cols-1 justify-center mx-auto px-4 py-10">
+      <Card className="w-3/4 shadow-none border-none border border-b border-l">
+        <CardHeader>
+          <div className="flex  items-center gap-3 border-bottom mb-1">
+            <Building2 className="h-6 w-6" />
+            <CardTitle>No Company Found</CardTitle>
           </div>
+          <hr />
+          <CardDescription>
+            You don't have a company yet. Start by creating one to manage your
+            organization.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild>
+            <Button
+              onClick={() => {
+                setCreatingCompany(true);
+              }}
+            >
+              Create a Company
+            </Button>
+          </Button>
         </CardContent>
-        <CardFooter></CardFooter>
       </Card>
     </div>
   );
+  //}
 }
