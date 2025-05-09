@@ -39,8 +39,11 @@ export default function CompanyDetails() {
   const [creatingCompany, setCreatingCompany] = useState(false);
 
   useEffect(() => {
-    console.log(userComp);
-    setCompName(userComp.name);
+    if (userComp) {
+      console.log(userComp);
+
+      setCompName(userComp.name);
+    }
   }, [userComp]);
 
   // Handle organization name update
