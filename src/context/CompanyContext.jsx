@@ -52,7 +52,7 @@ export const CompanyProvider = ({ children }) => {
 
   // Fetch companies on initial load and when the search term changes
   useEffect(() => {
-    if (user) fetchCompanies(searchTerm);
+    if (user?.is_staff) fetchCompanies(searchTerm);
   }, [searchTerm, user]);
 
   return (

@@ -3,7 +3,7 @@
 import {
   BadgeCheck,
   Bell,
-  ChevronsUpDown,
+  ChevronRight,
   CreditCard,
   LogOut,
   Sparkles,
@@ -66,7 +66,7 @@ export function SideBarUser() {
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
                 {state == "expanded" && (
-                  <ChevronsUpDown className="ml-auto size-4" />
+                  <ChevronRight  className="ml-auto size-4" />
                 )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>

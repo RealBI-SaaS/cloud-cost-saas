@@ -1,5 +1,5 @@
 import React from "react";
-import logo_and_text from "../../public/text-and-logo.png";
+import logo_and_text from "/text-and-logo.png";
 
 export default function Welcome() {
   return (

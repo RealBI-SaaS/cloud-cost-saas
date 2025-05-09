@@ -91,7 +91,7 @@ export function NavigationsList() {
             </SidebarMenuButton>
 
             {/* Optional: keep the dropdown trigger hidden on collapse */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
                   <MoreHorizontal />
@@ -117,7 +117,7 @@ export function NavigationsList() {
                   <span>Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
           </SidebarMenuItem>
         ))}
       </SidebarMenu>

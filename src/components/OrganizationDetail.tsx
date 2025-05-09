@@ -47,7 +47,7 @@ export default function OrganizationDetailsPage() {
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  console.log(user);
+  // console.log(user);
 
   useEffect(() => {
     if (currentOrg?.name) {

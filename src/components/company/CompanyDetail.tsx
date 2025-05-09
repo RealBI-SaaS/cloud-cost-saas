@@ -29,12 +29,14 @@ import { Building2, Pencil, Trash2 } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { edit_user_comp } from "@/utils/org/editors";
+import CreateCompany from "./CreateCompany";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
   const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
+  const [creatingCompany, setCreatingCompany] = useState(false);
 
   useEffect(() => {
     console.log(userComp);
@@ -72,17 +74,29 @@ export default function CompanyDetails() {
   // Here you would typically send the delete request to your API
   // Redirect to organizations list or dashboard
   //};
+  if (creatingCompany){
+    return <CreateCompany />
+  }
   if (!userComp) {
     return (
-      <div className="max-w-md mx-auto mt-10 rounded-lg p-6 bg-background text-foreground">
-        <h2 className="text-lg font-semibold mb-2">No Company Found</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          You don’t have a company yet. Start by creating one to manage your
-          organization.
-        </p>
-        <Button asChild>
-          <Link to="/company/create">Create a Company</Link>
-        </Button>
+      <div className="container   grid grid-cols-1 justify-center mx-auto px-4 py-10">
+        <Card className="w-3/4 shadow-none border-none border border-b border-l">
+          <CardHeader>
+            <div className="flex  items-center gap-3 border-bottom mb-1">
+              <Building2 className="h-6 w-6" />
+              <CardTitle>No Company Found</CardTitle>
+            </div>
+            <hr/>
+            <CardDescription>
+              You don't have a company yet. Start by creating one to manage your organization.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild>
+              <Button onClick={()=>{setCreatingCompany(true)}}>Create a Company</Button>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

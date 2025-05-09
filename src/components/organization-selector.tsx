@@ -37,15 +37,15 @@ export function OrganizationSelector() {
   const [activeOrg, setActiveOrg] = useState(
     currentOrg?.name
       ? {
-        name: currentOrg.name,
-        comp_name: currentOrg.company_name,
-        logo: StarOff,
-      }
+          name: currentOrg.name,
+          comp_name: currentOrg.company_name,
+          logo: StarOff,
+        }
       : {
-        name: "select ",
-        comp_name: "-",
-        logo: StarOff,
-      },
+          name: "select ",
+          comp_name: "-",
+          logo: StarOff,
+        },
   );
   const { state } = useSidebar();
   //populate with userorgs
@@ -77,7 +77,7 @@ export function OrganizationSelector() {
         logo: Circle,
       });
     }
-  }, [userOrgs, currentOrg, setCurrentOrg]);
+  }, [userOrgs, currentOrg]);
 
   useEffect(() => {
     // console.log("new org", activeOrg);

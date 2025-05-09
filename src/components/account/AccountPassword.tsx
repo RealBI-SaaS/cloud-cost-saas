@@ -77,9 +77,9 @@ export default function AccountPassword() {
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader>
-        <div className="flex items-center gap-2 ">
-          <KeyRound className="h-7 w-7" />
-          <CardTitle className="text-3xl">Update Password</CardTitle>
+        <div className="flex items-center gap-3 ">
+          <KeyRound className="h-5 w-5" />
+          <CardTitle className="">Update Password</CardTitle>
         </div>
         <CardDescription>Change your account password here.</CardDescription>
       </CardHeader>

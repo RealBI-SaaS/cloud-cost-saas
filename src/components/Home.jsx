@@ -9,7 +9,7 @@ import HomeNew from "./HomeNew";
 const Home = () => {
   const { user, loading, setLoading, setUser, fetchUserData } = useUser();
   const navigate = useNavigate();
-  const [isFetchingUser, setIsFetchingUser] = useState("false");
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -29,20 +29,24 @@ const Home = () => {
           localStorage.setItem("refresh_token", refreshToken);
 
           // Fetch user data using the access token
-          //const response = await fetch(
-          //  `${import.meta.env.VITE_BASE_URL}/auth/user/`,
-          //  {
-          //    headers: {
-          //      Authorization: `Bearer ${accessToken}`,
-          //    },
-          //  },
-          //);
-          //
+          try {
+            const userData = await fetchUserData();
+            console.log("User data fetched successfully:", userData);
+            setUser(userData);
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            // Clear tokens if user data fetch fails
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            setUser(null);
+          }
 
-          //console.log("XCV");
-          const userData = await fetchUserData();
+          // console.log("user before", user);
+          // const userData = await fetchUserData();
           //console.log(userData);
-          setUser(userData);
+          // setUser(userData);
+
+          // console.log("user after", user);
 
           //if (response.ok) {
           //const userData = await response.json();
@@ -52,6 +56,7 @@ const Home = () => {
         } catch (error) {
           console.error("Error handling token parameters:", error);
         } finally {
+          console.log("falsed");
           setLoading(false);
           setIsFetchingUser(false);
         }
@@ -59,35 +64,35 @@ const Home = () => {
     };
     //console.log("searchParams");
     handleTokenParams();
-  }, [searchParams, setUser]);
+  }, [searchParams]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="absolute inset-0 animate-ping rounded-full bg-primary/20"></div>
-            <div className="relative animate-bounce rounded-full h-12 w-12 bg-primary"></div>
-          </div>
-          <p className="text-muted-foreground animate-pulse">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
+  //if (loading) {
+  //  return (
+  //    <div className="flex justify-center items-center h-screen">
+  //      <div className="flex flex-col items-center gap-4">
+  //        <div className="relative">
+  //          <div className="absolute inset-0 animate-ping rounded-full bg-primary/20"></div>
+  //          <div className="relative animate-bounce rounded-full h-12 w-12 bg-primary"></div>
+  //        </div>
+  //        <p className="text-muted-foreground animate-pulse">Loading...</p>
+  //      </div>
+  //    </div>
+  //  );
+  //}
+  //
   useEffect(() => {
-    if (loading || !isFetchingUser) return;
-    if (!user) {
-      console.log(user, "sd");
+    if (loading || isFetchingUser) {console.log('returned');return};
+    // if (!user) {
+      // console.log(user, "sd");
       //return <Landing />;
-      navigate("/landing");
+      // navigate("/landing");
       //return;
-    } else {
+    // } else {
       //return <HomeAuthenticated />;
 
       navigate("/home/authenticated");
-    }
-  }, [user]);
+    // }
+  }, [user, loading, isFetchingUser]);
 };
 
 export default Home;

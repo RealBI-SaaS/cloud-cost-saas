@@ -32,11 +32,11 @@ export default function CreateCompany() {
 
       const data = await response.data;
       toast.success("Company created successfully!");
-      navigate("/home");
+      fetchUserCompany();
+      navigate("/settings/company/details");
     } catch (err) {
       toast.error(err.message);
     } finally {
-      fetchUserCompany();
       setLoading(false);
     }
   };

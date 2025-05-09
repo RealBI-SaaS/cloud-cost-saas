@@ -19,9 +19,12 @@ export const UserProvider = ({ children }) => {
       const response = await axiosInstance.get("/myauth/user/");
 
       console.log("fetch", response.data);
-      //return response.data;
+      return response.data;
     } catch (err) {
       console.error("Error fetching user data:", err);
+      if (err.response) {
+        console.error("Error response:", err.response.data);
+      }
       throw err;
     }
   };

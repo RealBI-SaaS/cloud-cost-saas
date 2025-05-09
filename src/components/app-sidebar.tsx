@@ -46,7 +46,7 @@ import { OrganizationSelector } from "@/components/organization-selector";
 import { NavigationsList } from "@/components/navigation-list";
 import { SideBarUser } from "@/components/sidebar-footer-account";
 import { Link } from "react-router-dom";
-import text_and_logo from "../../public/text-and-logo.png";
+import text_and_logo from "/text-and-logo.png";
 import { useOrg } from "@/context/OrganizationContext";
 // Menu items.
 const items = [

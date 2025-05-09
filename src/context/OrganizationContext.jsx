@@ -78,7 +78,8 @@ export const OrganizationProvider = ({ children }) => {
     } catch (err) {
       console.error("Error fetching company data:", err);
     } finally {
-      setLoading(false);
+      console.log("company fetched");
+      // setLoading(false);
     }
   };
 
@@ -113,7 +114,7 @@ export const OrganizationProvider = ({ children }) => {
         //setOrgsNext(response.data.next);
         //setOrgsPrevious(response.data.previous);
         //
-        console.log(orgsPrevious, orgsPrevious);
+        //console.log(orgsPrevious, orgsPrevious);
       }
 
       setUserOrgs(organizations);
@@ -127,6 +128,7 @@ export const OrganizationProvider = ({ children }) => {
     } catch (err) {
       console.error("Error fetching organization data:", err);
     } finally {
+      console.log("organization fetched");
       setLoading(false);
     }
   };
@@ -162,12 +164,16 @@ export const OrganizationProvider = ({ children }) => {
     //
     // Only fetch data if user exists
     if (!user.is_staff || userComp) {
+      setLoading(true);
       fetchUserCompany();
       fetchUserOrganizations();
+
     }
   }, [user]);
 
   useEffect(() => {
+
+
     if (currentOrg) {
       fetchNavigations();
     }

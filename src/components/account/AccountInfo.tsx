@@ -61,9 +61,9 @@ export default function AccountInfo() {
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader className=" ">
-        <div className="flex items-center gap-2 text-bold">
-          <User className="h-7 w-7" />
-          <CardTitle className="text-3xl">Personal Information</CardTitle>
+        <div className="flex items-center gap-2 ">
+          <User className="" />
+          <CardTitle className="">Personal Information</CardTitle>
         </div>
         <CardDescription>Update your personal details here.</CardDescription>
       </CardHeader>
