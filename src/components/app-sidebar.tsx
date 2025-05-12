@@ -48,6 +48,7 @@ import { SideBarUser } from "@/components/sidebar-footer-account";
 import { Link } from "react-router-dom";
 import text_and_logo from "/text-and-logo.png";
 import { useOrg } from "@/context/OrganizationContext";
+import useOrgStore from "@/context/OrgStore";
 // Menu items.
 const items = [
   {
@@ -80,8 +81,9 @@ const items = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, setOpen } = useSidebar();
   const location = useLocation();
-  const { userComp, userOrgs } = useOrg();
-
+  // const { userComp, userOrgs } = useOrg();
+  const userComp = useOrgStore((state) => state.userComp);
+  const userOrgs = useOrgStore((state) => state.userOrgs);
   // Check if we're on a settings page
   const isSettingsPage =
     location.pathname.includes("/settings") ||

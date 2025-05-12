@@ -15,7 +15,7 @@ import useUserStore from "./context/userStore";
 
 const AppWrapper = () => {
   //const { user } = useUser();
-  const user = useUserStore((state) => state.user);
+  // const user = useUserStore((state) => state.user);
 
   //logic not to display the sidebar with unauthenticated user
   //if (!user) {
@@ -23,7 +23,7 @@ const AppWrapper = () => {
   //}
   //
   return (
-    <OrganizationProvider>
+    // <OrganizationProvider>
       <CompanyProvider>
         <ThemeProvider>
           <main className="w-full h-full relative">
@@ -35,7 +35,7 @@ const AppWrapper = () => {
           </main>
         </ThemeProvider>
       </CompanyProvider>
-    </OrganizationProvider>
+    // </OrganizationProvider>
   );
 };
 

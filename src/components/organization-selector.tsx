@@ -23,6 +23,7 @@ import { useOrg } from "@/context/OrganizationContext";
 import { StarOff, Plus, ChevronsUpDown, FolderX, Circle } from "lucide-react";
 import { act, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useOrgStore from "@/context/OrgStore";
 let orgs = [
   {
     name: "firstorg",
@@ -32,7 +33,10 @@ let orgs = [
 ];
 
 export function OrganizationSelector() {
-  const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
+  // const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
+  const userOrgs = useOrgStore((state) => state.userOrgs);
+  const setCurrentOrg = useOrgStore((state) => state.setCurrentOrg);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   const navigate = useNavigate();
   const [activeOrg, setActiveOrg] = useState(
     currentOrg?.name

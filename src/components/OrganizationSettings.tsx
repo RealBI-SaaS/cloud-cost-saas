@@ -24,7 +24,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
+import useOrgStore from "@/context/OrgStore";
 type NavItem = {
   title: string;
   href: string;
@@ -41,14 +41,17 @@ export const orgNavItems: NavItem[] = [
 
 export default function OrganizationSettings() {
   const navigate = useNavigate();
-  const {
-    createOrganization,
-    userOrgs,
-    setCurrentOrg,
-    orgsNext,
-    orgsPrevious,
-    fetchUserOrganizations,
-  } = useOrg();
+  // const {
+  //   createOrganization,
+  //   userOrgs,
+  //   setCurrentOrg,
+  //   orgsNext,
+  //   orgsPrevious,
+  //   fetchUserOrganizations,
+  // } = useOrg();
+  const createOrganization = useOrgStore((state) => state.createOrganization);
+  const userOrgs = useOrgStore((state) => state.userOrgs);
+  const setCurrentOrg = useOrgStore((state) => state.setCurrentOrg);
   const [showNewOrgForm, setShowNewOrgForm] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
   const [organizations, setOrganizations] = useState<

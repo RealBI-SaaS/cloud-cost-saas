@@ -46,9 +46,10 @@ import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { loadEnvFile } from "process";
 import { Loading } from "@/misc/loading";
-
+import useOrgStore from "@/context/OrgStore";
 export default function OrganizationMembers() {
-  const { currentOrg } = useOrg();
+  // const { currentOrg } = useOrg();
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   const [loading, setLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);

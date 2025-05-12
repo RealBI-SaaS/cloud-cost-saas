@@ -40,7 +40,7 @@ import {
 import { MoreVertical } from "lucide-react";
 import useUserStore from "@/context/userStore";
 import { shallow } from "zustand/shallow";
-
+import useOrgStore from "@/context/OrgStore";
 interface User {
   is_staff: boolean;
   // Add other user properties as needed
@@ -49,7 +49,9 @@ interface User {
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user as User);
-  const { currentOrg, fetchUserOrganizations } = useOrg();
+  // const { currentOrg, fetchUserOrganizations } = useOrg();
+  const currentOrg = useOrgStore((state) => state.currentOrg);
+  const fetchUserOrganizations = useOrgStore((state) => state.fetchUserOrganizations);
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);

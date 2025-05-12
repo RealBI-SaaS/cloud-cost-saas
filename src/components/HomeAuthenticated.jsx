@@ -7,10 +7,12 @@ import { useState } from "react";
 import PowerBIEmbed from "./powerbi/PowerBIEmbed";
 import useUserStore from "@/context/userStore";
 import { shallow } from "zustand/shallow";
+import useOrgStore from "@/context/OrgStore";
 
 const HomeAuthenticated = () => {
   const user = useUserStore((state) => state.user, shallow);
-  const { currentOrg } = useOrg();
+  // const { currentOrg } = useOrg();
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   //const navigate = useNavigate();
   //const [value, setValue] = useState([50]);
   //

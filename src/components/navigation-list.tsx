@@ -30,10 +30,14 @@ import { useEffect } from "react";
 import { useOrg } from "@/context/OrganizationContext";
 import { Link, useLocation } from "react-router-dom";
 import { navIcons, defaultIcon } from "@/assets/iconMap";
+import useOrgStore from "@/context/OrgStore";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
-  const { navigations, currentOrg } = useOrg();
+  // const { navigations, currentOrg } = useOrg();
+  const navigations = useOrgStore((state) => state.navigations);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
+
   let navigations_list = [
     {
       name: "Welcome", // Fix typo from "lable" to "label"

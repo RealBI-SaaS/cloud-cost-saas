@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
+import { Eye, EyeClosed } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { validatePassword } from "../utils/auth/password_validate";
@@ -20,6 +21,7 @@ import useUserStore from "@/context/userStore";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   //const [redirectToAdmin, setRedirectToAdmin] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -226,14 +228,30 @@ const Login = () => {
 
             <div className="grid gap-1">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
+                <Button
+                  type="button"
+                  variant="icon"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 "
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  
+                  {showPassword ? (
+                    <EyeClosed className="h-4 w-4 " />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
             </div>
 
             {/* {error && <p className="text-sm text-red-500">{error}</p>} */}

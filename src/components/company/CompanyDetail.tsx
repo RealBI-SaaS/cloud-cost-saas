@@ -30,10 +30,15 @@ import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { edit_user_comp } from "@/utils/org/editors";
 import CreateCompany from "./CreateCompany";
+import useOrgStore from "@/context/OrgStore";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
-  const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
+  // const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
+  const userComp = useOrgStore((state) => state.userComp);
+  const fetchUserCompany = useOrgStore((state) => state.fetchUserCompany);
+  const fetchUserOrganizations = useOrgStore((state) => state.fetchUserOrganizations);
+
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [creatingCompany, setCreatingCompany] = useState(false);

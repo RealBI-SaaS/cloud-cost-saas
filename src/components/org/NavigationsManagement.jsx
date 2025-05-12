@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axiosInstance from "../../axios/axiosInstance";
 import { useState } from "react";
-import { useOrg } from "../../context/OrganizationContext";
+// import { useOrg } from "../../context/OrganizationContext";
 import { useUser } from "../../context/UserContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,14 +51,17 @@ import {
 } from "@/components/ui/collapsible";
 import { navIcons } from "@/assets/iconMap";
 import useUserStore from "@/context/userStore";
-
+import useOrgStore from "@/context/OrgStore";
 const NavigationManagement = () => {
   // const { loading, setLoading } = useUser();
   const loading = useUserStore((state)=>state.loading)
   const setLoading = useUserStore((state)=>state.setLoading)
   const [label, setLabel] = useState("");
-  const { currentOrg } = useOrg();
-  const { navigations, fetchNavigations } = useOrg();
+  // const { currentOrg } = useOrg();
+  // const { navigations, fetchNavigations } = useOrg();
+  const currentOrg = useOrgStore((state) => state.currentOrg);
+  const navigations = useOrgStore((state) => state.navigations);
+  const fetchNavigations = useOrgStore((state) => state.fetchNavigations);
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
   const [newNavigationLabel, setNewNavigationLabel] = useState(null);
   //NOTE: for creation

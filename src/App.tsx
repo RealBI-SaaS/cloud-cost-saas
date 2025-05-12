@@ -50,6 +50,7 @@ import { CompanyStyles } from "./components/settings/CompanyStyles";
 import Welcome from "./components/Welcome";
 import HomeAuthenticated from "./components/HomeAuthenticated";
 import useUserStore from "./context/userStore";
+import { useOrgInitializer } from "./context/OrgStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 
 // Protected Route component
@@ -65,6 +66,7 @@ const ProtectedRoute = ({ children }) => {
   if (!user) {
     return <Navigate to="/landing" state={{ from: location }} replace />;
   }
+  useOrgInitializer();  
 
   return children;
 };
@@ -75,10 +77,10 @@ const AuthRoute = ({ children }) => {
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
 
-  // if (loading) {
-  //   console.log("loading");
-  //   return <Loading />;
-  // }
+  if (loading) {
+    console.log("loading");
+    return <Loading />;
+  }
 
   if (user) {
     return <Navigate to="/home" state={{ from: location }} replace />;
@@ -88,6 +90,7 @@ const AuthRoute = ({ children }) => {
 };
 
 function App() {
+
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
 
@@ -96,8 +99,7 @@ function App() {
       <Toaster toastOptions={{ duration: 3000 }} />
       <div className="w-full   grid grid-cols-1   mx-auto ">
         <Routes>
-          {/*components with sidebar */}
-
+          {/* Public routes */}
           <Route path="/login" element={
             <AuthRoute>
               <Login />
@@ -108,27 +110,33 @@ function App() {
               <Landing />
             </AuthRoute>
           } />
-          <Route element={<MainLayout />}>
-            <Route path="/home" element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } />
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Navigate to="/home" />
-              </ProtectedRoute>
-            } />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
+          <Route
+            path="/ask-email-verification"
+            element={<AskEmailVerificatioin />}
+          />
+          <Route path="/reset-password" element={<AskForPasswordReset />} />
+          <Route
+            path="/password/reset/confirm/:uid/:token"
+            element={<ResetPassword />}
+          />
+          <Route
+            path="/accept-invitation/:token"
+            element={<AcceptInvitation />}
+          />
 
-            <Route
-              path="/home/authenticated"
-              element={
-                <ProtectedRoute>
-                  <HomeAuthenticated />
-                </ProtectedRoute>
-              }
-            />
-            {/* setting pages with */}
+          {/* Protected routes with MainLayout */}
+          <Route element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home/authenticated" element={<HomeAuthenticated />} />
+            
+            {/* Setting pages */}
             <Route element={<SettingsLayout />}>
               <Route
                 path="/settings/organization/list"
@@ -231,15 +239,11 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              path="/welcome"
-              element={
-                <ProtectedRoute>
-                  <Welcome />{" "}
-                </ProtectedRoute>
-              }
-            />
+            
+            <Route path="/welcome" element={<Welcome />} />
           </Route>
+
+          {/* Other protected routes without MainLayout */}
           <Route
             path="/admin/signin"
             element={
@@ -252,24 +256,9 @@ function App() {
             path="/company/create"
             element={
               <ProtectedRoute>
-                <CreateCompany />{" "}
+                <CreateCompany />
               </ProtectedRoute>
             }
-          />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
-          <Route
-            path="/ask-email-verification"
-            element={<AskEmailVerificatioin />}
-          />
-          <Route path="/reset-password" element={<AskForPasswordReset />} />
-          <Route
-            path="/password/reset/confirm/:uid/:token"
-            element={<ResetPassword />}
-          />
-          <Route
-            path="/accept-invitation/:token"
-            element={<AcceptInvitation />}
           />
         </Routes>
       </div>
