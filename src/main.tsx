@@ -11,9 +11,11 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { CompanyProvider } from "./context/CompanyContext";
 import Landing from "./components/Landing";
+import useUserStore from "./context/userStore";
 
 const AppWrapper = () => {
-  const { user } = useUser();
+  //const { user } = useUser();
+  const user = useUserStore((state) => state.user);
 
   //logic not to display the sidebar with unauthenticated user
   //if (!user) {
@@ -40,9 +42,9 @@ const AppWrapper = () => {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <UserProvider>
-        <AppWrapper />
-      </UserProvider>
+      {/* <UserProvider> */}
+      <AppWrapper />
+      {/* </UserProvider> */}
     </BrowserRouter>
   </StrictMode>,
 );

@@ -38,11 +38,17 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
-import { useUser } from "@/context/UserContext";
+import useUserStore from "@/context/userStore";
+import { shallow } from "zustand/shallow";
+
+interface User {
+  is_staff: boolean;
+  // Add other user properties as needed
+}
 
 export default function OrganizationDetailsPage() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const user = useUserStore((state) => state.user as User);
   const { currentOrg, fetchUserOrganizations } = useOrg();
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);

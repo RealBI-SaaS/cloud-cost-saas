@@ -3,13 +3,14 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
-import AiChat from "./components/ai/ChatBot";
-import { UserProvider } from "./context/UserContext";
+//import AiChat from "./components/ai/ChatBot";
+//import { UserProvider } from "./context/UserContext";
 import Login from "./components/login";
 import Home from "./components/Home";
-import Nav from "./components/Nav";
-import Account from "./components/Account";
+//import Nav from "./components/Nav";
+//import Account from "./components/Account";
 import Logout from "./components/logout";
 import { useUser } from "./context/UserContext";
 import CreateCompany from "./components/company/CreateCompany";
@@ -21,17 +22,17 @@ import ResetPassword from "./components/auth/ResetPassword";
 import OrganizationDetails from "./components/org/OrganizationDetails";
 import AcceptInvitation from "./components/org/AcceptInvitation";
 import { useLocation } from "react-router-dom";
-import { OrganizationProvider } from "./context/OrganizationContext";
+//import { OrganizationProvider } from "./context/OrganizationContext";
 import NavigationManagement from "./components/org/NavigationsManagement";
-import { MenuProvider } from "./context/MenuContext";
+//import { MenuProvider } from "./context/MenuContext";
 import OrganizationDetailsPage from "./components/OrganizationDetail";
 import { Toaster } from "sonner";
 import SettingsLayout from "./components/layout/SettingsLayout";
 import MainLayout from "./components/layout/MainLayout";
 import AccountInfo from "./components/account/AccountInfo";
 import AccountPassword from "./components/account/AccountPassword";
-import UserOrganization from "./components/org/UserOrganizations";
-import Organizations from "./components/Organizations";
+//import UserOrganization from "./components/org/UserOrganizations";
+//import Organizations from "./components/Organizations";
 import OrganizationDetail from "./components/OrganizationDetail";
 import OrganizationSettings from "./components/OrganizationSettings";
 import OrganizationMembers from "./components/org/OrganizationMembers";
@@ -48,10 +49,13 @@ import Landing from "./components/Landing";
 import { CompanyStyles } from "./components/settings/CompanyStyles";
 import Welcome from "./components/Welcome";
 import HomeAuthenticated from "./components/HomeAuthenticated";
+import useUserStore from "./context/userStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
+
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useUser();
+  const user = useUserStore((state) => state.user);
+  const loading = useUserStore((state) => state.loading);
   const location = useLocation();
 
   if (loading) {
@@ -65,24 +69,56 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Auth Route component for non-authenticated users
+const AuthRoute = ({ children }) => {
+  const user = useUserStore((state) => state.user);
+  const loading = useUserStore((state) => state.loading);
+  const location = useLocation();
+
+  // if (loading) {
+  //   console.log("loading");
+  //   return <Loading />;
+  // }
+
+  if (user) {
+    return <Navigate to="/home" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
 function App() {
-  const { loading } = useUser();
-  if (loading) return <Loading />; // or a full-screen spinner
+  //const { loading } = useUser();
+  //if (loading) return <Loading />; // or a full-screen spinner
 
   return (
-    <MenuProvider>
-      {/* <Nav /> */}
-      {/* <AiChat /> */}
+    <>
       <Toaster toastOptions={{ duration: 3000 }} />
       <div className="w-full   grid grid-cols-1   mx-auto ">
         <Routes>
           {/*components with sidebar */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/landing" element={<Landing />} />
+          <Route path="/login" element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          } />
+          <Route path="/landing" element={
+            <AuthRoute>
+              <Landing />
+            </AuthRoute>
+          } />
           <Route element={<MainLayout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Navigate to="/home" />
+              </ProtectedRoute>
+            } />
 
             <Route
               path="/home/authenticated"
@@ -237,7 +273,7 @@ function App() {
           />
         </Routes>
       </div>
-    </MenuProvider>
+    </>
   );
 }
 

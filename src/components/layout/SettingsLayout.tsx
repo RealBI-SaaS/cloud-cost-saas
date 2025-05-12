@@ -3,9 +3,16 @@ import { SidebarProvider } from "../ui/sidebar";
 import SettingsSidebar from "../menu/SettingSidebar";
 import { useUser } from "@/context/UserContext";
 import { Loading } from "@/misc/loading";
+import useUserStore from "@/context/userStore";
 
 const SettingsLayout = () => {
-  const { user, loading } = useUser();
+  //const { user, loading } = useUser();
+  const user = useUserStore((state) => {
+    state.user;
+  });
+  const loading = useUserStore((state) => {
+    state.loading;
+  });
   //FIX: user data null after refresh untill fetch
   //
   //  if (loading) {

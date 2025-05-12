@@ -1,11 +1,15 @@
 import React from "react";
 import { useUser } from "../context/UserContext";
-
+import useUserStore from "@/context/userStore";
+import { useNavigate } from "react-router-dom";
 const Logout = () => {
-  const { logout } = useUser();
+  //const { logout } = useUser();
+  const navigate = useNavigate();
+  const logout = useUserStore((state) => state.logout);
 
   React.useEffect(() => {
     logout();
+    navigate("/login");
   }, [logout]);
 
   return (

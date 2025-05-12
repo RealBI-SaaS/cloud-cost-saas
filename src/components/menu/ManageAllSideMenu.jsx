@@ -3,10 +3,10 @@ import { TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useOrg } from "../../context/OrganizationContext";
-import { useMenu } from "../../context/MenuContext";
+//import { useMenu } from "../../context/MenuContext";
 
 const ManageAllSideMenu = () => {
-  const { selectedMenu, selectMenu } = useMenu();
+  //const { selectedMenu, selectMenu } = useMenu();
   const { currentOrg } = useOrg();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);

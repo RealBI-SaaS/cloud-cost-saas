@@ -28,11 +28,13 @@ import {
 } from "@/components/ui/sidebar";
 import { useUser } from "@/context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
+import useUserStore from "@/context/userStore";
 
 export function SideBarUser() {
   const navigate = useNavigate();
   const { isMobile } = useSidebar();
-  const { user } = useUser();
+  //const { user } = useUser();
+  const user = useUserStore((state) => state.user);
   const { state } = useSidebar();
 
   return (
@@ -66,7 +68,7 @@ export function SideBarUser() {
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
                 {state == "expanded" && (
-                  <ChevronRight  className="ml-auto size-4" />
+                  <ChevronRight className="ml-auto size-4" />
                 )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>

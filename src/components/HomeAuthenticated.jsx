@@ -1,13 +1,15 @@
 //import React, { useState } from "react";
 import React from "react";
 //import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
 import { useOrg } from "../context/OrganizationContext";
 import HomeOrgMenu from "./menu/HomeOrgMenu";
 import { useState } from "react";
 import PowerBIEmbed from "./powerbi/PowerBIEmbed";
+import useUserStore from "@/context/userStore";
+import { shallow } from "zustand/shallow";
+
 const HomeAuthenticated = () => {
-  const { user } = useUser();
+  const user = useUserStore((state) => state.user, shallow);
   const { currentOrg } = useOrg();
   //const navigate = useNavigate();
   //const [value, setValue] = useState([50]);

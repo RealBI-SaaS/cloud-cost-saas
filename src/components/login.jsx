@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import logo_only from "/logo-only.png";
+import useUserStore from "@/context/userStore";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -27,8 +28,30 @@ const Login = () => {
     last_name: "",
   });
 
-  const { error, setError, login, signup, user } = useUser();
-  const [loading, setLoading] = useState(false);
+  //const { error, setError, login, signup, user } = useUser();
+  const user = useUserStore((state) => 
+    state.user
+  );
+  const error = useUserStore((state) => 
+    state.error
+  );
+  const setError = useUserStore((state) => 
+    state.setError
+  );
+  const login = useUserStore((state) => 
+    state.login
+  );
+  const signup = useUserStore((state) => 
+    state.signup
+  );
+  const loading = useUserStore((state) => 
+    state.loading
+  );
+  const setLoading = useUserStore((state) => 
+    state.setLoading
+  );
+
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   //

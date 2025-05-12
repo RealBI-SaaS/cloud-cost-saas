@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
 //import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+// import { useUser } from "../context/UserContext";
 import Landing from "./Landing";
 import HomeAuthenticated from "./HomeAuthenticated";
 import HomeNew from "./HomeNew";
+import useUserStore from "@/context/userStore";
+import { shallow } from "zustand/shallow";
 
 const Home = () => {
-  const { user, loading, setLoading, setUser, fetchUserData } = useUser();
+  //const { user, loading, setLoading, setUser, fetchUserData } = useUser();
   const navigate = useNavigate();
-  const [isFetchingUser, setIsFetchingUser] = useState(false);
   const [searchParams] = useSearchParams();
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
+  
+  // Use separate selectors for each value to prevent unnecessary re-renders
+  const user = useUserStore((state) => state.user);
+  const loading = useUserStore((state) => state.loading);
+  const setLoading = useUserStore((state) => state.setLoading);
+  const setUser = useUserStore((state) => state.setUser);
+  const fetchUserData = useUserStore((state) => state.fetchUserData);
 
   useEffect(() => {
     const handleTokenParams = async () => {
       const accessToken = searchParams.get("access");
       const refreshToken = searchParams.get("refresh");
-      //console.log("acces, red", accessToken, refreshToken);
-
-      //console.log("acces, red", accessToken, refreshToken);
 
       if (accessToken && refreshToken) {
         setLoading(true);
@@ -40,63 +46,32 @@ const Home = () => {
             localStorage.removeItem("refresh_token");
             setUser(null);
           }
-
-          // console.log("user before", user);
-          // const userData = await fetchUserData();
-          //console.log(userData);
-          // setUser(userData);
-
-          // console.log("user after", user);
-
-          //if (response.ok) {
-          //const userData = await response.json();
-          // Update user context directly
-          //setUser(userData);
-          //}
         } catch (error) {
           console.error("Error handling token parameters:", error);
         } finally {
-          console.log("falsed");
           setLoading(false);
           setIsFetchingUser(false);
         }
       }
     };
-    //console.log("searchParams");
-    handleTokenParams();
-  }, [searchParams]);
 
-  //if (loading) {
-  //  return (
-  //    <div className="flex justify-center items-center h-screen">
-  //      <div className="flex flex-col items-center gap-4">
-  //        <div className="relative">
-  //          <div className="absolute inset-0 animate-ping rounded-full bg-primary/20"></div>
-  //          <div className="relative animate-bounce rounded-full h-12 w-12 bg-primary"></div>
-  //        </div>
-  //        <p className="text-muted-foreground animate-pulse">Loading...</p>
-  //      </div>
-  //    </div>
-  //  );
-  //}
-  //
+    handleTokenParams();
+  }, [searchParams]); // Remove other dependencies as they are stable references
+
   useEffect(() => {
     if (loading || isFetchingUser) {
-      console.log("returned");
       return;
     }
+
     if (!user) {
-      console.log(user, "sd");
-      //return <Landing />;
       navigate("/landing");
       return;
     }
-    // } else {
-    //return <HomeAuthenticated />;
 
     navigate("/home/authenticated");
-    // }
-  }, [user, loading, isFetchingUser]);
+  }, [user, loading, isFetchingUser, navigate]);
+
+  return null; // Since we're using navigation, we don't need to render anything
 };
 
 export default Home;

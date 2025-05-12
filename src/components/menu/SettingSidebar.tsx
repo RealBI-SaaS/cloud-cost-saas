@@ -1,3 +1,4 @@
+import useUserStore from "@/context/userStore";
 import {
   User,
   KeyRound,
@@ -37,7 +38,10 @@ const SettingsSidebar = ({
 }: React.ComponentProps<typeof Sidebar>) => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const { user } = useUser();
+  //const { user } = useUser();
+  const user = useUserStore((state) => 
+    state.user
+  );
 
   const isActive = (path: string) => {
     return currentPath.includes(path);

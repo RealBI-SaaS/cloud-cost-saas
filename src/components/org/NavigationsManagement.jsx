@@ -50,9 +50,12 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { navIcons } from "@/assets/iconMap";
+import useUserStore from "@/context/userStore";
 
 const NavigationManagement = () => {
-  const { loading, setLoading } = useUser();
+  // const { loading, setLoading } = useUser();
+  const loading = useUserStore((state)=>state.loading)
+  const setLoading = useUserStore((state)=>state.setLoading)
   const [label, setLabel] = useState("");
   const { currentOrg } = useOrg();
   const { navigations, fetchNavigations } = useOrg();

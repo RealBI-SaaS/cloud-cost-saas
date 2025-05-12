@@ -1,4 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
+import useUserStore from "./userStore";
+
 import {
   get_users_orgs,
   get_user_comp,
@@ -23,12 +25,23 @@ export const useOrg = () => {
 export const OrganizationProvider = ({ children }) => {
   const navigate = useNavigate();
   const [userOrgs, setUserOrgs] = useState([]);
-  const { user } = useUser();
+  //const { user } = useUser();
+  //const { loading, setLoading } = useUser();
+  const user = useUserStore((state) => 
+    state.user
+  );
+  const loading = useUserStore((state) => 
+    state.loading
+  );
+
+  const setLoading = useUserStore((state) => 
+    state.setLoading
+);
+
   //the organization th user is working on
   const [currentOrg, setCurrentOrg] = useState("");
   const [userComp, setUserComp] = useState("");
   //const [loading, setLoading] = useState(true);
-  const { loading, setLoading } = useUser();
   const [orgsNext, setOrgsNext] = useState(null);
   const [orgsPrevious, setOrgsPrevious] = useState(null);
 

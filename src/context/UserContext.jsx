@@ -35,6 +35,7 @@ export const UserProvider = ({ children }) => {
 
       // 🚨 Stop fetching if there is no access token
       if (!accessToken) {
+        console.log("no access token");
         setLoading(false);
         return;
       }
@@ -43,35 +44,21 @@ export const UserProvider = ({ children }) => {
         const userData = await fetchUserData();
         setUser(userData);
       } catch (err) {
-        // If token is expired, try to refresh it
-        //try {
-        //  const newAccessToken = await refreshToken();
-        //  const userData = await fetchUserData(newAccessToken);
-        //  setUser(userData);
-        //} catch (refreshErr) {
-        //  // If refresh fails, clear everything and redirect to login
-        //  localStorage.removeItem("access_token");
-        //  localStorage.removeItem("refresh_token");
-        //  setUser(null);
-        //  window.location.href = "/login";
-        //}
-        //console.log("error in initializeUser: ", err);
-        //setError(err.message);
+        console.error("Error initializing user:", err);
+        // If token is expired or invalid, clear everything and redirect to login
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         setUser(null);
-        //window.location.href = "/login";
-        //}
-        //} catch (err) {
-        //setError(err.message);
+        navigate("/login");
       } finally {
         setLoading(false);
       }
     };
 
     setLoading(true);
+    console.log("initializing user");
     initializeUser();
-  }, []);
+  }, [navigate]);
 
   // Save user data to local storage when user state changes
   useEffect(() => {
@@ -124,11 +111,8 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("user");
-    //localStorage.removeItem("theme");
     setUser(null);
     navigate("/login");
-    //window.location.href = "/login";
   };
 
   return (

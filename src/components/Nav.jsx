@@ -1,13 +1,13 @@
 import React from "react";
 import { Avatar } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
-import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import OrganizationsDropDown from "./menu/NavDropDown";
-import { useOrg } from "../context/OrganizationContext";
+import useUserStore from "@/context/userStore";
+import { shallow } from "zustand/shallow";
 
-function Nav() {
-  const { user } = useUser();
+const Nav = () => {
+  const user = useUserStore((state) => state.user, shallow);
   const userName = user?.firstName || user?.email || "x";
   const userInitial = userName.charAt(0).toUpperCase();
 
@@ -51,6 +51,6 @@ function Nav() {
       </div>
     </nav>
   );
-}
+};
 
 export default Nav;

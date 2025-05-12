@@ -14,9 +14,15 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Pencil, User } from "lucide-react";
 import { useUser } from "@/context/UserContext";
+import useUserStore from "@/context/userStore";
 
 export default function AccountInfo() {
-  const { user, setUser, fetchUserData } = useUser();
+  // const { user, setUser, fetchUserData } = useUser();
+  const user = useUserStore((state)=>state.user)
+  const setUser = useUserStore((state)=>state.setUser)
+
+  const fetchUserData = useUserStore((state)=>state.fetchUserData)
+
 
   const [profile, setProfile] = useState({
     firstName: user.first_name,

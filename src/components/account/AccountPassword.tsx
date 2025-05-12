@@ -19,10 +19,12 @@ import { useNavigate } from "react-router-dom";
 import check_correct_password from "@/utils/auth/check_correct_password";
 import { validatePassword } from "@/utils/auth/password_validate";
 import change_password from "@/utils/auth/change_password";
+import useUserStore from "@/context/userStore";
 
 export default function AccountPassword() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  // const { user } = useUser();
+  const user = useUserStore((state)=>state.user)
 
   // Password state
   const [passwords, setPasswords] = useState({
