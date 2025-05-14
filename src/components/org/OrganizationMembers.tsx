@@ -54,33 +54,35 @@ export default function OrganizationMembers() {
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
+  //for Dialog
+  const [open, setOpen] = useState(false);
+  //console.log(invi)
 
+  const fetchInvitations = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/organizations/${currentOrg.id}/invitations`,
+      );
+      setInvitations(response.data);
+    } catch (error) {
+      console.error("Error fetching invitations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMembers = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/organizations/organization/${currentOrg.id}/members/`,
+      );
+      setMembers(response.data);
+    } catch (error) {
+      console.error("Error fetching members:", error);
+    }
+  };
   useEffect(() => {
     if (!currentOrg) return;
-
-    const fetchMembers = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/organizations/organization/${currentOrg.id}/members/`,
-        );
-        setMembers(response.data);
-      } catch (error) {
-        console.error("Error fetching members:", error);
-      }
-    };
-
-    const fetchInvitations = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/organizations/${currentOrg.id}/invitations`,
-        );
-        setInvitations(response.data);
-      } catch (error) {
-        console.error("Error fetching invitations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     setLoading(true);
     fetchMembers();
@@ -88,39 +90,98 @@ export default function OrganizationMembers() {
   }, [currentOrg]);
 
   // Handle member role change
-  const handleRoleChange = (memberId: number, newRole: string) => {
+  const handleRoleChange = async (memberId: number, newRole: string) => {
     // Here you would typically send the role update to your API
-    toast.success("Role updated successfully");
+    try {
+      setLoading(true);
+      const response = await axiosInstance.patch(
+        `organizations/${currentOrg.id}/members/${memberId}/role/`,
+        { role: newRole },
+      );
+
+      fetchMembers();
+      setLoading(false);
+
+      toast.success("Memeber's role changed successfully");
+      //setInvitations((prev) => [...prev, response.data]);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error changing role:", error);
+      toast.error("Failed to change role");
+    }
+    //toast.success("Role updated successfully");
   };
 
   // Handle member removal
-  const handleRemoveMember = (memberId: number) => {
+  const handleRemoveMember = async (memberId: number) => {
     // Here you would typically send the remove request to your API
-    toast.success("Member removed successfully");
+    try {
+      setLoading(true);
+      const response = await axiosInstance.delete(
+        `organizations/${currentOrg.id}/members/${memberId}/`,
+      );
+
+      fetchMembers();
+      setLoading(false);
+
+      toast.success("Memeber removed from organization");
+      //setInvitations((prev) => [...prev, response.data]);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error removing member:", error);
+      toast.error("Failed to remove member");
+    }
+
+    //toast.success("Member removed successfully");
   };
 
   // Handle invitation revocation
-  const handleRevokeInvitation = (invitationId: number) => {
+  const handleRevokeInvitation = async (id: string) => {
     // Here you would typically send the revoke request to your API
-    toast.success("Invitation revoked successfully");
+
+    try {
+      setLoading(true);
+      const response = await axiosInstance.delete(
+        `/organizations/invitations/revoke/${id}/`,
+      );
+
+      fetchInvitations();
+      setLoading(false);
+
+      toast.success("Invitation revoked successfully");
+      //setInvitations((prev) => [...prev, response.data]);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error revoking invitation:", error);
+      toast.error("Failed to revoke invitation");
+    }
   };
 
   // Handle new invitation
   const handleInviteUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(newInvite);
+    setOpen(false); // close dialog on submit
 
     try {
+      setLoading(true);
       const response = await axiosInstance.post(
         `/organizations/${currentOrg.id}/invite/`,
-        { email: newInvite.email },
+        { email: newInvite.email, role: newInvite.role },
       );
-      setInvitations((prev) => [...prev, response.data]);
+
+      fetchInvitations();
+      setLoading(false);
+
       toast.success("Invitation sent successfully");
+
+      //setInvitations((prev) => [...prev, response.data]);
     } catch (error) {
       console.error("Error sending invitation:", error);
       toast.error("Failed to send invitation");
+    } finally {
+      setNewInvite({ email: "", role: "member" });
     }
-    setNewInvite({ email: "", role: "member" });
   };
   if (loading) return <Loading />;
 
@@ -138,7 +199,7 @@ export default function OrganizationMembers() {
                 Manage members of your organization.
               </CardDescription>
             </div>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button className="!text-white">
                   <UserPlus className="h-4 w-4 mr-2" />
@@ -170,9 +231,33 @@ export default function OrganizationMembers() {
                         required
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 space-x-3">
                       <Label htmlFor="invite-role">Role</Label>
-                      <Select
+                      <div className="flex space-x-3">
+                        <Button
+                          type="button"
+                          variant={
+                            newInvite.role === "member" ? "default" : "outline"
+                          }
+                          onClick={() =>
+                            setNewInvite({ ...newInvite, role: "member" })
+                          }
+                        >
+                          Member
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={
+                            newInvite.role === "admin" ? "default" : "outline"
+                          }
+                          onClick={() =>
+                            setNewInvite({ ...newInvite, role: "admin" })
+                          }
+                        >
+                          Admin
+                        </Button>
+                      </div>{" "}
+                      {/* <Select
                         value={newInvite.role}
                         onValueChange={(value) =>
                           setNewInvite({ ...newInvite, role: value })
@@ -185,7 +270,7 @@ export default function OrganizationMembers() {
                           <SelectItem value="admin">Admin</SelectItem>
                           <SelectItem value="member">Member</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </Select> */}
                     </div>
                   </div>
                   <DialogFooter>

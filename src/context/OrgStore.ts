@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { useEffect } from 'react';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { useEffect } from "react";
+import { persist, createJSONStorage } from "zustand/middleware";
 import axiosInstance from "../axios/axiosInstance";
 import {
   get_users_orgs,
@@ -72,7 +72,7 @@ const useOrgStore = create<OrgState>()(
         try {
           setLoading(true);
           const response = await axiosInstance.get(
-            `/organizations/${currentOrg.id}/navigation/`
+            `/organizations/${currentOrg.id}/navigation/`,
           );
           set({ navigations: response.data.results });
         } catch (err) {
@@ -88,7 +88,7 @@ const useOrgStore = create<OrgState>()(
 
         if (user.is_staff) {
           const response = await axiosInstance.get(
-            `/organizations/company/${userComp?.id}/`
+            `/organizations/company/${userComp?.id}/`,
           );
           if (response.data) {
             setUserComp(response.data);
@@ -106,7 +106,8 @@ const useOrgStore = create<OrgState>()(
       },
 
       fetchUserOrganizations: async (url = "/organizations/organization/") => {
-        const { currentOrg, userComp, setUserOrgs, setCurrentOrg, setLoading } = get();
+        const { currentOrg, userComp, setUserOrgs, setCurrentOrg, setLoading } =
+          get();
         const user = useUserStore.getState().user;
 
         try {
@@ -127,7 +128,7 @@ const useOrgStore = create<OrgState>()(
           setUserOrgs(organizations);
           if (organizations.length > 0) {
             const matchedOrg = organizations.find(
-              (org) => org.id === currentOrg?.id
+              (org) => org.id === currentOrg?.id,
             );
             setCurrentOrg(matchedOrg || organizations[0]);
           }
@@ -140,7 +141,7 @@ const useOrgStore = create<OrgState>()(
 
       createOrganization: async (orgName) => {
         const { userComp, fetchUserOrganizations } = get();
-        
+
         if (!userComp) {
           return "No company to create the organization in! Create one first.";
         }
@@ -148,7 +149,7 @@ const useOrgStore = create<OrgState>()(
         try {
           const response = await axiosInstance.post(
             "/organizations/organization/",
-            { name: orgName, company: userComp.id }
+            { name: orgName, company: userComp.id },
           );
 
           if (response.status === 201) {
@@ -163,7 +164,13 @@ const useOrgStore = create<OrgState>()(
       },
 
       initialize: async () => {
-        const { setLoading, fetchUserCompany, fetchUserOrganizations, fetchNavigations, reset } = get();
+        const {
+          setLoading,
+          fetchUserCompany,
+          fetchUserOrganizations,
+          fetchNavigations,
+          reset,
+        } = get();
         const user = useUserStore.getState().user;
 
         if (!user) {
@@ -194,7 +201,7 @@ const useOrgStore = create<OrgState>()(
       },
     }),
     {
-      name: 'org-storage',
+      name: "org-store",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         userOrgs: state.userOrgs,
@@ -203,13 +210,14 @@ const useOrgStore = create<OrgState>()(
         navigations: state.navigations,
         isInitialized: state.isInitialized,
       }),
-    }
-  )
+    },
+  ),
 );
 
 // Custom hook for initialization
 export const useOrgInitializer = () => {
-  const { currentOrg, initialize, fetchNavigations, isInitialized } = useOrgStore();
+  const { currentOrg, initialize, fetchNavigations, isInitialized } =
+    useOrgStore();
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
