@@ -7,6 +7,7 @@ import {
   MoreHorizontal,
   Trash2,
   House,
+  ChevronRight,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,6 +25,9 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useEffect } from "react";
@@ -31,45 +35,44 @@ import { useOrg } from "@/context/OrganizationContext";
 import { Link, useLocation } from "react-router-dom";
 import { navIcons, defaultIcon } from "@/assets/iconMap";
 import useOrgStore from "@/context/OrgStore";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
-  // const { navigations, currentOrg } = useOrg();
   const navigations = useOrgStore((state) => state.navigations);
   const currentOrg = useOrgStore((state) => state.currentOrg);
 
+  // Filter out navigations that have a parent
+  const parentNavigations = navigations.filter(nav => !nav.parent);
+
   let navigations_list = [
+    // {
+    //   name: "Welcome",
+    //   key: 1,
+    //   icon: Handshake,
+    //   url: "/welcome",
+    // },
     {
-      name: "Welcome", // Fix typo from "lable" to "label"
-      key: 1,
-      icon: Handshake,
-      url: "/welcome",
-    },
-    {
-      name: "Home", // Fix typo from "lable" to "label"
+      name: "Home",
       key: 2,
       icon: House,
       url: "/home",
     },
-    ...navigations.map((nav) => ({
-      name: nav.label, // Ensure this matches the key name in the API response
-      key: nav.id, // Use ID as the unique key
-      icon: navIcons[nav?.icon] || defaultIcon, // Add icons if needed
+    ...parentNavigations.map((nav) => ({
+      name: nav.label,
+      key: nav.id,
+      icon: navIcons[nav?.icon] || defaultIcon,
+      url: `#${nav.id}`,
+      sub_navigations: navigations
+        .filter(subNav => subNav.parent === nav.id)
+        .map(subNav => subNav.id),
     })),
   ];
-  //useEffect(() => {
-  //  if (navigations) {
-  //    navigations_list = [];
-  //
-  //    navigations.map((nav) => {
-  //      navigations_list.push({
-  //        name: nav.label,
-  //        icon: Folder,
-  //        url: "#",
-  //      });
-  //    });
-  //  }
-  //}, [currentOrg]);
+
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -84,45 +87,47 @@ export function NavigationsList() {
       </SidebarGroupLabel>
       <SidebarMenu>
         {navigations_list.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton isActive={isActive(item.url)} asChild>
-              <Link to={item.url}>
-                <item.icon />
-                <span className="group-data-[collapsible=icon]:hidden">
-                  {item.name}
-                </span>
-              </Link>
-            </SidebarMenuButton>
-
-            {/* Optional: keep the dropdown trigger hidden on collapse */}
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu> */}
-          </SidebarMenuItem>
+          <Collapsible
+            key={item.key}
+            asChild
+            defaultOpen={isActive(item.url)}
+            className="group/collapsible"
+          >
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton isActive={isActive(item.url)} asChild>
+                  <Link to={item.url}>
+                    <item.icon />
+                    <span className="group-data-[collapsible=icon]:hidden">
+                      {item.name}
+                    </span>
+                    {item.sub_navigations?.length > 0 && (
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    )}
+                  </Link>
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+              {item.sub_navigations?.length > 0 && (
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {item.sub_navigations.map((subNavId) => {
+                      const subNav = navigations.find((nav) => nav.id === subNavId);
+                      if (!subNav) return null;
+                      return (
+                        <SidebarMenuSubItem key={subNav.id}>
+                          <SidebarMenuSubButton asChild>
+                            <Link to={`#${subNav.id}`}>
+                              <span>{subNav.label}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      );
+                    })}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              )}
+            </SidebarMenuItem>
+          </Collapsible>
         ))}
       </SidebarMenu>
     </SidebarGroup>
