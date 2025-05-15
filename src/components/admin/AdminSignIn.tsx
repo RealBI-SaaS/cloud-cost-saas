@@ -21,6 +21,7 @@ import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { fetchCompOrgs } from "@/utils/org/fetchers";
+import useOrgStore from "@/context/OrgStore";
 
 export default function CompanySelector() {
   const navigate = useNavigate();
@@ -32,7 +33,10 @@ export default function CompanySelector() {
   } | null>(null);
   //const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-  const { setUserComp, setUserOrgs, setCurrentOrg } = useOrg();
+  //const { setUserComp, setUserOrgs, setCurrentOrg } = useOrg();
+  const setUserComp = useOrgStore((state) => state.setUserComp);
+  const setUserOrgs = useOrgStore((state) => state.setUserOrgs);
+  const setCurrentOrg = useOrgStore((state) => state.setCurrentOrg);
   console.log("on adminnn");
 
   //const companies = [

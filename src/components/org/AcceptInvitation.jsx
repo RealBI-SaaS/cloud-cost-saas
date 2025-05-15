@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import axiosInstance from "../../axios/axiosInstance";
+import useUserStore from "@/context/userStore";
 const AcceptInvitation = () => {
   const { token } = useParams();
-  const [message, setMessage] = useState("Verifying...");
+  const user = useUserStore((state) => state.user);
+  const [message, setMessage] = useState("Verifying invitation token...");
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) navigate("/login");
     const acceptInvitation = async () => {
       try {
         const response = await axiosInstance.post(
@@ -19,7 +22,7 @@ const AcceptInvitation = () => {
         if (response.status == "200") {
           setMessage("Invitation Accepted");
           //console.log("Account Verified")
-          setTimeout(() => navigate("/manage-all"), 3000);
+          //setTimeout(() => navigate("/manage-all"), 3000);
         } else {
           console.log(response);
           setMessage("Invalid or expired invitation link.");
@@ -36,8 +39,8 @@ const AcceptInvitation = () => {
   }, [token, navigate]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>{message}</h2>
+    <div className="grid grid-cols-1 items-center justify-center">
+      <p className="text-2xl">{message}</p>
     </div>
   );
 };

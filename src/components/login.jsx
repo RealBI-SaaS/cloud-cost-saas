@@ -31,27 +31,13 @@ const Login = () => {
   });
 
   //const { error, setError, login, signup, user } = useUser();
-  const user = useUserStore((state) => 
-    state.user
-  );
-  const error = useUserStore((state) => 
-    state.error
-  );
-  const setError = useUserStore((state) => 
-    state.setError
-  );
-  const login = useUserStore((state) => 
-    state.login
-  );
-  const signup = useUserStore((state) => 
-    state.signup
-  );
-  const loading = useUserStore((state) => 
-    state.loading
-  );
-  const setLoading = useUserStore((state) => 
-    state.setLoading
-  );
+  const user = useUserStore((state) => state.user);
+  const error = useUserStore((state) => state.error);
+  const setError = useUserStore((state) => state.setError);
+  const login = useUserStore((state) => state.login);
+  const signup = useUserStore((state) => state.signup);
+  const loading = useUserStore((state) => state.loading);
+  const setLoading = useUserStore((state) => state.setLoading);
 
   // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -100,10 +86,10 @@ const Login = () => {
         if (myUser.is_staff) {
           console.log("Admin");
           navigate("/admin/signin", { replace: true });
-          //setRedirectToAdmin(true);
-          return; // Stop here to avoid navigating twice
+          return;
         }
-        const from = location.state?.from?.pathname || "/home";
+
+        const from = location.state?.redirectTo || "/home";
         navigate(from, { replace: true });
       }
     } catch (error) {
@@ -119,7 +105,7 @@ const Login = () => {
       //toast.error()
       toast.error(
         error?.response?.data?.detail ||
-        "An error occurred, try again or another account",
+          "An error occurred, try again or another account",
       );
       toast.error(error?.response?.data?.password[0]);
       console.log(error?.response?.data);
@@ -244,7 +230,6 @@ const Login = () => {
                   className="absolute right-0 top-0 h-full px-3 py-2 "
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  
                   {showPassword ? (
                     <EyeClosed className="h-4 w-4 " />
                   ) : (

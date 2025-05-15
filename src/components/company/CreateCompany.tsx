@@ -7,12 +7,14 @@ import { Building2 } from "lucide-react";
 import axiosInstance from "@/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useOrg } from "@/context/OrganizationContext";
+import useOrgStore from "@/context/OrgStore";
 
 export default function CreateCompany() {
   const navigate = useNavigate();
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { fetchUserCompany } = useOrg();
+  //const { fetchUserCompany } = useOrg();
+  const fetchUserCompany = useOrgStore((state) => state.fetchUserCompany);
 
   const handleCreate = async () => {
     if (!companyName.trim()) {

@@ -52,21 +52,27 @@ import HomeAuthenticated from "./components/HomeAuthenticated";
 import useUserStore from "./context/userStore";
 import { useOrgInitializer } from "./context/OrgStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
-
+import useOrgStore from "./context/OrgStore";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
+  const userComp = useOrgStore((state) => state.userComp);
+  useOrgInitializer(); // Always call the hook
 
   if (loading) {
     return <Loading />;
   }
 
   if (!user) {
-    return <Navigate to="/landing" state={{ from: location }} replace />;
+    return <Login redirectTo={location.pathname} />;
   }
-  useOrgInitializer();  
+
+  // For admin users, only redirect to admin signin if they're not already there
+  if (user.is_staff && !userComp) {
+    return <AdminSignIn/>;
+  }
 
   return children;
 };
@@ -100,6 +106,8 @@ function App() {
       <div className="w-full   grid grid-cols-1   mx-auto ">
         <Routes>
           {/* Public routes */}
+          <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={
             <AuthRoute>
               <Login />
@@ -132,10 +140,9 @@ function App() {
               <MainLayout />
             </ProtectedRoute>
           }>
-            <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/home/authenticated" element={<HomeAuthenticated />} />
             
+            <Route path="/home/authenticated" element={<HomeAuthenticated />} />
+
             {/* Setting pages */}
             <Route element={<SettingsLayout />}>
               <Route
@@ -239,7 +246,7 @@ function App() {
                 }
               />
             </Route>
-            
+
             <Route path="/welcome" element={<Welcome />} />
           </Route>
 

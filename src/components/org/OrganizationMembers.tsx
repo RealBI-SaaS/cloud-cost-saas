@@ -307,33 +307,37 @@ export default function OrganizationMembers() {
                     <TableCell>{member.email}</TableCell>
                     <TableCell className="capitalize">{member.role}</TableCell>
                     <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Actions</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handleRoleChange(
-                                member.id,
-                                member.role === "admin" ? "member" : "admin",
-                              )
-                            }
-                          >
-                            Change to{" "}
-                            {member.role === "admin" ? "Member" : "Admin"}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleRemoveMember(member.id)}
-                          >
-                            Remove Member
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      {member.role !== "owner" ? (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Actions</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleRoleChange(
+                                  member.id,
+                                  member.role === "admin" ? "member" : "admin",
+                                )
+                              }
+                            >
+                              Change to{" "}
+                              {member.role === "admin" ? "Member" : "Admin"}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="text-destructive"
+                              onClick={() => handleRemoveMember(member.id)}
+                            >
+                              Remove Member
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      ) : (
+                        <p></p>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -216,6 +216,7 @@ const useOrgStore = create<OrgState>()(
 
 // Custom hook for initialization
 export const useOrgInitializer = () => {
+  console.log("org initializer")
   const { currentOrg, initialize, fetchNavigations, isInitialized } =
     useOrgStore();
   const user = useUserStore((state) => state.user);

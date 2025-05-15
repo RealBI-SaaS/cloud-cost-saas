@@ -13,7 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isFetchingUser, setIsFetchingUser] = useState(false);
-  
+
   // Use separate selectors for each value to prevent unnecessary re-renders
   const user = useUserStore((state) => state.user);
   const loading = useUserStore((state) => state.loading);
@@ -38,7 +38,10 @@ const Home = () => {
           try {
             const userData = await fetchUserData();
             console.log("User data fetched successfully:", userData);
-            setUser(userData);
+            if (userData?.is_staff) {
+              navigate("/admin/signin", { replace: true });
+            }
+            //setUser(userData);
           } catch (error) {
             console.error("Error fetching user data:", error);
             // Clear tokens if user data fetch fails
@@ -54,11 +57,12 @@ const Home = () => {
         }
       }
     };
-
+    console.log("searchParams", searchParams);
     handleTokenParams();
   }, [searchParams]); // Remove other dependencies as they are stable references
 
   useEffect(() => {
+    console.log("loading", loading);
     if (loading || isFetchingUser) {
       return;
     }
