@@ -82,32 +82,40 @@ const Login = () => {
         });
       } else {
         const myUser = await login(formData.email, formData.password);
-        console.log(myUser);
+        console.log("Login successful, user:", myUser);
         if (myUser.is_staff) {
-          console.log("Admin");
+          console.log("Admin user detected, redirecting to admin signin");
           navigate("/admin/signin", { replace: true });
           return;
         }
 
-        const from = location.state?.redirectTo || "/home";
-        navigate(from, { replace: true });
+        const from = location.state?.redirectTo || "/home/authenticated";
+        console.log("Attempting to redirect to:", from);
+        console.log("Current location state:", location.state);
+        
+        // If we're redirecting to an invitation acceptance, use window.location
+        if (from.startsWith('/accept-invitation/')) {
+          console.log("Redirecting to invitation acceptance");
+          window.location.href = from;
+          return;
+        }
+
+        try {
+          navigate(from, { replace: true });
+          console.log("Navigation triggered");
+        } catch (navError) {
+          console.error("Navigation error:", navError);
+        }
       }
     } catch (error) {
-      // if (err?.status == 401){
-      //   toast("hi", {
-      //     title: "Error",
-      //     description:
-      //       err?.response?.data?.message ||
-      //       "An error occurred during login, try again or another account",
-      //   });
-      // }
       console.log(error);
-      //toast.error()
       toast.error(
         error?.response?.data?.detail ||
-          "An error occurred, try again or another account",
+        "An error occurred, try again or another account",
       );
-      toast.error(error?.response?.data?.password[0]);
+      if (error?.response?.data?.password?.[0]) {
+        toast.error(error.response.data.password[0]);
+      }
       console.log(error?.response?.data);
     } finally {
       setLoading(false);

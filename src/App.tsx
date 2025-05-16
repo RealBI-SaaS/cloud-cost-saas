@@ -71,7 +71,7 @@ const ProtectedRoute = ({ children }) => {
 
   // For admin users, only redirect to admin signin if they're not already there
   if (user.is_staff && !userComp) {
-    return <AdminSignIn/>;
+    return <AdminSignIn />;
   }
 
   return children;
@@ -107,7 +107,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={
             <AuthRoute>
               <Login />
@@ -140,7 +140,7 @@ function App() {
               <MainLayout />
             </ProtectedRoute>
           }>
-            
+
             <Route path="/home/authenticated" element={<HomeAuthenticated />} />
 
             {/* Setting pages */}

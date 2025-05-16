@@ -1,46 +1,74 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 
 import axiosInstance from "../../axios/axiosInstance";
 import useUserStore from "@/context/userStore";
+
 const AcceptInvitation = () => {
   const { token } = useParams();
   const user = useUserStore((state) => state.user);
   const [message, setMessage] = useState("Verifying invitation token...");
+  const [hasAcceptedInvitation, setHasAcceptedInvitation] = useState(false);
+  const [hasSentRequest, setHasSentRequest] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!user) navigate("/login");
+    if (!user) {
+      navigate("/login", { state: { redirectTo: location.pathname } });
+      return;
+    }
+
+    if (!token || hasSentRequest) return;
+
     const acceptInvitation = async () => {
       try {
         const response = await axiosInstance.post(
-          `/organizations/invitations/accept/${token}/`,
+          `/organizations/invitations/accept/${token}/`
         );
-        //console.log(response)
 
-        if (response.status == "200") {
+        if (response.status === 200) {
           setMessage("Invitation Accepted");
-          //console.log("Account Verified")
-          //setTimeout(() => navigate("/manage-all"), 3000);
+          setHasAcceptedInvitation(true);
+          // Redirect after short delay
+          setTimeout(() => navigate("/home"), 2000);
         } else {
-          console.log(response);
           setMessage("Invalid or expired invitation link.");
         }
       } catch (error) {
-        console.log(error);
-        setMessage("An error occurred. Please try again.");
+        console.error("Error accepting invitation:", error);
+        // setMessage("An error occurred. Please try again.");
+      } finally {
+        setHasSentRequest(true);
       }
     };
 
-    if (token) {
-      acceptInvitation();
-    }
-  }, [token, navigate]);
+    acceptInvitation();
+  }, [token, user, navigate, location, hasSentRequest]);
 
   return (
-    <div className="grid grid-cols-1 items-center justify-center">
-      <p className="text-2xl">{message}</p>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full mx-auto p-8 rounded-lg shadow-lg">
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl font-bold">Organization Invitation</h1>
+          <p
+            className={`text-xl ${
+              message.includes("Accepted")
+                ? "text-green-600"
+                : message.includes("error")
+                ? "text-red-600"
+                : "text-gray-600"
+            }`}
+          >
+            {message}
+          </p>
+          {hasAcceptedInvitation && (
+            <p className="text-sm text-gray-500">
+              You will be redirected shortly...
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
