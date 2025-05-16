@@ -184,6 +184,13 @@ export default function OrganizationMembers() {
     }
   };
   if (loading) return <Loading />;
+  if (!currentOrg) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center">
+        <p className="text-2xl">you have no no organization, get into one!</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-10 ">

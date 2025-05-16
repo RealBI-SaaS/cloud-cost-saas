@@ -84,6 +84,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // const { userComp, userOrgs } = useOrg();
   const userComp = useOrgStore((state) => state.userComp);
   const userOrgs = useOrgStore((state) => state.userOrgs);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   // Check if we're on a settings page
   const isSettingsPage =
     location.pathname.includes("/settings") ||
@@ -102,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       {state == "expanded" ? (
-        !userComp ? (
+        !currentOrg?.company_name ? (
           <SidebarHeader>
             <img
               src={text_and_logo}
@@ -112,7 +113,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarHeader>
         ) : (
           <p className="text-3xl text-primary px-3 py-5 bold-lg">
-            {userComp.name}
+            {currentOrg.company_name}
           </p>
         )
       ) : (
@@ -126,7 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         {/*setting menu item */}
 
-        {(userOrgs.length > 0) && <OrganizationSelector />}
+        {userOrgs.length > 0 && <OrganizationSelector />}
 
         <hr className="" />
 

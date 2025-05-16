@@ -51,7 +51,9 @@ export default function OrganizationDetailsPage() {
   const user = useUserStore((state) => state.user as User);
   // const { currentOrg, fetchUserOrganizations } = useOrg();
   const currentOrg = useOrgStore((state) => state.currentOrg);
-  const fetchUserOrganizations = useOrgStore((state) => state.fetchUserOrganizations);
+  const fetchUserOrganizations = useOrgStore(
+    (state) => state.fetchUserOrganizations,
+  );
   const [orgName, setOrgName] = useState(currentOrg?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -121,66 +123,67 @@ export default function OrganizationDetailsPage() {
                 Name
               </Label>
               {((!isEditingOrg && currentOrg.role == "owner") ||
+                (!isEditingOrg && currentOrg.role == "admin") ||
                 (!isEditingOrg && user.is_staff)) && (
-                <>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 p-0"
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
+                  <>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 p-0"
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
 
-                    <DropdownMenuContent align="end" className="w-40">
-                      <DropdownMenuItem onClick={() => setIsEditingOrg(true)}>
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem onClick={() => setIsEditingOrg(true)}>
+                          <Pencil className="h-4 w-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
 
-                      <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onSelect={(e) => {
-                          event.preventDefault();
-                          setOpenDeleteDialog(true);
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onSelect={(e) => {
+                            event.preventDefault();
+                            setOpenDeleteDialog(true);
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
 
-                      <AlertDialog
-                        open={openDeleteDialog}
-                        onOpenChange={setOpenDeleteDialog}
-                      >
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete the organization and remove all
-                              associated data.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              className="!text-white"
-                              onClick={handleDeleteOrg}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </>
-              )}
+                        <AlertDialog
+                          open={openDeleteDialog}
+                          onOpenChange={setOpenDeleteDialog}
+                        >
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Are you absolutely sure?
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete the organization and remove all
+                                associated data.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                className="!text-white"
+                                onClick={handleDeleteOrg}
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
+                )}
             </div>
             {isEditingOrg ? (
               <div className="flex items-center gap-2">

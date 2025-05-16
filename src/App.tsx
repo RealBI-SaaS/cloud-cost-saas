@@ -53,6 +53,7 @@ import useUserStore from "./context/userStore";
 import { useOrgInitializer } from "./context/OrgStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 import useOrgStore from "./context/OrgStore";
+import NotFound from "./components/pages/NotFound";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
@@ -96,7 +97,6 @@ const AuthRoute = ({ children }) => {
 };
 
 function App() {
-
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
 
@@ -108,16 +108,22 @@ function App() {
           {/* Public routes */}
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/login" element={
-            <AuthRoute>
-              <Login />
-            </AuthRoute>
-          } />
-          <Route path="/landing" element={
-            <AuthRoute>
-              <Landing />
-            </AuthRoute>
-          } />
+          <Route
+            path="/login"
+            element={
+              <AuthRoute>
+                <Login />
+              </AuthRoute>
+            }
+          />
+          <Route
+            path="/landing"
+            element={
+              <AuthRoute>
+                <Landing />
+              </AuthRoute>
+            }
+          />
           <Route path="/logout" element={<Logout />} />
           <Route path="/activate/:uid/:token" element={<VerifyEmail />} />
           <Route
@@ -135,12 +141,13 @@ function App() {
           />
 
           {/* Protected routes with MainLayout */}
-          <Route element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }>
-
+          <Route
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route path="/home/authenticated" element={<HomeAuthenticated />} />
 
             {/* Setting pages */}
@@ -267,6 +274,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>

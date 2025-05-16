@@ -24,20 +24,20 @@ const AcceptInvitation = () => {
     const acceptInvitation = async () => {
       try {
         const response = await axiosInstance.post(
-          `/organizations/invitations/accept/${token}/`
+          `/organizations/invitations/accept/${token}/`,
         );
 
         if (response.status === 200) {
           setMessage("Invitation Accepted");
           setHasAcceptedInvitation(true);
           // Redirect after short delay
-          setTimeout(() => navigate("/home"), 2000);
+          navigate("/home");
         } else {
           setMessage("Invalid or expired invitation link.");
         }
       } catch (error) {
         console.error("Error accepting invitation:", error);
-        // setMessage("An error occurred. Please try again.");
+        setMessage("An error occurred. Please try again.");
       } finally {
         setHasSentRequest(true);
       }
@@ -52,13 +52,12 @@ const AcceptInvitation = () => {
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Organization Invitation</h1>
           <p
-            className={`text-xl ${
-              message.includes("Accepted")
-                ? "text-green-600"
-                : message.includes("error")
+            className={`text-xl ${message.includes("Accepted")
+              ? "text-green-600"
+              : message.includes("error")
                 ? "text-red-600"
                 : "text-gray-600"
-            }`}
+              }`}
           >
             {message}
           </p>

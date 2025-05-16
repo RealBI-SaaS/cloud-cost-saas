@@ -72,7 +72,7 @@ const VerifyEmail = () => {
               </div>
             ) : null}
             <p
-              className={`text-center text-sm ${message.includes("successfully") ? "text-primary" : "text-destructive"}`}
+              className={`text-center text-sm ${message.includes("successfully") ? "text-primary" : "text-primary"}`}
             >
               {message}
             </p>
