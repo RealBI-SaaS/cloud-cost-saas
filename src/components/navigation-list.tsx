@@ -45,9 +45,8 @@ export function NavigationsList() {
   const { isMobile } = useSidebar();
   const navigations = useOrgStore((state) => state.navigations);
   const currentOrg = useOrgStore((state) => state.currentOrg);
-
-  // Filter out navigations that have a parent
-  const parentNavigations = navigations.filter(nav => !nav.parent);
+    // Filter out navigations that have a parent
+    const parentNavigations = navigations.filter(nav => !nav.parent);
 
   let navigations_list = [
     // {
@@ -73,6 +72,14 @@ export function NavigationsList() {
     })),
   ];
 
+
+  const firstItemWithSubmenus = navigations_list.find(
+    (item) => item.sub_navigations?.length > 0
+  );
+  const firstSubmenuKey = firstItemWithSubmenus?.key;
+
+  
+
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -90,8 +97,9 @@ export function NavigationsList() {
           <Collapsible
             key={item.key}
             asChild
-            defaultOpen={isActive(item.url)}
+            defaultOpen={isActive(item.url) || item.key === firstSubmenuKey}
             className="group/collapsible"
+            
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
