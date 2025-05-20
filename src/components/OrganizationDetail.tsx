@@ -27,7 +27,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Building2, Pencil, Trash2 } from "lucide-react";
-import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { edit_user_org } from "@/utils/org/editors";
 

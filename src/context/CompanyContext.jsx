@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axiosInstance from "@/axios/axiosInstance";
-import { useUser } from "./UserContext";
+//import { useUser } from "./UserContext";
 import useUserStore from "./userStore";
 
 // Create Context
@@ -21,7 +21,7 @@ export const CompanyProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCompanies, setFilteredCompanies] = useState([]);
   //const { user } = useUser();
-  const user = useUserStore((state) => state.user   )
+  const user = useUserStore((state) => state.user);
 
   // Fetch all companies from the backend (with optional search query)
   const fetchCompanies = async (search = "") => {
@@ -30,7 +30,7 @@ export const CompanyProvider = ({ children }) => {
       const response = await axiosInstance.get(
         `/organizations/all-companies/?search=${search}`,
       );
-      console.log(response.data);
+      //console.log(response.data);
       setAllCompanies(response.data.results);
       setFilteredCompanies(response.data.results);
     } catch (err) {

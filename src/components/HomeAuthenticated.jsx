@@ -1,8 +1,10 @@
 //import React, { useState } from "react";
+
+import AiChat from "./ai/ChatBot";
 import React from "react";
 //import { useNavigate } from "react-router-dom";
-import { useOrg } from "../context/OrganizationContext";
-import HomeOrgMenu from "./menu/HomeOrgMenu";
+//import { useOrg } from "../context/OrganizationContext";
+//import HomeOrgMenu from "./menu/HomeOrgMenu";
 import { useState } from "react";
 import PowerBIEmbed from "./powerbi/PowerBIEmbed";
 import useUserStore from "@/context/userStore";
@@ -29,6 +31,7 @@ const HomeAuthenticated = () => {
       {/* Pass the click handler */}
 
       <PowerBIEmbed />
+      <AiChat />
     </div>
   );
 };

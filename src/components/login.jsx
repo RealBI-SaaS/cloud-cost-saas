@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeClosed } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+//import { useUser } from "../context/UserContext";
 import { validatePassword } from "../utils/auth/password_validate";
 import { cn } from "@/lib/utils";
 import {
@@ -92,7 +92,7 @@ const Login = () => {
         const from = location.state?.redirectTo || "/home/authenticated";
         console.log("Attempting to redirect to:", from);
         console.log("Current location state:", location.state);
-        
+
         // If we're redirecting to an invitation acceptance, use window.location
         if (from.startsWith('/accept-invitation/')) {
           console.log("Redirecting to invitation acceptance");

@@ -19,7 +19,7 @@ import AskEmailVerificatioin from "./components/auth/AskEmailVerification";
 import AskForPasswordReset from "./components/auth/AskForPasswordReset";
 import ResetPassword from "./components/auth/ResetPassword";
 //import ManageAll from "./components/ManageAll";
-import OrganizationDetails from "./components/org/OrganizationDetails";
+//import OrganizationDetails from "./components/org/OrganizationDetails";
 import AcceptInvitation from "./components/org/AcceptInvitation";
 import { useLocation } from "react-router-dom";
 //import { OrganizationProvider } from "./context/OrganizationContext";
@@ -33,7 +33,7 @@ import AccountInfo from "./components/account/AccountInfo";
 import AccountPassword from "./components/account/AccountPassword";
 //import UserOrganization from "./components/org/UserOrganizations";
 //import Organizations from "./components/Organizations";
-import OrganizationDetail from "./components/OrganizationDetail";
+//import OrganizationDetail from "./components/OrganizationDetail";
 import OrganizationSettings from "./components/OrganizationSettings";
 import OrganizationMembers from "./components/org/OrganizationMembers";
 import DataIntegration from "./components/data/DataIntegration";
@@ -233,14 +233,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <OrganizationDetailsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/organizations/:id"
-                element={
-                  <ProtectedRoute>
-                    <OrganizationDetails />
                   </ProtectedRoute>
                 }
               />

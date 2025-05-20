@@ -14,8 +14,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "strict": false, // can disable this if strictness bugs you at first
-    "noEmit": true,
+    //"strict": false, // can disable this if strictness bugs you at first
+    "noEmit": false,
     "baseUrl": ".",
     "paths": {
       "@/*": [
