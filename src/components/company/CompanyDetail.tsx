@@ -25,7 +25,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Building2, Pencil, Trash2 } from "lucide-react";
+import { Building2, Pencil, Trash2, Upload } from "lucide-react";
 import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { edit_user_comp } from "@/utils/org/editors";
@@ -44,26 +44,58 @@ export default function CompanyDetails() {
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [creatingCompany, setCreatingCompany] = useState(false);
-
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(userComp?.logo || null);
+console.log(userComp);
   useEffect(() => {
     if (userComp) {
       //console.log(userComp);
 
       setCompName(userComp.name);
+      setLogoPreview(userComp.logo || null);
     }
   }, [userComp]);
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Handle organization name update
   const handleCompanyUpdate = async () => {
-    // Here you would typically send the updated org name to your API
-    const res = await edit_user_comp(userComp?.id, { name: compName });
-    //console.log(compName);
-    //console.log(res);
-    fetchUserCompany();
-    fetchUserOrganizations();
+    try {
+      const formData = new FormData();
+      formData.append('name', compName);
+      if (logoFile) {
+        formData.append('logo', logoFile);
+      }
 
-    toast.success("Company updated successfully");
-    setIsEditingOrg(false);
+      const res = await axiosInstance.patch(
+        `/organizations/company/${userComp?.id}/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      fetchUserCompany();
+      fetchUserOrganizations();
+
+      toast.success("Company updated successfully");
+      setIsEditingOrg(false);
+    } catch (error) {
+      toast.error("Failed to update company");
+      console.error("Error updating company:", error);
+    }
   };
 
   // Handle organization deletion
@@ -91,7 +123,15 @@ export default function CompanyDetails() {
         <Card className="w-full shadow-none border-none w-3/4">
           <CardHeader>
             <div className="flex items-center gap-3 border-bottom mb-5">
-              <Building2 className="h-6 w-6" />
+              {logoPreview ? (
+                <img 
+                  src={logoPreview} 
+                  alt="Company Logo" 
+                  className="h-12 w-12 object-contain rounded-md"
+                />
+              ) : (
+                <Building2 className="h-6 w-6" />
+              )}
               <h1 className="text-3xl font-bold">{userComp?.name}</h1>
             </div>
 
@@ -100,7 +140,7 @@ export default function CompanyDetails() {
             </CardDescription>
           </CardHeader>
           <hr />
-          <CardContent className="space-y-1 ">
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label
@@ -133,7 +173,7 @@ export default function CompanyDetails() {
                     size="sm"
                     className="!text-white"
                     onClick={handleCompanyUpdate}
-                    disabled={compName == userComp?.name}
+                    disabled={compName == userComp?.name && !logoFile}
                   >
                     Save
                   </Button>
@@ -142,6 +182,8 @@ export default function CompanyDetails() {
                     variant="outline"
                     onClick={() => {
                       setCompName(userComp?.name || "");
+                      setLogoFile(null);
+                      setLogoPreview(userComp?.logo || null);
                       setIsEditingOrg(false);
                     }}
                   >
@@ -152,9 +194,47 @@ export default function CompanyDetails() {
                 <div className="text-lg font-medium">{userComp.name}</div>
               )}
             </div>
-            <div className="space-y-2 ">
+
+            {isEditingOrg && (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="company-logo"
+                  className="text-xs text-muted-foreground"
+                >
+                  Company Logo
+                </Label>
+                <div className="flex items-center gap-4">
+                  {logoPreview && (
+                    <img
+                      src={logoPreview}
+                      alt="Company Logo Preview"
+                      className="h-16 w-16 object-contain rounded-md border"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <Input
+                      id="company-logo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoChange}
+                      className="hidden"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById('company-logo')?.click()}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {logoPreview ? 'Change Logo' : 'Upload Logo'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">
-                {userComp?.created_at
+                Created on {userComp?.created_at
                   ? format(new Date(userComp.created_at), "MMM d, yyyy")
                   : "Invalid date"}
               </Label>

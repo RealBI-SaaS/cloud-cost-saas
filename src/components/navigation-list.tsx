@@ -103,8 +103,7 @@ export function NavigationsList() {
   const currentPath = location.pathname;
 
   const isActive = (navItem: NavigationItem) => {
-    console.log("currentPath",currentPath);
-    console.log("navItem.url",navItem.url); 
+
     return currentPath === navItem.url || (currentPath.startsWith(navItem.url) && navItem.url !== "/dashboard/"); 
   };
 

@@ -46,7 +46,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Landing from "./components/Landing";
-import { CompanyStyles } from "./components/settings/CompanyStyles";
+import { CompanyStyles } from "./components/company/CompanyStyles";
 import Welcome from "./components/Welcome";
 import HomeAuthenticated from "./components/HomeAuthenticated";
 import useUserStore from "@/context/userStore";

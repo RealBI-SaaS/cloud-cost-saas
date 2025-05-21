@@ -17,11 +17,15 @@ interface Organization {
   name: string;
   company: string;
   company_name: string;
+  company_logo: string;
+
 }
 
 interface Company {
   id: string;
   name: string;
+  logo?: string;
+  created_at?: string;
 }
 
 interface Navigation {
@@ -70,7 +74,7 @@ const useOrgStore = create<OrgState>()(
       fetchNavigations: async () => {
 
         const { currentOrg, setLoading } = get();
-        console.log("navigation fetch, currentOrg",currentOrg);
+        // console.log("navigation fetch, currentOrg",currentOrg);
         if (!currentOrg) return;
 
         try {
@@ -78,7 +82,7 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/${currentOrg.id}/navigation/`,
           );
-          console.log("navigation fetch, response",response.data);
+          // console.log("navigation fetch, response",response.data);
           set({ navigations: response.data.results });
         } catch (err) {
           console.error("Error fetching navigations", err);
@@ -95,7 +99,9 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/company/${userComp?.id}/`,
           );
+          console.log("fetchUserCompany, response",response);
           if (response.data) {
+            console.log("fetchUserCompany, response",response.data);
             setUserComp(response.data);
           }
           return;

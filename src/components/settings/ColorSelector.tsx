@@ -15,8 +15,8 @@ const COLOR_VARIABLES = [
 
 export function ColorPicker() {
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
-  const currentOrg = useOrgStore((state) => state.currentOrg);
-  const compId = currentOrg.company;
+  const userComp = useOrgStore((state) => state.userComp);
+  // const compId = userComp.id;
   const { setColor, resetColor, colors } = useThemeStore();
 
   return (
@@ -32,7 +32,7 @@ export function ColorPicker() {
             type="color"
             className="hidden"
             defaultValue={colors[variable]}
-            onChange={(e) => setColor(variable, e.target.value, compId)}
+            onChange={(e) => setColor(variable, e.target.value, userComp.id)}
           />
           <div className="flex justify-end">
             <Button
@@ -48,7 +48,7 @@ export function ColorPicker() {
               variant="outline"
               size="icon"
               className=" rounded-md flex items-center justify-center "
-              onClick={() => resetColor(variable, currentOrg.company)}
+              onClick={() => resetColor(variable, userComp.id)}
             >
               <RotateCcw className="h-4 w-4" />
               <span className="sr-only">Reset {label} color</span>

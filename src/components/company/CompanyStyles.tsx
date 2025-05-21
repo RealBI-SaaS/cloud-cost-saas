@@ -6,15 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ColorPicker } from "./ColorSelector";
-
+import { ColorPicker } from "@/components/settings/ColorSelector";
+import useOrgStore from "@/context/OrgStore";
 export function CompanyStyles() {
+  const userComp = useOrgStore((state)=>state.userComp)
   return (
     <Card className="border-none shadow-none m-10 p-5 w-2/3">
       <CardHeader>
         <CardTitle>Appearance</CardTitle>
         <CardDescription>
-          Customize how your company looks on RealBI
+          Customize how your <span className="font-bold">{userComp.name}</span> looks on RealBI
         </CardDescription>
       </CardHeader>
       <hr />

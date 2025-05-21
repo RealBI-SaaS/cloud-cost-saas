@@ -72,7 +72,7 @@ const Home = () => {
       return;
     }
 
-    navigate("/dashboard");
+    navigate("/dashboard/");
   }, [user, loading, isFetchingUser, navigate]);
 
   return null; // Since we're using navigation, we don't need to render anything
