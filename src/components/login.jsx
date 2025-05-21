@@ -18,6 +18,8 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import logo_only from "/logo-only.png";
 import useUserStore from "@/context/userStore";
+import { useOrgInitializer } from "@/context/OrgStore";
+import { useThemeInitializer } from "@/context/ThemeStore";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -88,6 +90,8 @@ const Login = () => {
           navigate("/admin/signin", { replace: true });
           return;
         }
+        useOrgInitializer(); // Always call the hook
+        useThemeInitializer();
 
         const from = location.state?.redirectTo || "/home/authenticated";
         console.log("Attempting to redirect to:", from);

@@ -1,62 +1,54 @@
-"use client";
-
+import useOrgStore from "@/context/OrgStore";
+import { useThemeStore } from "@/context/ThemeStore";
 import { useRef } from "react";
 import { Paintbrush, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useThemeContext } from "@/context/ThemeContext";
 
 const COLOR_VARIABLES = [
-  { label: "Primary ", variable: "--primary" },
+  { label: "Primary", variable: "--primary" },
   { label: "Sidebar Accent", variable: "--sidebar-accent" },
   { label: "Borders", variable: "--border" },
-  { label: "form Input Background", variable: "--input" },
-  { label: "Sidebar Background Color", variable: "--sidebar" },
-  { label: "Sidebar Font Color", variable: "--sidebar-foreground" },
+  { label: "Form Input Background", variable: "--input" },
+  { label: "Sidebar Background", variable: "--sidebar" },
+  { label: "Sidebar Font", variable: "--sidebar-foreground" },
 ];
 
 export function ColorPicker() {
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
-  const { setPrimaryColor } = useThemeContext();
-
-  const handleColorChange = (variable: string, color: string) => {
-    document.documentElement.style.setProperty(variable, color);
-    //if (variable === "--primary") {
-    //  setPrimaryColor(color); // update context if needed
-    //}
-  };
-  const resetToDefault = (variable: string) => {
-    document.documentElement.style.removeProperty(variable);
-    //if (variable === "--primary") setPrimaryColor(""); // Or default value
-  };
+  const currentOrg = useOrgStore((state) => state.currentOrg);
+  const compId = currentOrg.company;
+  const { setColor, resetColor, colors } = useThemeStore();
 
   return (
     <div className="space-y-3 w-full">
       {COLOR_VARIABLES.map(({ label, variable }) => (
         <div
           key={variable}
-          className="grid   grid-cols-2 w-100 w-full gap-2 border-b border-dotted "
+          className="grid grid-cols-2 gap-2 border-b border-dotted"
         >
-          <span className="text-sm ">{label}</span>
+          <span className="text-sm">{label}</span>
           <input
             ref={(el) => (inputRefs.current[variable] = el)}
             type="color"
             className="hidden"
-            onChange={(e) => handleColorChange(variable, e.target.value)}
+            defaultValue={colors[variable]}
+            onChange={(e) => setColor(variable, e.target.value, compId)}
           />
-          <div className="flex justify-end ">
+          <div className="flex justify-end">
             <Button
               variant="outline"
               size="icon"
-              className=" rounded-md flex items-center justify-center "
+              className=" rounded-md flex items-center justify-center mx-2 mb-1 "
               onClick={() => inputRefs.current[variable]?.click()}
             >
               <Paintbrush className="h-4 w-4" />
               <span className="sr-only text-sm">Pick {label} color</span>
             </Button>
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              onClick={() => resetToDefault(variable)}
+              className=" rounded-md flex items-center justify-center "
+              onClick={() => resetColor(variable, currentOrg.company)}
             >
               <RotateCcw className="h-4 w-4" />
               <span className="sr-only">Reset {label} color</span>

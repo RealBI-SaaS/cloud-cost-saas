@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import axios from "axios";
 import axiosInstance from "@/axios/axiosInstance";
 import useOrgStore from "./OrgStore";
+import { useThemeStore } from "./ThemeStore";
 const userStore = (set, get) => ({
   //const reset = useOrgStore((state) => state.reset)
   user: null,
@@ -72,6 +73,7 @@ const userStore = (set, get) => ({
     //localStorage.removeItem("org-store");
     //reset()
     useOrgStore.getState().reset();
+    useThemeStore.getState().reset();
     set({ user: null });
   },
 

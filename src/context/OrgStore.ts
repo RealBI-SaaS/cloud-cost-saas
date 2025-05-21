@@ -10,6 +10,7 @@ import {
 import useUserStore from "./userStore";
 import { useUser } from "./UserContext";
 import { useNavigate } from "react-router-dom";
+import { useThemeStore, useThemeInitializer } from "./ThemeStore";
 
 interface Organization {
   id: string;
@@ -130,6 +131,7 @@ const useOrgStore = create<OrgState>()(
             const matchedOrg = organizations.find(
               (org) => org.id === currentOrg?.id,
             );
+
             setCurrentOrg(matchedOrg || organizations[0]);
           }
         } catch (err) {
@@ -183,6 +185,7 @@ const useOrgStore = create<OrgState>()(
           setLoading(true);
           await fetchUserCompany();
           await fetchUserOrganizations();
+          await fetchNavigations();
         }
         set({ isInitialized: true });
       },
@@ -216,9 +219,10 @@ const useOrgStore = create<OrgState>()(
 
 // Custom hook for initialization
 export const useOrgInitializer = () => {
-  console.log("org initializer")
+  console.log("org initializer");
   const { currentOrg, initialize, fetchNavigations, isInitialized } =
     useOrgStore();
+  const initializeTheme = useThemeStore((state) => state.initializeTheme);
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
@@ -230,6 +234,9 @@ export const useOrgInitializer = () => {
   useEffect(() => {
     if (currentOrg) {
       fetchNavigations();
+      initializeTheme(currentOrg?.company);
+
+      //useThemeInitializer(currentOrg?.company);
     }
   }, [currentOrg]);
 };

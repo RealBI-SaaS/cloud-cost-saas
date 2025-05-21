@@ -8,7 +8,7 @@ import { OrganizationProvider } from "@/context/OrganizationContext";
 import { AppSidebar } from "@/components/app-sidebar";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeContext";
+//import { ThemeProvider } from "./context/ThemeContext";
 import { CompanyProvider } from "./context/CompanyContext";
 import Landing from "./components/Landing";
 import useUserStore from "./context/userStore";
@@ -24,17 +24,15 @@ const AppWrapper = () => {
   //
   return (
     // <OrganizationProvider>
-      <CompanyProvider>
-        <ThemeProvider>
-          <main className="w-full h-full relative">
-            {/* <SidebarTrigger
+    <CompanyProvider>
+      <main className="w-full h-full relative">
+        {/* <SidebarTrigger
               className="m-5 fixed bottom-0"
               style={{ display: "block" }}
             /> */}
-            <App />
-          </main>
-        </ThemeProvider>
-      </CompanyProvider>
+        <App />
+      </main>
+    </CompanyProvider>
     // </OrganizationProvider>
   );
 };

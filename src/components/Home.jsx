@@ -62,7 +62,7 @@ const Home = () => {
   }, [searchParams]); // Remove other dependencies as they are stable references
 
   useEffect(() => {
-    console.log("loading", loading);
+    //console.log("loading", loading);
     if (loading || isFetchingUser) {
       return;
     }

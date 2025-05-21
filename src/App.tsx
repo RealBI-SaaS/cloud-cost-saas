@@ -49,18 +49,25 @@ import Landing from "./components/Landing";
 import { CompanyStyles } from "./components/settings/CompanyStyles";
 import Welcome from "./components/Welcome";
 import HomeAuthenticated from "./components/HomeAuthenticated";
-import useUserStore from "./context/userStore";
+import useUserStore from "@/context/userStore";
 import { useOrgInitializer } from "./context/OrgStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
 import useOrgStore from "./context/OrgStore";
 import NotFound from "./components/pages/NotFound";
+import { useThemeInitializer, useThemeStore } from "./context/ThemeStore";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
   const userComp = useOrgStore((state) => state.userComp);
-  useOrgInitializer(); // Always call the hook
+  //const currentOrg = useOrgStore((state) => state.currentOrg);
+
+  //const initializeTheme = useThemeStore((state) => state.initializeTheme);
+
+  //if (userComp || currentOrg) {
+  //await initializeTheme(userComp?.id || currentOrg?.id);
+  //}
 
   if (loading) {
     return <Loading />;
@@ -85,7 +92,7 @@ const AuthRoute = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    console.log("loading");
+    // console.log("loading");
     return <Loading />;
   }
 

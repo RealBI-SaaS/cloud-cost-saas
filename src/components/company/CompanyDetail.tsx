@@ -37,7 +37,9 @@ export default function CompanyDetails() {
   // const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
   const userComp = useOrgStore((state) => state.userComp);
   const fetchUserCompany = useOrgStore((state) => state.fetchUserCompany);
-  const fetchUserOrganizations = useOrgStore((state) => state.fetchUserOrganizations);
+  const fetchUserOrganizations = useOrgStore(
+    (state) => state.fetchUserOrganizations,
+  );
 
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
@@ -45,7 +47,7 @@ export default function CompanyDetails() {
 
   useEffect(() => {
     if (userComp) {
-      console.log(userComp);
+      //console.log(userComp);
 
       setCompName(userComp.name);
     }
@@ -55,8 +57,8 @@ export default function CompanyDetails() {
   const handleCompanyUpdate = async () => {
     // Here you would typically send the updated org name to your API
     const res = await edit_user_comp(userComp?.id, { name: compName });
-    console.log(compName);
-    console.log(res);
+    //console.log(compName);
+    //console.log(res);
     fetchUserCompany();
     fetchUserOrganizations();
 

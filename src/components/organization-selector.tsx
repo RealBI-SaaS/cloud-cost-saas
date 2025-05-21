@@ -24,6 +24,8 @@ import { StarOff, Plus, ChevronsUpDown, FolderX, Circle } from "lucide-react";
 import { act, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useOrgStore from "@/context/OrgStore";
+import { useThemeStore, useThemeInitializer } from "@/context/ThemeStore";
+
 let orgs = [
   {
     name: "firstorg",
@@ -32,6 +34,7 @@ let orgs = [
   },
 ];
 
+//TODO: refactor and clean this code up
 export function OrganizationSelector() {
   // const { userOrgs, setCurrentOrg, currentOrg } = useOrg();
   const userOrgs = useOrgStore((state) => state.userOrgs);
@@ -41,15 +44,15 @@ export function OrganizationSelector() {
   const [activeOrg, setActiveOrg] = useState(
     currentOrg?.name
       ? {
-        name: currentOrg.name,
-        comp_name: currentOrg.company_name,
-        logo: StarOff,
-      }
+          name: currentOrg.name,
+          comp_name: currentOrg.company_name,
+          logo: StarOff,
+        }
       : {
-        name: "select ",
-        comp_name: "-",
-        logo: StarOff,
-      },
+          name: "select ",
+          comp_name: "-",
+          logo: StarOff,
+        },
   );
   const { state } = useSidebar();
   //populate with userorgs
@@ -67,27 +70,33 @@ export function OrganizationSelector() {
     // console.log("orgg", userOrgs, orgs);
   }, [userOrgs]);
 
-  useEffect(() => {
-    if (userOrgs.length > 0 && !currentOrg) {
-      setCurrentOrg(userOrgs[0]);
+  // useEffect(() => {
+  //   if (userOrgs.length > 0 && !currentOrg) {
+  //     setCurrentOrg(userOrgs[0]);
 
-      //setSelectedOrg(userOrgs[0]); // Update local state
-    } else {
-      //console.log("Dd");
-      //console.log(currentOrg);
-      setActiveOrg({
-        name: currentOrg.name,
-        comp_name: currentOrg.company_name,
-        logo: Circle,
-      });
-    }
-  }, [userOrgs, currentOrg]);
+  //     //setSelectedOrg(userOrgs[0]); // Update local state
+  //   } else {
+  //     //console.log("Dd");
+  //     //console.log(currentOrg);
+  //     setActiveOrg({
+  //       name: currentOrg.name,
+  //       comp_name: currentOrg.company_name,
+  //       logo: Circle,
+  //     });
+  //   }
+  // }, [userOrgs, currentOrg]);
 
   useEffect(() => {
     // console.log("new org", activeOrg);
+    console.log("theme reseted");
+    useThemeStore.getState().reset();
     const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
     if (matchedOrg) {
       setCurrentOrg(matchedOrg);
+      console.log("theme initialized");
+      useThemeStore.getState().initializeTheme(matchedOrg.company);
+
+      //useThemeInitializer();
     }
   }, [activeOrg]);
 
