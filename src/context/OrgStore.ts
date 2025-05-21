@@ -16,6 +16,7 @@ interface Organization {
   id: string;
   name: string;
   company: string;
+  company_name: string;
 }
 
 interface Company {
@@ -67,7 +68,9 @@ const useOrgStore = create<OrgState>()(
       setUserComp: (comp) => set({ userComp: comp }),
 
       fetchNavigations: async () => {
+
         const { currentOrg, setLoading } = get();
+        console.log("navigation fetch, currentOrg",currentOrg);
         if (!currentOrg) return;
 
         try {
@@ -75,6 +78,7 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/${currentOrg.id}/navigation/`,
           );
+          console.log("navigation fetch, response",response.data);
           set({ navigations: response.data.results });
         } catch (err) {
           console.error("Error fetching navigations", err);
@@ -233,6 +237,7 @@ export const useOrgInitializer = () => {
 
   useEffect(() => {
     if (currentOrg) {
+      // console.log("new org detected, fetching navigations and initializing theme");
       fetchNavigations();
       initializeTheme(currentOrg?.company);
 

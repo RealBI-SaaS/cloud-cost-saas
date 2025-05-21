@@ -79,7 +79,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
     set((state) => {
       const defaultValue = DEFAULT_COLORS[variable];
       const field = VARIABLE_TO_FIELD_MAP[variable];
-      console.log(field, defaultValue);
+      // console.log(field, defaultValue);
       if (!field) {
         console.error(`No mapping found for variable: ${variable}`);
         return state;
@@ -105,7 +105,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
       //setLoading(true);
       Object.entries(scheme).forEach(([key, value]) => {
         if (value) {
-          console.log(key, value)
+          // console.log(key, value)
           document.documentElement.style.setProperty(key, value);
         }
       });

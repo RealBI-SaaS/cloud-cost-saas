@@ -55,6 +55,7 @@ export function OrganizationSelector() {
         },
   );
   const { state } = useSidebar();
+  
   //populate with userorgs
   useEffect(() => {
     if (userOrgs) {
@@ -67,38 +68,28 @@ export function OrganizationSelector() {
         });
       });
     }
-    // console.log("orgg", userOrgs, orgs);
   }, [userOrgs]);
 
-  // useEffect(() => {
-  //   if (userOrgs.length > 0 && !currentOrg) {
-  //     setCurrentOrg(userOrgs[0]);
-
-  //     //setSelectedOrg(userOrgs[0]); // Update local state
-  //   } else {
-  //     //console.log("Dd");
-  //     //console.log(currentOrg);
-  //     setActiveOrg({
-  //       name: currentOrg.name,
-  //       comp_name: currentOrg.company_name,
-  //       logo: Circle,
-  //     });
-  //   }
-  // }, [userOrgs, currentOrg]);
-
+  // Update activeOrg when currentOrg changes
   useEffect(() => {
-    // console.log("new org", activeOrg);
-    console.log("theme reseted");
-    useThemeStore.getState().reset();
-    const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
-    if (matchedOrg) {
-      setCurrentOrg(matchedOrg);
-      console.log("theme initialized");
-      useThemeStore.getState().initializeTheme(matchedOrg.company);
-
-      //useThemeInitializer();
+    if (currentOrg?.name && currentOrg.name !== activeOrg.name) {
+      setActiveOrg({
+        name: currentOrg.name,
+        comp_name: currentOrg.company_name,
+        logo: StarOff,
+      });
     }
-  }, [activeOrg]);
+  }, [currentOrg]);
+
+  // Only handle org changes when activeOrg is explicitly changed by user
+  useEffect(() => {
+    const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
+    if (matchedOrg && matchedOrg.id !== currentOrg?.id) {
+      setCurrentOrg(matchedOrg);
+      useOrgStore.getState().fetchNavigations();
+      useThemeStore.getState().initializeTheme(matchedOrg.company);
+    }
+  }, [activeOrg.name]);
 
   const { isMobile } = useSidebar();
   if (activeOrg) {

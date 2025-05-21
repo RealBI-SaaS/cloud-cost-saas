@@ -30,7 +30,7 @@ import {
   SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useOrg } from "@/context/OrganizationContext";
 import { Link, useLocation } from "react-router-dom";
 import { navIcons, defaultIcon } from "@/assets/iconMap";
@@ -41,36 +41,55 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+interface Navigation {
+  id: string;
+  label: string;
+  icon?: string;
+  parent?: string | null;
+}
+
+interface NavigationItem {
+  name: string;
+  key: string | number;
+  icon: LucideIcon | React.ElementType;
+  url: string;
+  sub_navigations?: {
+    id: string;
+    label: string;
+    url: string;
+  }[];
+}
+
 export function NavigationsList() {
   const { isMobile } = useSidebar();
-  const navigations = useOrgStore((state) => state.navigations);
+  const navigations = useOrgStore((state) => state.navigations) as unknown as Navigation[];
   const currentOrg = useOrgStore((state) => state.currentOrg);
-    // Filter out navigations that have a parent
-    const parentNavigations = navigations.filter(nav => !nav.parent);
+  const [activeNav, setActiveNav] = useState<string | null>(null);
+  // Filter out navigations that have a parent
+  const parentNavigations = navigations.filter(nav => !nav.parent);
 
-  let navigations_list = [
-    // {
-    //   name: "Welcome",
-    //   key: 1,
-    //   icon: Handshake,
-    //   url: "/welcome",
-    // },
+  let navigations_list: NavigationItem[] = [
     {
       name: "Home",
       key: 2,
       icon: House,
-      url: "/home",
+      url: "/dashboard/",
     },
     ...parentNavigations.map((nav) => ({
       name: nav.label,
       key: nav.id,
       icon: navIcons[nav?.icon] || defaultIcon,
-      url: `#${nav.id}`,
+      url: `/dashboard/${nav.id}`,
       sub_navigations: navigations
         .filter(subNav => subNav.parent === nav.id)
-        .map(subNav => subNav.id),
+        .map(subNav => ({
+          id: subNav.id,
+          label: subNav.label,
+          url: `/dashboard/${nav.id}/${subNav.id}/`
+        })),
     })),
   ];
+  // console.log("navigations_list",navigations);
 
 
   const firstItemWithSubmenus = navigations_list.find(
@@ -83,8 +102,10 @@ export function NavigationsList() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const isActive = (path: string) => {
-    return currentPath.includes(path);
+  const isActive = (navItem: NavigationItem) => {
+    console.log("currentPath",currentPath);
+    console.log("navItem.url",navItem.url); 
+    return currentPath === navItem.url || (currentPath.startsWith(navItem.url) && navItem.url !== "/dashboard/"); 
   };
 
   return (
@@ -97,14 +118,16 @@ export function NavigationsList() {
           <Collapsible
             key={item.key}
             asChild
-            defaultOpen={isActive(item.url) || item.key === firstSubmenuKey}
+            defaultOpen={isActive(item)}
             className="group/collapsible"
-            
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton isActive={isActive(item.url)} asChild>
-                  <Link to={item.url}>
+                <SidebarMenuButton isActive={isActive(item)} asChild>
+                  <Link
+                    to={item.url}
+                    // state={{ title: item.name }}
+                  >
                     <item.icon />
                     <span className="group-data-[collapsible=icon]:hidden">
                       {item.name}
@@ -118,19 +141,18 @@ export function NavigationsList() {
               {item.sub_navigations?.length > 0 && (
                 <CollapsibleContent>
                   <SidebarMenuSub>
-                    {item.sub_navigations.map((subNavId) => {
-                      const subNav = navigations.find((nav) => nav.id === subNavId);
-                      if (!subNav) return null;
-                      return (
-                        <SidebarMenuSubItem key={subNav.id}>
-                          <SidebarMenuSubButton asChild>
-                            <Link to={`#${subNav.id}`}>
-                              <span>{subNav.label}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      );
-                    })}
+                    {item.sub_navigations.map((subNav) => (
+                      <SidebarMenuSubItem key={subNav.id}>
+                        <SidebarMenuSubButton asChild>
+                          <Link
+                            to={subNav.url}
+                            // state={{ title: `${item.name} > ${subNav.label}` }}
+                          >
+                            <span>{subNav.label}</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               )}

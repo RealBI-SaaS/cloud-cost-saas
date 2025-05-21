@@ -51,12 +51,14 @@ const Login = () => {
   //  }
   //}, [redirectToAdmin, navigate]);
   //
-  //useEffect(() => {
+  // useEffect(() => {
   //  if (user) {
-  //    navigate("/home");
-  //  }
-  //}, [user]);
+  //       useOrgInitializer(); // Always call the hook
+  //       useThemeInitializer();  
+  //     }
+  // }, [user]);
   //
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -90,10 +92,10 @@ const Login = () => {
           navigate("/admin/signin", { replace: true });
           return;
         }
-        useOrgInitializer(); // Always call the hook
-        useThemeInitializer();
+        // useOrgInitializer(); // Always call the hook
+        // useThemeInitializer();
 
-        const from = location.state?.redirectTo || "/home/authenticated";
+        const from = location.state?.redirectTo || "/dashboard";
         console.log("Attempting to redirect to:", from);
         console.log("Current location state:", location.state);
 
@@ -112,7 +114,8 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.log("error",error);
+      // console.log(error);
       toast.error(
         error?.response?.data?.detail ||
         "An error occurred, try again or another account",

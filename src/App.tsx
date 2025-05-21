@@ -55,6 +55,7 @@ import { useOrgInitializer } from "./context/OrgStore";
 import useOrgStore from "./context/OrgStore";
 import NotFound from "./components/pages/NotFound";
 import { useThemeInitializer, useThemeStore } from "./context/ThemeStore";
+import { useEffect } from "react";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
@@ -68,6 +69,7 @@ const ProtectedRoute = ({ children }) => {
   //if (userComp || currentOrg) {
   //await initializeTheme(userComp?.id || currentOrg?.id);
   //}
+ 
 
   if (loading) {
     return <Loading />;
@@ -104,8 +106,33 @@ const AuthRoute = ({ children }) => {
 };
 
 function App() {
+  const user = useUserStore((state) => state.user);
+  const initializeOrg = useOrgStore((state) => state.initialize);
+  const initializeTheme = useThemeStore((state) => state.initializeTheme);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
+  useEffect(() => {
+    if (user) {
+      console.log("initializing org and theme");
+        initializeOrg(); // Always call the hook
+        if(currentOrg){
+          initializeTheme(currentOrg?.company);  
+
+        }
+       }
+   }, [user]);
+
+   useEffect(() => {
+    if (user) {
+      // console.log("initializing org and theme");
+        // initializeOrg(); // Always call the hook
+        if(currentOrg){
+          initializeTheme(currentOrg?.company);  
+
+        }
+       }
+   }, [currentOrg]);
 
   return (
     <>
@@ -155,7 +182,9 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/home/authenticated" element={<HomeAuthenticated />} />
+            <Route path="/dashboard/" element={<HomeAuthenticated />} />
+            <Route path="/dashboard/:parentId" element={<HomeAuthenticated />} />
+            <Route path="/dashboard/:parentId/:subId" element={<HomeAuthenticated />} />
 
             {/* Setting pages */}
             <Route element={<SettingsLayout />}>
@@ -274,7 +303,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<NotFound />} />
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </div>
     </>
