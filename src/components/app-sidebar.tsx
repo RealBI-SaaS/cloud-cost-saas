@@ -99,7 +99,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       setOpen(true);
     }
   }, [isSettingsPage]);
-  console.log(currentOrg);
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -117,7 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarHeader>
         ) : (
           <img
-            src={`${import.meta.env.VITE_BASE_URL}/media/${currentOrg.company_logo}` }
+            src={`${import.meta.env.VITE_BASE_URL}${currentOrg.company_logo}` }
             alt={`${currentOrg?.company_name} logo`}
             className="h-24 object-contain px-3 py-5"
           />

@@ -116,8 +116,9 @@ const useOrgStore = create<OrgState>()(
 
         try {
           let organizations = [];
-          if (user.is_staff && currentOrg?.id) {
+          if (user.is_staff && userComp?.id) {
             const response = await fetchCompOrgs(userComp?.id);
+            // console.log("fetchUserOrganizations, response",response);
             organizations = response || [];
           } else {
             let next_list_url = url;
