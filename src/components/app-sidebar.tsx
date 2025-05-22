@@ -106,9 +106,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {state == "expanded" ? (
         !currentOrg?.company_logo ? (
           <SidebarHeader>
-            <p className="text-3xl text-primary px-3 py-5 bold-lg">
+            {/* <p className="text-3xl text-primary px-3 py-5 bold-lg">
               {currentOrg?.company_name || "RealBI"}
-            </p>
+            </p> */}
+            <img
+              src={text_and_logo}
+              alt="Logo"
+              className="h-14 object-contain "
+            />
           </SidebarHeader>
         ) : (
           <img

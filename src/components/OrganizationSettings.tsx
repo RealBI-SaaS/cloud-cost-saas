@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useUserStore from "@/context/userStore";
 import { toast } from "sonner";
 import { Building2, Plus, ChevronRight } from "lucide-react";
-import { useOrg } from "@/context/OrganizationContext";
+// import { useOrg } from "@/context/OrganizationContext";
 import { useNavigate } from "react-router-dom";
 import {
   Pagination,
@@ -25,6 +26,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import useOrgStore from "@/context/OrgStore";
+import { Organization } from "@/utils/types/types";
 type NavItem = {
   title: string;
   href: string;
@@ -40,6 +42,7 @@ export const orgNavItems: NavItem[] = [
 ];
 
 export default function OrganizationSettings() {
+  const userComp = useOrgStore((state) => state.userComp);
   const navigate = useNavigate();
   // const {
   //   createOrganization,
@@ -55,7 +58,7 @@ export default function OrganizationSettings() {
   const [showNewOrgForm, setShowNewOrgForm] = useState(false);
   const [newOrgName, setNewOrgName] = useState("");
   const [organizations, setOrganizations] = useState<
-    { id: number; name: string; role: string }[]
+    Organization[]
   >([]);
 
   useEffect(() => {
@@ -63,6 +66,12 @@ export default function OrganizationSettings() {
       id: org.id,
       name: org.name,
       role: org.role,
+      company: org.company,
+      company_name: org.company_name,
+      company_logo: org.company_logo,
+      created_at: org.created_at,
+      updated_at: org.updated_at,
+      is_staff: org.is_staff,
     }));
     setOrganizations(orgs);
   }, [userOrgs]);
@@ -84,7 +93,7 @@ export default function OrganizationSettings() {
     }
   };
 
-  const handleOrgClick = (org: { id: number; name: string }) => {
+  const handleOrgClick = (org: Organization) => {
     setCurrentOrg(org);
     navigate("/settings/organization/detail/");
   };
@@ -98,6 +107,7 @@ export default function OrganizationSettings() {
               <Building2 className="h-5 w-5" />
               <CardTitle>Your Organizations</CardTitle>
             </div>
+            {userComp && (
             <Button
               size="sm"
               onClick={() => setShowNewOrgForm(!showNewOrgForm)}
@@ -106,6 +116,7 @@ export default function OrganizationSettings() {
               <Plus className="h-4 w-4 mr-2" />
               New Organization
             </Button>
+            )}
           </div>
           <CardDescription>
             Manage your organizations and teams.
@@ -118,7 +129,7 @@ export default function OrganizationSettings() {
               className="mb-6 p-4 border rounded-lg"
             >
               <h3 className="text-sm font-medium mb-3">
-                Create New Organization
+                Create New Organization in <span className="text-primary ">{userComp?.name}</span>
               </h3>
               <div className="space-y-4">
                 <div className="space-y-2">

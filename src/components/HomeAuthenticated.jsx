@@ -48,7 +48,7 @@ const HomeAuthenticated = () => {
     <div className=" flex grid grid-cols-1 justify-around items-center w-full h-full  ">
       {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
-      <h1 className="text-2xl font-bold px-5 mx-5 py-5">{title}</h1>
+      <h1 className="text-2xl font-bold px-5 mx-5 py-3">{title}</h1>
 
       <PowerBIEmbed />
     </div>

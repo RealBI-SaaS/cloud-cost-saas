@@ -1,4 +1,5 @@
 import useUserStore from "@/context/userStore";
+import useOrgStore from "@/context/OrgStore";
 import {
   User,
   KeyRound,
@@ -36,6 +37,8 @@ import { useUser } from "@/context/UserContext";
 const SettingsSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
+  const userComp = useOrgStore((state) => state.userComp);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
   const location = useLocation();
   const currentPath = location.pathname;
   //const { user } = useUser();
@@ -137,6 +140,7 @@ const SettingsSidebar = ({
         </SidebarGroup>
 
         {/* Company Section */}
+        {userComp && (
         <SidebarGroup>
           <SidebarGroupLabel>Company</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -177,6 +181,7 @@ const SettingsSidebar = ({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        )}
 
         {/* Organization Section */}
         <SidebarGroup>
@@ -191,7 +196,7 @@ const SettingsSidebar = ({
                 >
                   <Link to="/settings/organization/list">
                     <UsersRound />
-                    <span>Organization</span>
+                    <span>Organizations</span>
                   </Link>
                 </SidebarMenuButton>
 
@@ -218,9 +223,10 @@ const SettingsSidebar = ({
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
+                  {currentOrg?.role === "admin" || currentOrg?.role === "owner" && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
                       isActive={isActiveExact(
                         "/settings/organization/navigation",
                       )}
@@ -230,6 +236,7 @@ const SettingsSidebar = ({
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
+                  )}
 
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton

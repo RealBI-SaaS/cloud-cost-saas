@@ -8,18 +8,11 @@ import {
   fetchCompOrgs,
 } from "../utils/org/fetchers";
 import useUserStore from "./userStore";
-import { useUser } from "./UserContext";
+// import { useUser } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 import { useThemeStore, useThemeInitializer } from "./ThemeStore";
+import { Organization } from "@/utils/types/types";
 
-interface Organization {
-  id: string;
-  name: string;
-  company: string;
-  company_name: string;
-  company_logo: string;
-
-}
 
 interface Company {
   id: string;

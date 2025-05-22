@@ -46,12 +46,12 @@ export function OrganizationSelector() {
       ? {
           name: currentOrg.name,
           comp_name: currentOrg.company_name,
-          logo: StarOff,
+          logo: Circle,
         }
       : {
           name: "select ",
           comp_name: "-",
-          logo: StarOff,
+          logo: Circle,
         },
   );
   const { state } = useSidebar();
@@ -64,7 +64,7 @@ export function OrganizationSelector() {
         orgs.push({
           name: org.name,
           comp_name: org.company_name,
-          logo: StarOff,
+          logo: Circle,
         });
       });
     }
@@ -76,7 +76,7 @@ export function OrganizationSelector() {
       setActiveOrg({
         name: currentOrg.name,
         comp_name: currentOrg.company_name,
-        logo: StarOff,
+        logo: Circle,
       });
     }
   }, [currentOrg]);

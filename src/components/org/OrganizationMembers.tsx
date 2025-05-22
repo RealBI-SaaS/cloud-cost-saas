@@ -207,12 +207,14 @@ export default function OrganizationMembers() {
               </CardDescription>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button className="!text-white">
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Invite User
+              {currentOrg.role === "admin" || currentOrg.role === "owner" && (
+                <DialogTrigger asChild>
+                  <Button className="!text-white">
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Invite User
                 </Button>
               </DialogTrigger>
+              )}
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Invite New User</DialogTitle>
