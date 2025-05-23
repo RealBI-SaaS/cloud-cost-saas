@@ -37,7 +37,7 @@ const Home = () => {
           // Fetch user data using the access token
           try {
             const userData = await fetchUserData();
-            console.log("User data fetched successfully:", userData);
+            //console.log("User data fetched successfully:", userData);
             if (userData?.is_staff) {
               navigate("/admin/signin", { replace: true });
             }
@@ -57,7 +57,7 @@ const Home = () => {
         }
       }
     };
-    console.log("searchParams", searchParams);
+    //console.log("searchParams", searchParams);
     handleTokenParams();
   }, [searchParams]); // Remove other dependencies as they are stable references
 

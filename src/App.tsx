@@ -69,7 +69,7 @@ const ProtectedRoute = ({ children }) => {
   //if (userComp || currentOrg) {
   //await initializeTheme(userComp?.id || currentOrg?.id);
   //}
- 
+
 
   if (loading) {
     return <Loading />;
@@ -115,24 +115,24 @@ function App() {
   useEffect(() => {
     if (user) {
       console.log("initializing org and theme");
-        initializeOrg(); // Always call the hook
-        if(currentOrg){
-          initializeTheme(currentOrg?.company);  
+      initializeOrg(); // Always call the hook
+      if (currentOrg) {
+        initializeTheme(currentOrg?.company);
 
-        }
-       }
-   }, [user]);
+      }
+    }
+  }, [user]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (user) {
       // console.log("initializing org and theme");
-        // initializeOrg(); // Always call the hook
-        if(currentOrg){
-          initializeTheme(currentOrg?.company);  
+      //initializeOrg(); // Always call the hook
+      if (currentOrg) {
+        initializeTheme(currentOrg?.company);
 
-        }
-       }
-   }, [currentOrg]);
+      }
+    }
+  }, [currentOrg]);
 
   return (
     <>

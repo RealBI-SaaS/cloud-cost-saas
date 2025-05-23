@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useThemeStore, useThemeInitializer } from "./ThemeStore";
 import { Organization } from "@/utils/types/types";
 
-
 interface Company {
   id: string;
   name: string;
@@ -65,7 +64,6 @@ const useOrgStore = create<OrgState>()(
       setUserComp: (comp) => set({ userComp: comp }),
 
       fetchNavigations: async () => {
-
         const { currentOrg, setLoading } = get();
         // console.log("navigation fetch, currentOrg",currentOrg);
         if (!currentOrg) return;
@@ -92,9 +90,9 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/company/${userComp?.id}/`,
           );
-          console.log("fetchUserCompany, response",response);
+          console.log("fetchUserCompany, response", response);
           if (response.data) {
-            console.log("fetchUserCompany, response",response.data);
+            //console.log("fetchUserCompany, response", response.data);
             setUserComp(response.data);
           }
           return;
@@ -180,17 +178,21 @@ const useOrgStore = create<OrgState>()(
         const user = useUserStore.getState().user;
 
         if (!user) {
+          conole.log("retttornt");
           reset();
           set({ isInitialized: true });
           return;
         }
 
-        if (!user.is_staff || get().userComp) {
-          setLoading(true);
+        setLoading(true);
+        if (!user.is_staff) {
           await fetchUserCompany();
-          await fetchUserOrganizations();
-          await fetchNavigations();
         }
+
+        //if (!user.is_staff || get().userComp) {
+        await fetchUserOrganizations();
+        await fetchNavigations();
+        //}
         set({ isInitialized: true });
       },
 

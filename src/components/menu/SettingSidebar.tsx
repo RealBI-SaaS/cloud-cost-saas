@@ -42,9 +42,7 @@ const SettingsSidebar = ({
   const location = useLocation();
   const currentPath = location.pathname;
   //const { user } = useUser();
-  const user = useUserStore((state) => 
-    state.user
-  );
+  const user = useUserStore((state) => state.user);
 
   const isActive = (path: string) => {
     return currentPath.includes(path);
@@ -141,46 +139,46 @@ const SettingsSidebar = ({
 
         {/* Company Section */}
         {userComp && (
-        <SidebarGroup>
-          <SidebarGroupLabel>Company</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  //isActive={isActive("/settings/organization")}
-                  tooltip="Company"
-                >
-                  <Link to="settings/company/details">
-                    <Building className="h-4 w-4" />
-                    <span>Company</span>
-                  </Link>
-                </SidebarMenuButton>
+          <SidebarGroup>
+            <SidebarGroupLabel>Company</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    //isActive={isActive("/settings/organization")}
+                    tooltip="Company"
+                  >
+                    <Link to="settings/company/details">
+                      <Building className="h-4 w-4" />
+                      <span>Company</span>
+                    </Link>
+                  </SidebarMenuButton>
 
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/company/details")}
-                    >
-                      <Link to="settings/company/details">Your Company</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/company/styles")}
-                    >
-                      <Link to="settings/company/styles">Manage Colors</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact("/settings/company/details")}
+                      >
+                        <Link to="settings/company/details">Your Company</Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact("/settings/company/styles")}
+                      >
+                        <Link to="settings/company/styles">Manage Colors</Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         )}
 
         {/* Organization Section */}
@@ -223,19 +221,21 @@ const SettingsSidebar = ({
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 
-                  {currentOrg?.role === "admin" || currentOrg?.role === "owner" && (
+                  {(currentOrg?.role === "admin" ||
+                    currentOrg?.role === "owner" ||
+                    user.is_staff) && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
-                      isActive={isActiveExact(
-                        "/settings/organization/navigation",
-                      )}
-                    >
-                      <Link to="/settings/organization/navigation">
-                        Navigations
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+                        isActive={isActiveExact(
+                          "/settings/organization/navigation",
+                        )}
+                      >
+                        <Link to="/settings/organization/navigation">
+                          Navigations
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
                   )}
 
                   <SidebarMenuSubItem>

@@ -42,11 +42,12 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { UserPlus, Mail, User, MoreHorizontal } from "lucide-react";
-import { useOrg } from "@/context/OrganizationContext";
+//import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { loadEnvFile } from "process";
 import { Loading } from "@/misc/loading";
 import useOrgStore from "@/context/OrgStore";
+import useUserStore from "@/context/userStore";
 export default function OrganizationMembers() {
   // const { currentOrg } = useOrg();
   const currentOrg = useOrgStore((state) => state.currentOrg);
@@ -54,6 +55,8 @@ export default function OrganizationMembers() {
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
+  const user = useUserStore((state) => state.user);
+  //console.log(user);
   //for Dialog
   const [open, setOpen] = useState(false);
   //console.log(invi)
@@ -192,6 +195,13 @@ export default function OrganizationMembers() {
     );
   }
 
+  const hasPriviledges = () => {
+    return (
+      user.is_staff ||
+      currentOrg.role === "admin" ||
+      currentOrg.role === "owner"
+    );
+  };
   return (
     <div className="container mx-auto px-4 py-10 ">
       <Card className="w-full border-none shadow-sm mb-5">
@@ -207,13 +217,13 @@ export default function OrganizationMembers() {
               </CardDescription>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
-              {currentOrg.role === "admin" || currentOrg.role === "owner" && (
+              {hasPriviledges() && (
                 <DialogTrigger asChild>
                   <Button className="!text-white">
                     <UserPlus className="h-4 w-4 mr-2" />
                     Invite User
-                </Button>
-              </DialogTrigger>
+                  </Button>
+                </DialogTrigger>
               )}
               <DialogContent>
                 <DialogHeader>
@@ -304,7 +314,9 @@ export default function OrganizationMembers() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  {hasPriviledges() && (
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -315,39 +327,43 @@ export default function OrganizationMembers() {
                     </TableCell>
                     <TableCell>{member.email}</TableCell>
                     <TableCell className="capitalize">{member.role}</TableCell>
-                    <TableCell>
-                      {member.role !== "owner" ? (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Actions</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleRoleChange(
-                                  member.id,
-                                  member.role === "admin" ? "member" : "admin",
-                                )
-                              }
-                            >
-                              Change to{" "}
-                              {member.role === "admin" ? "Member" : "Admin"}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => handleRemoveMember(member.id)}
-                            >
-                              Remove Member
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      ) : (
-                        <p></p>
-                      )}
-                    </TableCell>
+                    {hasPriviledges() && (
+                      <TableCell>
+                        {member.role !== "owner" ? (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Actions</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleRoleChange(
+                                    member.id,
+                                    member.role === "admin"
+                                      ? "member"
+                                      : "admin",
+                                  )
+                                }
+                              >
+                                Change to{" "}
+                                {member.role === "admin" ? "Member" : "Admin"}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={() => handleRemoveMember(member.id)}
+                              >
+                                Remove Member
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        ) : (
+                          <p></p>
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
