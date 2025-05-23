@@ -62,16 +62,18 @@ interface NavigationItem {
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
-  const navigations = useOrgStore((state) => state.navigations) as unknown as Navigation[];
+  const navigations = useOrgStore(
+    (state) => state.navigations,
+  ) as unknown as Navigation[];
   const currentOrg = useOrgStore((state) => state.currentOrg);
   const [activeNav, setActiveNav] = useState<string | null>(null);
   // Filter out navigations that have a parent
-  const parentNavigations = navigations.filter(nav => !nav.parent);
+  const parentNavigations = navigations.filter((nav) => !nav.parent);
 
   let navigations_list: NavigationItem[] = [
     {
       name: "Home",
-      key: 2,
+      key: 0,
       icon: House,
       url: "/dashboard/",
     },
@@ -81,30 +83,29 @@ export function NavigationsList() {
       icon: navIcons[nav?.icon] || defaultIcon,
       url: `/dashboard/${nav.id}`,
       sub_navigations: navigations
-        .filter(subNav => subNav.parent === nav.id)
-        .map(subNav => ({
+        .filter((subNav) => subNav.parent === nav.id)
+        .map((subNav) => ({
           id: subNav.id,
           label: subNav.label,
-          url: `/dashboard/${nav.id}/${subNav.id}/`
+          url: `/dashboard/${nav.id}/${subNav.id}/`,
         })),
     })),
   ];
   // console.log("navigations_list",navigations);
 
-
   const firstItemWithSubmenus = navigations_list.find(
-    (item) => item.sub_navigations?.length > 0
+    (item) => item.sub_navigations?.length > 0,
   );
   const firstSubmenuKey = firstItemWithSubmenus?.key;
-
-  
 
   const location = useLocation();
   const currentPath = location.pathname;
 
   const isActive = (navItem: NavigationItem) => {
-
-    return currentPath === navItem.url || (currentPath.startsWith(navItem.url) && navItem.url !== "/dashboard/"); 
+    return (
+      currentPath === navItem.url ||
+      (currentPath.startsWith(navItem.url) && navItem.url !== "/dashboard/")
+    );
   };
 
   return (
@@ -117,7 +118,7 @@ export function NavigationsList() {
           <Collapsible
             key={item.key}
             asChild
-            defaultOpen={isActive(item)}
+            open={isActive(item) || item.key == firstSubmenuKey}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -125,7 +126,7 @@ export function NavigationsList() {
                 <SidebarMenuButton isActive={isActive(item)} asChild>
                   <Link
                     to={item.url}
-                    // state={{ title: item.name }}
+                  // state={{ title: item.name }}
                   >
                     <item.icon />
                     <span className="group-data-[collapsible=icon]:hidden">
@@ -145,7 +146,7 @@ export function NavigationsList() {
                         <SidebarMenuSubButton asChild>
                           <Link
                             to={subNav.url}
-                            // state={{ title: `${item.name} > ${subNav.label}` }}
+                          // state={{ title: `${item.name} > ${subNav.label}` }}
                           >
                             <span>{subNav.label}</span>
                           </Link>

@@ -129,6 +129,7 @@ const useOrgStore = create<OrgState>()(
           }
 
           setUserOrgs(organizations);
+          console.log(organizations);
           if (organizations.length > 0) {
             const matchedOrg = organizations.find(
               (org) => org.id === currentOrg?.id,

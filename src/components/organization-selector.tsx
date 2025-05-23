@@ -55,7 +55,8 @@ export function OrganizationSelector() {
         },
   );
   const { state } = useSidebar();
-  
+
+  //console.log("DFFF", userOrgs);
   //populate with userorgs
   useEffect(() => {
     if (userOrgs) {
@@ -83,13 +84,14 @@ export function OrganizationSelector() {
 
   // Only handle org changes when activeOrg is explicitly changed by user
   useEffect(() => {
-    const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
-    if (matchedOrg && matchedOrg.id !== currentOrg?.id) {
-      setCurrentOrg(matchedOrg);
-      useOrgStore.getState().fetchNavigations();
-      useThemeStore.getState().initializeTheme(matchedOrg.company);
-    }
-  }, [activeOrg.name]);
+    console.log(currentOrg.name);
+    //const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
+    //if (matchedOrg && matchedOrg.id !== currentOrg?.id) {
+    //setCurrentOrg(matchedOrg);
+    useOrgStore.getState().fetchNavigations();
+    useThemeStore.getState().initializeTheme(currentOrg.company);
+    //}
+  }, [currentOrg.name]);
 
   const { isMobile } = useSidebar();
   if (activeOrg) {
@@ -123,13 +125,18 @@ export function OrganizationSelector() {
               <DropdownMenuLabel className="text-muted-foreground text-xs">
                 Organizations
               </DropdownMenuLabel>
-              {orgs.map((org, index) => (
+              {userOrgs.map((org, index) => (
                 <DropdownMenuItem
                   key={org.name}
                   onClick={() => {
                     //handleSideMenuOrgSelect(team);
 
-                    setActiveOrg(org);
+                    setCurrentOrg(org);
+                    //setActiveOrg({
+                    //  name: org.name,
+                    //  comp_name: org.company_name,
+                    //  logo: Circle,
+                    //},);
                   }}
                   className="gap-2 p-2"
                 >
