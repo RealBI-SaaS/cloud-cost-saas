@@ -65,6 +65,8 @@ const useOrgStore = create<OrgState>()(
 
       fetchNavigations: async () => {
         const { currentOrg, setLoading } = get();
+        const navsById = [];
+        const navsTree = [];
         // console.log("navigation fetch, currentOrg",currentOrg);
         if (!currentOrg) return;
 
@@ -73,8 +75,24 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/${currentOrg.id}/navigation/`,
           );
-          // console.log("navigation fetch, response",response.data);
-          set({ navigations: response.data.results });
+          console.log("navigation fetch, response", response.data);
+          const data = response.data.results;
+
+          data.forEach((item) => {
+            navsById[item.id] = { ...item, children: [] };
+          });
+
+          data.forEach((item) => {
+            if (item.parent) {
+              // Add to parent's children
+              navsById[item.parent]?.children.push(navsById[item.id]);
+            } else {
+              // No parent → top-level nav item
+              navsTree.push(navsById[item.id]);
+            }
+          });
+          console.log(navsTree);
+          set({ navigations: navsTree });
         } catch (err) {
           console.error("Error fetching navigations", err);
         } finally {
@@ -90,7 +108,8 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/company/${userComp?.id}/`,
           );
-          console.log("fetchUserCompany, response", response);
+          //console.log("fetchUserCompany, response", response);
+
           if (response.data) {
             //console.log("fetchUserCompany, response", response.data);
             setUserComp(response.data);
@@ -129,7 +148,7 @@ const useOrgStore = create<OrgState>()(
           }
 
           setUserOrgs(organizations);
-          console.log(organizations);
+          //console.log(organizations);
           if (organizations.length > 0) {
             const matchedOrg = organizations.find(
               (org) => org.id === currentOrg?.id,

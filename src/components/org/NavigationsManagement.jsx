@@ -1,4 +1,21 @@
 import { useEffect } from "react";
+import ChildNav from "./nav/ChildNavItem";
+import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import React from "react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import axiosInstance from "../../axios/axiosInstance";
 import { useState } from "react";
 // import { useOrg } from "../../context/OrganizationContext";
@@ -53,6 +70,9 @@ import { navIcons } from "@/assets/iconMap";
 import useUserStore from "@/context/userStore";
 import useOrgStore from "@/context/OrgStore";
 import { Checkbox } from "@/components/ui/checkbox";
+import { findNavById } from "@/utils/org/helpers";
+import Navigation from "./NavigationListItem";
+import { DragOverlay } from "@dnd-kit/core";
 
 const NavigationManagement = () => {
   // const { loading, setLoading } = useUser();
@@ -87,7 +107,7 @@ const NavigationManagement = () => {
       //   toast.error("No Icon selected! Please select an icon.");
       //   return;
       // }
-      await axiosInstance.post(`/organizations/navigation/`, {
+      await axiosInstance.post(`/organizations/${currentOrg.id}/navigation/`, {
         organization: currentOrg.id,
         label,
         icon: icon ? icon : "PieChart",
@@ -110,10 +130,16 @@ const NavigationManagement = () => {
   const handleNavigationEdit = async (e) => {
     e.preventDefault();
 
-    const currentNav = navigations.find(
-      (nav) => nav.id === navigationGettingEdited,
-    );
-
+    const currentNav = findNavById(navigationGettingEdited);
+    //const currentNav = navigations.find(
+    //  (nav) => nav.id === navigationGettingEdited,
+    //);
+    //
+    if (!currentNav) {
+      toast.info("cannot match nav");
+      setNavigationGettingEdited(null);
+      return;
+    }
     if (
       currentNav &&
       newNavigationLabel === currentNav.label &&
@@ -128,7 +154,7 @@ const NavigationManagement = () => {
 
     try {
       const res = await axiosInstance.patch(
-        `/organizations/navigation/${navigationGettingEdited}/`,
+        `/organizations/${currentOrg.id}/navigation/${navigationGettingEdited}/`,
         {
           organization: currentOrg.id,
           label: newNavigationLabel,
@@ -150,9 +176,12 @@ const NavigationManagement = () => {
   const handleNavigationDelete = async (navigationId) => {
     try {
       setLoading(true);
-      await axiosInstance.delete(`/organizations/navigation/${navigationId}/`, {
-        organization: currentOrg.id,
-      });
+      await axiosInstance.delete(
+        `/organizations/${currentOrg.id}/navigation/${navigationId}/`,
+        {
+          organization: currentOrg.id,
+        },
+      );
       toast.success("Navigation deleted successfully");
       fetchNavigations();
     } catch (err) {
@@ -162,6 +191,58 @@ const NavigationManagement = () => {
       setLoading(false);
     }
   };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
+    }),
+  );
+  const [sortedNavigations, setSortedNavigations] = useState(
+    [...navigations].sort((a, b) => a.order - b.order)
+  );
+
+  const [activeId, setActiveId] = useState(null);
+
+  const handleDragStart = (event) => {
+    setActiveId(event.active.id);
+  };
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = sortedNavigations.findIndex((nav) => nav.id === active.id);
+    const newIndex = sortedNavigations.findIndex((nav) => nav.id === over.id);
+
+    const newNavs = arrayMove(sortedNavigations, oldIndex, newIndex);
+
+    // Update each item's order based on new index
+    const updatedNavs = newNavs.map((nav, index) => ({
+      ...nav,
+      order: index, // update order based on new index
+    }));
+
+    setSortedNavigations(updatedNavs);
+    setActiveId(null)
+
+    // TODO: send to backend
+    // e.g., axios.patch('/api/nav-order', updatedNavs)
+  };
+
+  //const { attributes, listeners, setNodeRef, transform, transition } =
+  //  useSortable({ id });
+  //
+  //const style = {
+  //  transform: CSS.Transform.toString(transform),
+  //  transition,
+  //  padding: "1rem",
+  //  marginBottom: "0.5rem",
+  //  background: "#eee",
+  //  border: "1px solid #ccc",
+  //  borderRadius: "4px",
+  //  cursor: "grab",
+  //};
 
   return (
     <div className="container mx-auto p-6 ">
@@ -180,348 +261,55 @@ const NavigationManagement = () => {
             </div>
           ) : (
             <>
-              <div className="space-y-4">
+              <div className="space-y-4  overflow-hidden ">
                 <h3 className="text-lg font-medium">Navigations</h3>
                 <hr />
+
                 {navigations.length > 0 ? (
-                  <div className="space-y-2">
-                    {navigations
-                      .filter((nav) => !nav.parent) // Only show parent navigations
-                      .map((navigation, ind) => (
-                        <div key={navigation.id}>
-                          <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                            {navigationGettingEdited === navigation.id ? (
-                              <form
-                                className="grid gap-4 w-full p-4 "
-                                onSubmit={handleNavigationEdit}
-                              >
-                                <Collapsible className="grid grid-cols-4 space-x-2">
-                                  <div className="col-span-3 flex flex-col gap-1 ">
-                                    <label
-                                      htmlFor="navigation-label"
-                                      className="text-sm  mb-1 text-foreground"
-                                    >
-                                      Navigation Label
-                                    </label>
-                                    <Input
-                                      id="navigation-label"
-                                      value={newNavigationLabel}
-                                      onChange={(e) =>
-                                        setNewNavigationLabel(e.target.value)
-                                      }
-                                      className="w-full"
-                                      placeholder="Enter navigation label"
-                                    />
-                                  </div>
-
-                                  <div className="flex flex-col gap-2">
-                                    <span className="text-sm text-foreground">
-                                      Select an Icon
-                                    </span>
-
-                                    <CollapsibleTrigger asChild>
-                                      <Button
-                                        variant="outline"
-                                        className="flex items-center gap-2"
-                                      >
-                                        <span>
-                                          {newIcon
-                                            ? `Icon: ${newIcon}`
-                                            : "Select Icon"}
-                                        </span>
-                                        <ChevronDown className="h-4 w-4" />
-                                      </Button>
-                                    </CollapsibleTrigger>
-                                  </div>
-                                  <CollapsibleContent className="col-span-4">
-                                    <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2">
-                                      {Object.entries(navIcons).map(
-                                        ([name, Icon]) => (
-                                          <Button
-                                            key={name}
-                                            type="button"
-                                            variant={
-                                              newIcon === name
-                                                ? "default"
-                                                : "outline"
-                                            }
-                                            size="sm"
-                                            className="flex flex-col items-center gap-1 h-auto py-2"
-                                            onClick={() => setNewIcon(name)}
-                                          >
-                                            <Icon className="h-4 w-4" />
-                                            <span className="text-xs">
-                                              {name}
-                                            </span>
-                                          </Button>
-                                        ),
-                                      )}
-                                    </div>
-                                  </CollapsibleContent>
-                                </Collapsible>
-
-                                <div className="grid grid-cols-4 justify-between items-center">
-                                  <Button
-                                    type="submit"
-                                    size="sm"
-                                    className="col-span-3"
-                                  >
-                                    Save
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    onClick={() =>
-                                      setNavigationGettingEdited(null)
-                                    }
-                                  >
-                                    <X className="h-4 w-4" />
-                                    cancel
-                                  </Button>
-                                </div>
-                              </form>
-                            ) : (
-                              <>
-                                <div className="flex items-center gap-4">
-                                  <span className="text-muted-foreground">
-                                    {ind + 1}.
-                                  </span>
-                                  <span>{navigation.label}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => {
-                                      setNavigationGettingEdited(navigation.id);
-                                      setNewNavigationLabel(navigation.label);
-                                      setNewIcon(navigation.icon);
-                                    }}
-                                  >
-                                    <Pencil className="h-4 w-4" />
-                                  </Button>
-                                  <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                      <Button variant="ghost" size="icon">
-                                        <Trash2 className="h-4 w-4" />
-                                      </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                          Are you sure?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                          This will permanently delete the
-                                          navigation "{navigation.label}". This
-                                          action cannot be undone.
-                                        </AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                          Cancel
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction
-                                          className="!text-white"
-                                          onClick={() =>
-                                            handleNavigationDelete(
-                                              navigation.id,
-                                            )
-                                          }
-                                        >
-                                          Delete
-                                        </AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
-                                </div>
-                              </>
-                            )}
-                          </div>
-
-                          {/* Sub-navigations */}
-                          {navigation.sub_navigations &&
-                            navigation.sub_navigations.length > 0 && (
-                              <div className="ml-8 mt-2 space-y-2">
-                                {navigation.sub_navigations.map(
-                                  (subNavId, subInd) => {
-                                    const subNav = navigations.find(
-                                      (nav) => nav.id === subNavId,
-                                    );
-                                    if (!subNav) return null;
-
-                                    return (
-                                      <div
-                                        key={subNav.id}
-                                        className="flex items-center justify-between p-4 py-1 border rounded-lg hover:bg-accent/50 transition-colors bg-muted/30"
-                                      >
-                                        {navigationGettingEdited ===
-                                          subNav.id ? (
-                                          <form
-                                            className="grid gap-4 w-full p-4"
-                                            onSubmit={handleNavigationEdit}
-                                          >
-                                            <div className="grid grid-cols-4 space-x-2">
-                                              <div className="col-span-3 flex flex-col gap-1">
-                                                <label
-                                                  htmlFor="sub-navigation-label"
-                                                  className="text-sm mb-1 text-foreground"
-                                                >
-                                                  Sub-navigation Label
-                                                </label>
-                                                <Input
-                                                  id="sub-navigation-label"
-                                                  value={newNavigationLabel}
-                                                  onChange={(e) =>
-                                                    setNewNavigationLabel(
-                                                      e.target.value,
-                                                    )
-                                                  }
-                                                  className="w-full"
-                                                  placeholder="Enter sub-navigation label"
-                                                />
-                                              </div>
-
-                                              {/* <div className="flex flex-col gap-2">
-                                          <span className="text-sm text-foreground">
-                                            Select an Icon
-                                          </span>
-
-                                          <CollapsibleTrigger asChild>
-                                            <Button
-                                              variant="outline"
-                                              className="flex items-center gap-2"
-                                            >
-                                              <span>
-                                                {newIcon
-                                                  ? `Icon: ${newIcon}`
-                                                  : "Select Icon"}
-                                              </span>
-                                              <ChevronDown className="h-4 w-4" />
-                                            </Button>
-                                          </CollapsibleTrigger>
-                                        </div> */}
-                                              {/* <CollapsibleContent className="col-span-4">
-                                          <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2">
-                                            {Object.entries(navIcons).map(
-                                              ([name, Icon]) => (
-                                                <Button
-                                                  key={name}
-                                                  type="button"
-                                                  variant={
-                                                    newIcon === name
-                                                      ? "default"
-                                                      : "outline"
-                                                  }
-                                                  size="sm"
-                                                  className="flex flex-col items-center gap-1 h-auto py-2"
-                                                  onClick={() => setNewIcon(name)}
-                                                >
-                                                  <Icon className="h-4 w-4" />
-                                                  <span className="text-xs">{name}</span>
-                                                </Button>
-                                              ),
-                                            )}
-                                          </div>
-                                        </CollapsibleContent> */}
-                                            </div>
-
-                                            <div className="grid grid-cols-4 justify-between items-center">
-                                              <Button
-                                                type="submit"
-                                                size="sm"
-                                                className="col-span-3"
-                                              >
-                                                Save
-                                              </Button>
-                                              <Button
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={() =>
-                                                  setNavigationGettingEdited(
-                                                    null,
-                                                  )
-                                                }
-                                              >
-                                                <X className="h-4 w-4" />
-                                                cancel
-                                              </Button>
-                                            </div>
-                                          </form>
-                                        ) : (
-                                          <>
-                                            <div className="flex items-center gap-4">
-                                              <span className="text-muted-foreground">
-                                                {ind + 1}.{subInd + 1}
-                                              </span>
-                                              <span>{subNav.label}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                              <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => {
-                                                  setNavigationGettingEdited(
-                                                    subNav.id,
-                                                  );
-                                                  setNewNavigationLabel(
-                                                    subNav.label,
-                                                  );
-                                                  setNewIcon(subNav.icon);
-                                                }}
-                                              >
-                                                <Pencil className="h-4 w-4" />
-                                              </Button>
-                                              <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                  <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                  >
-                                                    <Trash2 className="h-4 w-4" />
-                                                  </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                  <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                      Are you sure?
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                      This will permanently
-                                                      delete the sub-navigation
-                                                      "{subNav.label}". This
-                                                      action cannot be undone.
-                                                    </AlertDialogDescription>
-                                                  </AlertDialogHeader>
-                                                  <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                      Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                      className="!text-white"
-                                                      onClick={() =>
-                                                        handleNavigationDelete(
-                                                          subNav.id,
-                                                        )
-                                                      }
-                                                    >
-                                                      Delete
-                                                    </AlertDialogAction>
-                                                  </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                              </AlertDialog>
-                                            </div>
-                                          </>
-                                        )}
-                                      </div>
-                                    );
-                                  },
-                                )}
-                              </div>
-                            )}
-                        </div>
-                      ))}
-                  </div>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    modifiers={[
+                      restrictToParentElement,
+                      restrictToVerticalAxis // if you want only vertical drag
+                    ]}
+                  >
+                    <SortableContext
+                      items={sortedNavigations.map((nav) => nav.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-2">
+                        {sortedNavigations.map((navigation, ind) => {
+                          //if (navigation.id === activeId) return null;
+                          return (
+                            <React.Fragment key={navigation.id}>
+                              <Navigation ind={ind} navigation={navigation} />
+                              {/* Children rendered, but not sortable */}
+                              {/* {navigation.children?.map((childNav, subInd) => (
+                              <Navigation
+                                key={childNav.id}
+                                ind={subInd}
+                                navigation={childNav}
+                              />
+                            ))} */}
+                            </React.Fragment>,
+                          );
+                        })}
+                      </div>
+                    </SortableContext>
+                    <DragOverlay>
+                      {activeId ? (
+                        <Navigation
+                          navigation={navigations.find(
+                            (nav) => nav.id === activeId,
+                          )}
+                          dragOverlay
+                        />
+                      ) : null}
+                    </DragOverlay>
+                  </DndContext>
                 ) : (
                   <p className="text-muted-foreground">
                     No navigations available. Create one below!
