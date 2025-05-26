@@ -38,6 +38,7 @@ interface OrgState {
   setCurrentOrg: (org: Organization | null) => void;
   setUserOrgs: (orgs: Organization[]) => void;
   setUserComp: (comp: Company | null) => void;
+  setNavigations: (navs: Navigation[]) => void;
   fetchUserOrganizations: (url?: string) => Promise<void>;
   createOrganization: (orgName: string) => Promise<string | void>;
   fetchNavigations: () => Promise<void>;
@@ -62,6 +63,9 @@ const useOrgStore = create<OrgState>()(
       setCurrentOrg: (org) => set({ currentOrg: org }),
       setUserOrgs: (orgs) => set({ userOrgs: orgs }),
       setUserComp: (comp) => set({ userComp: comp }),
+      setNavigations: (navs) => {
+        set({ navigations: navs });
+      },
 
       fetchNavigations: async () => {
         const { currentOrg, setLoading } = get();
@@ -99,7 +103,6 @@ const useOrgStore = create<OrgState>()(
           setLoading(false);
         }
       },
-
       fetchUserCompany: async () => {
         const { userComp, setUserComp } = get();
         const user = useUserStore.getState().user;

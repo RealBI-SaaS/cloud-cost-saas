@@ -82,6 +82,7 @@ const NavigationManagement = () => {
   // const { currentOrg } = useOrg();
   // const { navigations, fetchNavigations } = useOrg();
   const currentOrg = useOrgStore((state) => state.currentOrg);
+  const setNavigations = useOrgStore((state) => state.setNavigations);
   const navigations = useOrgStore((state) => state.navigations);
   const fetchNavigations = useOrgStore((state) => state.fetchNavigations);
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
@@ -92,6 +93,12 @@ const NavigationManagement = () => {
   const [newIcon, setNewIcon] = useState("");
   const [parentNavigation, setParentNavigation] = useState(null);
   const [isSubNavigation, setIsSubNavigation] = useState(false);
+  useEffect(() => {
+    console.log("D*D")
+    setSortedNavigations(navigations)
+    sortNavs()
+
+  }, [navigations])
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
@@ -126,72 +133,6 @@ const NavigationManagement = () => {
       setLoading(false);
     }
   };
-
-  const handleNavigationEdit = async (e) => {
-    e.preventDefault();
-
-    const currentNav = findNavById(navigationGettingEdited);
-    //const currentNav = navigations.find(
-    //  (nav) => nav.id === navigationGettingEdited,
-    //);
-    //
-    if (!currentNav) {
-      toast.info("cannot match nav");
-      setNavigationGettingEdited(null);
-      return;
-    }
-    if (
-      currentNav &&
-      newNavigationLabel === currentNav.label &&
-      newIcon === currentNav.icon
-    ) {
-      toast.info("No changes made.");
-      setNavigationGettingEdited(null);
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await axiosInstance.patch(
-        `/organizations/${currentOrg.id}/navigation/${navigationGettingEdited}/`,
-        {
-          organization: currentOrg.id,
-          label: newNavigationLabel,
-          icon: newIcon,
-        },
-      );
-      //console.log(res);
-      toast.success("Navigation updated successfully");
-      setNavigationGettingEdited(null);
-      fetchNavigations();
-    } catch (err) {
-      console.log("error editing navigation", err);
-      toast.error("Failed to update navigation");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleNavigationDelete = async (navigationId) => {
-    try {
-      setLoading(true);
-      await axiosInstance.delete(
-        `/organizations/${currentOrg.id}/navigation/${navigationId}/`,
-        {
-          organization: currentOrg.id,
-        },
-      );
-      toast.success("Navigation deleted successfully");
-      fetchNavigations();
-    } catch (err) {
-      console.log("error deleting navigation", err);
-      toast.error("Failed to delete navigation");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -202,8 +143,47 @@ const NavigationManagement = () => {
   const [sortedNavigations, setSortedNavigations] = useState(
     [...navigations].sort((a, b) => a.order - b.order)
   );
+  const sortNavs = (() => {
+    setSortedNavigations(
+
+      [...navigations].sort((a, b) => a.order - b.order)
+    )
+
+
+  })
+
+  const handleReorder = async () => {
+    try {
+      const payload = {
+        parent_id: null,
+        navigations: sortedNavigations.map((nav) => ({
+          id: nav.id,
+          order: nav.order,
+        })),
+      };
+
+      await axiosInstance.patch(
+        `/organizations/${currentOrg.id}/navigation/reorder/`,
+        payload
+      );
+
+      setNavigations(sortedNavigations)
+
+      setReordering(false)
+
+      console.log("Reorder successful");
+      toast.success("Navigations successfully re-ordered!");
+    } catch (error) {
+      console.error("Reorder failed:", error);
+
+      toast.error("Failed to re-order navigations");
+    }
+  };
 
   const [activeId, setActiveId] = useState(null);
+  const [reordering, setReordering] = useState(false);
+  //console.log(reordering)
+  console.log("navs", navigations)
 
   const handleDragStart = (event) => {
     setActiveId(event.active.id);
@@ -224,6 +204,8 @@ const NavigationManagement = () => {
     }));
 
     setSortedNavigations(updatedNavs);
+    //console.log(updatedNavs)
+    setReordering(true)
     setActiveId(null)
 
     // TODO: send to backend
@@ -315,6 +297,13 @@ const NavigationManagement = () => {
                     No navigations available. Create one below!
                   </p>
                 )}
+
+                {reordering && (
+                  <div className="border flex justify-end gap-3">
+                    <Button className="flex-1" onClick={() => { handleReorder() }}>Save</Button>
+
+                    <Button variant="outline" onClick={() => { setReordering(false); sortNavs() }}>cancel</Button>
+                  </div>)}
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Create New Navigation</h3>

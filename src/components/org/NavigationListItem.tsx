@@ -62,9 +62,16 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import useUserStore from "@/context/userStore";
 import ChildNav from "./nav/ChildNavItem";
+import { handleNavDelete, handleNavEdit } from "@/utils/org/navigationHandlers";
+import useOrgStore from "@/context/OrgStore";
 
 export default function Navigation({ navigation, ind }) {
+  const setLoading = useUserStore((state) => state.setLoading);
+  const currentOrg = useOrgStore((state) => state.currentOrg);
+  const navigations = useOrgStore((state) => state.navigations);
+  const fetchNavigations = useOrgStore((state) => state.fetchNavigations);
   //dnd stuff
   const {
     attributes,
@@ -86,18 +93,26 @@ export default function Navigation({ navigation, ind }) {
     width: isDragging ? ref?.current?.offsetWidth : undefined,
   };
 
+  const handleNavigationEdit = (e) => {
+    e.preventDefault();
+
+    console.log("sub");
+    handleNavEdit({
+      navigationGettingEdited,
+      newNavigationLabel,
+      newIcon,
+      setNavigationGettingEdited,
+      currentOrg,
+      setLoading,
+      navigations,
+      fetchNavigations,
+    });
+  };
   //local states
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
   const [newNavigationLabel, setNewNavigationLabel] = useState("");
   const [newIcon, setNewIcon] = useState("");
   //handlers
-  const handleNavEdit = (e) => {
-    return;
-  };
-  const handleNavDelete = (nav_id) => {
-    return;
-  };
-
   return (
     <>
       <div
@@ -108,10 +123,13 @@ export default function Navigation({ navigation, ind }) {
         style={style}
         className=""
       >
-        <div className="flex items-center justify-between  p-4 py-2 border rounded-lg hover:bg-accent/50 transition-colors h-12 group">
+        <div className="flex items-center justify-between  p-4 py-2 border rounded-lg hover:bg-accent/50 transition-colors min-h-12 group">
           {navigationGettingEdited === navigation.id ? (
             //if navigation is getting edited
-            <form className="grid gap-4 w-full p-4 " onSubmit={handleNavEdit}>
+            <form
+              className="grid gap-4 w-full p-4 "
+              onSubmit={handleNavigationEdit}
+            >
               <Collapsible className="grid grid-cols-4 space-x-2">
                 <div className="col-span-3 flex flex-col gap-1 ">
                   <label
@@ -186,7 +204,7 @@ export default function Navigation({ navigation, ind }) {
                 <button
                   {...attributes}
                   {...listeners}
-                  className="cursor-grab text-2xl text-gray-500 hover:text-black pr-1 border-r-2 border-r-secondary"
+                  className="cursor-grab h-10 text-2xl text-gray-500 hover:text-black pr-1 border-r-2 border-r-secondary"
                 >
                   ⠿
                 </button>
@@ -195,7 +213,7 @@ export default function Navigation({ navigation, ind }) {
                   {navigation.order + 1}. {navigation.label}
                 </span>
               </div>
-              <div className="flex items-center gap-2 hidden group-hover:block">
+              <div className="flex items-center gap-2  hidden group-hover:block">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -224,8 +242,15 @@ export default function Navigation({ navigation, ind }) {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        className="!text-white"
-                        onClick={() => handleNavDelete(navigation.id)}
+                        className="bg-destructive hover:bg-destructive"
+                        onClick={() =>
+                          handleNavDelete({
+                            navigationId: navigation.id,
+                            currentOrg,
+                            setLoading,
+                            fetchNavigations,
+                          })
+                        }
                       >
                         Delete
                       </AlertDialogAction>
