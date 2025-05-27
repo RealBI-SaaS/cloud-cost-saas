@@ -1,4 +1,9 @@
 import { navIcons } from "@/assets/iconMap";
+
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,8 +71,20 @@ import useUserStore from "@/context/userStore";
 import ChildNav from "./nav/ChildNavItem";
 import { handleNavDelete, handleNavEdit } from "@/utils/org/navigationHandlers";
 import useOrgStore from "@/context/OrgStore";
+import axiosInstance from "@/axios/axiosInstance";
 
-export default function Navigation({ navigation, ind }) {
+import { handleDragStart, handleDragEnd, handleChildDragEnd } from "@/misc/DnD";
+
+export default function Navigation({
+  navigation,
+  ind,
+  reordering,
+  setReordering,
+  sortedNavigations,
+  setSortedNavigations,
+  activeNavId,
+  setActiveNavId,
+}) {
   const setLoading = useUserStore((state) => state.setLoading);
   const currentOrg = useOrgStore((state) => state.currentOrg);
   const navigations = useOrgStore((state) => state.navigations);
@@ -93,10 +110,84 @@ export default function Navigation({ navigation, ind }) {
     width: isDragging ? ref?.current?.offsetWidth : undefined,
   };
 
+  //for child reorder
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
+    }),
+  );
+  //const [childNavs, setChildNavs] = useState(navigation.children);
+  //const [activeNavId, setActiveNavId] = useState(null);
+
+  //const [reordering, setReordering] = useState(false);
+  //const [sortedChildNavs, setSortedChildNavs] = useState(
+  //  [...childNavs].sort((a, b) => a.order - b.order),
+  //);
+  //const sortNavs = () => {
+  //  setSortedChildNavs([...childNavs].sort((a, b) => a.order - b.order));
+  //};
+
+  const handleChildReorder = async () => {
+    try {
+      const payload = {
+        parent_id: null,
+        //FIX:  include parent
+        navigations: sortedChildNavs.map((nav) => ({
+          id: nav.id,
+          order: nav.order,
+        })),
+      };
+
+      await axiosInstance.patch(
+        `/organizations/${currentOrg.id}/navigation/reorder/`,
+        payload,
+      );
+
+      //(sortedNavigations);
+
+      setReordering(false);
+
+      console.log("Reorder successful");
+      toast.success("Navigations successfully re-ordered!");
+    } catch (error) {
+      console.error("Reorder failed:", error);
+
+      toast.error("Failed to re-order navigations");
+    }
+  };
+  //const handleDragStart = (event) => {
+  //  setActiveNavId(event.active.id);
+  //};
+  //const handleDragEnd = (event) => {
+  //  const { active, over } = event;
+  //  if (!over || active.id === over.id) return;
+  //
+  //  const oldIndex = sortedChildNavs.findIndex((nav) => nav.id === active.id);
+  //  const newIndex = sortedChildNavs.findIndex((nav) => nav.id === over.id);
+  //
+  //  const newNavs = arrayMove(sortedChildNavs, oldIndex, newIndex);
+  //
+  //  // Update each item's order based on new index
+  //  const updatedNavs = newNavs.map((nav, index) => ({
+  //    ...nav,
+  //    order: index, // update order based on new index
+  //  }));
+  //
+  //  setSortedChildNavs(updatedNavs);
+  //  //console.log(updatedNavs)
+  //  setReordering(true);
+  //  setActiveNavId(null);
+  //
+  //  // TODO: send to backend
+  //  // e.g., axios.patch('/api/nav-order', updatedNavs)
+  //};
+
   const handleNavigationEdit = (e) => {
     e.preventDefault();
 
-    console.log("sub");
+    //console.log("sub");
     handleNavEdit({
       navigationGettingEdited,
       newNavigationLabel,
@@ -112,7 +203,14 @@ export default function Navigation({ navigation, ind }) {
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
   const [newNavigationLabel, setNewNavigationLabel] = useState("");
   const [newIcon, setNewIcon] = useState("");
-  //handlers
+
+  //console.log("sorted", sortedNavigations);
+  if (!sortedNavigations) {
+    console.log("no  navs");
+    return;
+  }
+  const parent = sortedNavigations.find((nav) => nav.id === navigation.id);
+  const children = parent?.children || [];
   return (
     <>
       <div
@@ -213,59 +311,89 @@ export default function Navigation({ navigation, ind }) {
                   {navigation.order + 1}. {navigation.label}
                 </span>
               </div>
-              <div className="flex items-center gap-2  hidden group-hover:block">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setNavigationGettingEdited(navigation.id);
-                    setNewNavigationLabel(navigation.label);
-                    setNewIcon(navigation.icon);
-                  }}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will permanently delete the navigation "
-                        {navigation.label}". This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className="bg-destructive hover:bg-destructive"
-                        onClick={() =>
-                          handleNavDelete({
-                            navigationId: navigation.id,
-                            currentOrg,
-                            setLoading,
-                            fetchNavigations,
-                          })
-                        }
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+              {!reordering && (
+                <div className="flex items-center gap-2  hidden group-hover:block">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setNavigationGettingEdited(navigation.id);
+                      setNewNavigationLabel(navigation.label);
+                      setNewIcon(navigation.icon);
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete the navigation "
+                          {navigation.label}". This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-destructive hover:bg-destructive"
+                          onClick={() =>
+                            handleNavDelete({
+                              navigationId: navigation.id,
+                              currentOrg,
+                              setLoading,
+                              fetchNavigations,
+                            })
+                          }
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              )}
             </>
           )}
         </div>
-        <div className="">
-          {navigation.children?.map((childNav, subInd) => (
-            <ChildNav key={childNav.id} ind={subInd} navigation={childNav} />
-          ))}{" "}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={(e) => handleDragStart(e, setActiveNavId)}
+          onDragEnd={(e) =>
+            handleChildDragEnd(
+              e,
+              navigation.id,
+              setSortedNavigations,
+              setReordering,
+            )
+          }
+          modifiers={[
+            restrictToParentElement,
+            restrictToVerticalAxis, // if you want only vertical drag
+          ]}
+        >
+          <SortableContext
+            items={children.map((childNav) => childNav.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="">
+              {children.map((childNav, subInd) => (
+                <ChildNav
+                  key={childNav.id}
+                  ind={subInd}
+                  navigation={childNav}
+                  reordering={reordering}
+                />
+              ))}{" "}
+            </div>
+          </SortableContext>
+        </DndContext>
       </div>
     </>
   );

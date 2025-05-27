@@ -34,9 +34,9 @@ axiosInstance.interceptors.response.use(
 
       if (!refreshToken) {
         console.warn("No refresh token available, logging out...");
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        //window.location.href= "/login";
+        //localStorage.removeItem("access_token");
+        //localStorage.removeItem("refresh_token");
+        window.location.href = "/logout";
 
         return Promise.reject(error);
       }

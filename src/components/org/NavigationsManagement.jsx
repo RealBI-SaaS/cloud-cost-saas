@@ -73,6 +73,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { findNavById } from "@/utils/org/helpers";
 import Navigation from "./NavigationListItem";
 import { DragOverlay } from "@dnd-kit/core";
+import { handleDragStart, handleDragEnd } from "@/misc/DnD";
 
 const NavigationManagement = () => {
   // const { loading, setLoading } = useUser();
@@ -94,7 +95,6 @@ const NavigationManagement = () => {
   const [parentNavigation, setParentNavigation] = useState(null);
   const [isSubNavigation, setIsSubNavigation] = useState(false);
   useEffect(() => {
-    console.log("D*D")
     setSortedNavigations(navigations)
     sortNavs()
 
@@ -110,10 +110,6 @@ const NavigationManagement = () => {
     try {
       setLoading(true);
 
-      // if (!icon) {
-      //   toast.error("No Icon selected! Please select an icon.");
-      //   return;
-      // }
       await axiosInstance.post(`/organizations/${currentOrg.id}/navigation/`, {
         organization: currentOrg.id,
         label,
@@ -143,14 +139,19 @@ const NavigationManagement = () => {
   const [sortedNavigations, setSortedNavigations] = useState(
     [...navigations].sort((a, b) => a.order - b.order)
   );
-  const sortNavs = (() => {
-    setSortedNavigations(
 
-      [...navigations].sort((a, b) => a.order - b.order)
-    )
+  //reorder navs if the edit is canceled
+  const sortNavs = () => {
+    const sorted = [...navigations].sort((a, b) => a.order - b.order).map((nav) => ({
+      ...nav,
+      children: nav.children
+        ? [...nav.children].sort((a, b) => a.order - b.order)
+        : [],
+    }));
 
+    setSortedNavigations(sorted);
+  };
 
-  })
 
   const handleReorder = async () => {
     try {
@@ -183,34 +184,34 @@ const NavigationManagement = () => {
   const [activeId, setActiveId] = useState(null);
   const [reordering, setReordering] = useState(false);
   //console.log(reordering)
-  console.log("navs", navigations)
+  //console.log("navs", sortedNavigations)
 
-  const handleDragStart = (event) => {
-    setActiveId(event.active.id);
-  };
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = sortedNavigations.findIndex((nav) => nav.id === active.id);
-    const newIndex = sortedNavigations.findIndex((nav) => nav.id === over.id);
-
-    const newNavs = arrayMove(sortedNavigations, oldIndex, newIndex);
-
-    // Update each item's order based on new index
-    const updatedNavs = newNavs.map((nav, index) => ({
-      ...nav,
-      order: index, // update order based on new index
-    }));
-
-    setSortedNavigations(updatedNavs);
-    //console.log(updatedNavs)
-    setReordering(true)
-    setActiveId(null)
-
-    // TODO: send to backend
-    // e.g., axios.patch('/api/nav-order', updatedNavs)
-  };
+  //const handleDragStart = (event) => {
+  //  setActiveId(event.active.id);
+  //};
+  //const handleDragEnd = (event) => {
+  //  const { active, over } = event;
+  //  if (!over || active.id === over.id) return;
+  //
+  //  const oldIndex = sortedNavigations.findIndex((nav) => nav.id === active.id);
+  //  const newIndex = sortedNavigations.findIndex((nav) => nav.id === over.id);
+  //
+  //  const newNavs = arrayMove(sortedNavigations, oldIndex, newIndex);
+  //
+  //  // Update each item's order based on new index
+  //  const updatedNavs = newNavs.map((nav, index) => ({
+  //    ...nav,
+  //    order: index, // update order based on new index
+  //  }));
+  //
+  //  setSortedNavigations(updatedNavs);
+  //  //console.log(updatedNavs)
+  //  setReordering(true)
+  //  setActiveId(null)
+  //
+  //  // TODO: send to backend
+  //  // e.g., axios.patch('/api/nav-order', updatedNavs)
+  //};
 
   //const { attributes, listeners, setNodeRef, transform, transition } =
   //  useSortable({ id });
@@ -251,8 +252,17 @@ const NavigationManagement = () => {
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
+
+                    onDragStart={(e) => handleDragStart(e, setActiveId)}
+                    onDragEnd={(e) =>
+                      handleDragEnd(
+                        e,
+                        sortedNavigations,
+                        setSortedNavigations,
+                        setReordering,
+                        setActiveId
+                      )
+                    }
                     modifiers={[
                       restrictToParentElement,
                       restrictToVerticalAxis // if you want only vertical drag
@@ -267,7 +277,7 @@ const NavigationManagement = () => {
                           //if (navigation.id === activeId) return null;
                           return (
                             <React.Fragment key={navigation.id}>
-                              <Navigation ind={ind} navigation={navigation} />
+                              <Navigation ind={ind} navigation={navigation} reordering={reordering} setReordering={setReordering} sortedNavigations={sortedNavigations} setSortedNavigations={setSortedNavigations} activeNavId={activeId} setActiveNavId={setActiveId} />
                               {/* Children rendered, but not sortable */}
                               {/* {navigation.children?.map((childNav, subInd) => (
                               <Navigation
@@ -299,7 +309,7 @@ const NavigationManagement = () => {
                 )}
 
                 {reordering && (
-                  <div className="border flex justify-end gap-3">
+                  <div className="flex justify-end gap-3">
                     <Button className="flex-1" onClick={() => { handleReorder() }}>Save</Button>
 
                     <Button variant="outline" onClick={() => { setReordering(false); sortNavs() }}>cancel</Button>

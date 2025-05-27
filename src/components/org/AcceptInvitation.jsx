@@ -1,58 +1,50 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import { Button } from "../ui/button";
 
 import axiosInstance from "../../axios/axiosInstance";
 import useUserStore from "@/context/userStore";
-import useOrgStore from "@/context/OrgStore";
-//import { useOrgInitializer } from "@/context/OrgStore";
 
 const AcceptInvitation = () => {
   const { token } = useParams();
   const user = useUserStore((state) => state.user);
-  const [message, setMessage] = useState("Verifying invitation token...");
+  const [message, setMessage] = useState(
+    "Click the button to accept the invitation.",
+  );
   const [hasAcceptedInvitation, setHasAcceptedInvitation] = useState(false);
   const [hasSentRequest, setHasSentRequest] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  //useEffect(() => {
-  function main() {
+  useEffect(() => {
     if (!user) {
       navigate("/login", { state: { redirectTo: location.pathname } });
-      return;
     }
+  }, [user, navigate, location]);
 
+  const handleAcceptInvitation = async () => {
     if (!token || hasSentRequest) return;
 
-    const acceptInvitation = async () => {
-      //const initializeOrg = useOrgStore((state) => state.initialize);
-      try {
-        const response = await axiosInstance.post(
-          `/organizations/invitations/accept/${token}/`,
-        );
+    setHasSentRequest(true);
+    setMessage("Processing...");
 
-        if (response.status === 200) {
-          setMessage("Invitation Accepted");
-          setHasAcceptedInvitation(true);
-          // Redirect after short delay
-          //await initializeOrg()
-          //await useOrgInitializer();
-          navigate("/home");
-        } else {
-          setMessage("Invalid or expired invitation link.");
-        }
-      } catch (error) {
-        console.error("Error accepting invitation:", error);
-        setMessage("An error occurred. Please try again.");
-      } finally {
-        setHasSentRequest(true);
+    try {
+      const response = await axiosInstance.post(
+        `/organizations/invitations/accept/${token}/`,
+      );
+
+      if (response.status === 200) {
+        setMessage("Invitation Accepted");
+        setHasAcceptedInvitation(true);
+        setTimeout(() => navigate("/home"), 2000);
+      } else {
+        setMessage("Invalid or expired invitation link.");
       }
-    };
-
-    acceptInvitation();
-  }
-  main();
-  //}, [token, user, navigate, location, hasSentRequest]);
+    } catch (error) {
+      console.error("Error accepting invitation:", error);
+      setMessage("An error occurred. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -60,24 +52,32 @@ const AcceptInvitation = () => {
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Organization Invitation</h1>
           <p
-            className={`text-xl ${
-              message.includes("Accepted")
+            className={`text-xl ${message.includes("Accepted")
                 ? "text-green-600"
-                : message.includes("error")
+                : message.includes("error") || message.includes("Invalid")
                   ? "text-red-600"
                   : "text-gray-600"
-            }`}
+              }`}
           >
             {message}
           </p>
-          {(hasAcceptedInvitation || message.includes("error")) && (
-            <p className="text-sm text-gray-500">
-              You will be redirected shortly... or go to{" "}
-              <Link to="/" className="text-primary text-lg underline">
-                Home
-              </Link>
-            </p>
+
+          {!hasAcceptedInvitation && !hasSentRequest && (
+            <Button onClick={handleAcceptInvitation} variant="">
+              Accept Invitation
+            </Button>
           )}
+
+          {(hasAcceptedInvitation ||
+            message.includes("error") ||
+            message.includes("Invalid")) && (
+              <p className="text-sm text-gray-500">
+                You will be redirected shortly... or go to{" "}
+                <Link to="/" className="text-primary text-lg underline">
+                  Home
+                </Link>
+              </p>
+            )}
         </div>
       </div>
     </div>

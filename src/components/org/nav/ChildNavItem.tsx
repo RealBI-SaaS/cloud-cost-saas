@@ -63,8 +63,9 @@ import { CSS } from "@dnd-kit/utilities";
 import useUserStore from "@/context/userStore";
 import useOrgStore from "@/context/OrgStore";
 import { handleNavDelete, handleNavEdit } from "@/utils/org/navigationHandlers";
+import { useRef } from "react";
 
-export default function ChildNav({ navigation, ind }) {
+export default function ChildNav({ navigation, ind, reordering }) {
   const setLoading = useUserStore((state) => state.setLoading);
   const currentOrg = useOrgStore((state) => state.currentOrg);
   const navigations = useOrgStore((state) => state.navigations);
@@ -92,7 +93,7 @@ export default function ChildNav({ navigation, ind }) {
   const handleNavigationEdit = (e) => {
     e.preventDefault();
 
-    console.log("sub");
+    //console.log("sub");
     handleNavEdit({
       navigationGettingEdited,
       newNavigationLabel,
@@ -104,10 +105,36 @@ export default function ChildNav({ navigation, ind }) {
       fetchNavigations,
     });
   };
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: navigation.id });
+  const ref = useRef();
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : undefined,
+    opacity: isDragging ? 0.2 : 1,
+    // 👇 Freeze dimensions to prevent layout shifting
+    height: isDragging ? ref?.current?.offsetHeight : undefined,
+    width: isDragging ? ref?.current?.offsetWidth : undefined,
+  };
 
   return (
     <>
-      <div>
+      <div
+        ref={(el) => {
+          setNodeRef(el);
+          ref.current = el;
+        }}
+        style={style}
+        className=""
+      >
         <div className="flex items-center justify-between ml-5 px-4 bg-secondary my-1 rounded-lg hover:bg-accent/50 transition-colors group min-h-10">
           {navigationGettingEdited === navigation.id ? (
             //if navigation is getting edited
@@ -186,57 +213,66 @@ export default function ChildNav({ navigation, ind }) {
             //navigation not being editing
             <>
               <div className="flex items-center gap-4 ">
+                <button
+                  {...attributes}
+                  {...listeners}
+                  className="cursor-grab h-10 text-2xl text-gray-500 hover:text-black pr-1 border-r-2 border-r-secondary"
+                >
+                  ⠿
+                </button>
                 {/* <span className="text-muted-foreground">{ind + 1}.</span> */}
                 <span>
                   {navigation.label}
                   {/*{navigation.order} */}
                 </span>
               </div>
-              <div className="flex items-center gap-2 hidden group-hover:block">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setNavigationGettingEdited(navigation.id);
-                    setNewNavigationLabel(navigation.label);
-                    setNewIcon(navigation.icon);
-                  }}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will permanently delete the navigation "
-                        {navigation.label}". This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className="bg-destructive hover:bg-destructive"
-                        onClick={() =>
-                          handleNavDelete({
-                            navigationId: navigation.id,
-                            currentOrg,
-                            setLoading,
-                            fetchNavigations,
-                          })
-                        }
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+              {!reordering && (
+                <div className="flex items-center gap-2 hidden group-hover:block">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setNavigationGettingEdited(navigation.id);
+                      setNewNavigationLabel(navigation.label);
+                      setNewIcon(navigation.icon);
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete the navigation "
+                          {navigation.label}". This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-destructive hover:bg-destructive"
+                          onClick={() =>
+                            handleNavDelete({
+                              navigationId: navigation.id,
+                              currentOrg,
+                              setLoading,
+                              fetchNavigations,
+                            })
+                          }
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              )}
             </>
           )}
         </div>

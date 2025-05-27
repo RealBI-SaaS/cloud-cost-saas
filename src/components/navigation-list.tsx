@@ -9,6 +9,7 @@ import {
   House,
   ChevronRight,
   type LucideIcon,
+  Home,
 } from "lucide-react";
 
 import {
@@ -41,7 +42,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-
 import { Button } from "./ui/button";
 
 export function NavigationsList() {
@@ -64,6 +64,9 @@ export function NavigationsList() {
       (current.startsWith(target) && target !== "/dashboard")
     );
   };
+  const firstNavWithChildrenId = navigations.find(
+    (nav) => nav.children?.length > 0,
+  )?.id;
 
   return (
     <SidebarGroup>
@@ -71,6 +74,15 @@ export function NavigationsList() {
         Navigations
       </SidebarGroupLabel>
       <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <div className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer">
+              <Home />
+              <span className="group-data-[collapsible=icon]:hidden">Home</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+
         {navigations.map((nav, ind) => {
           const Icon = navIcons[nav?.icon] || defaultIcon;
           const navUrl = `/dashboard/${nav.label}`;
@@ -79,8 +91,8 @@ export function NavigationsList() {
             <Collapsible
               key={nav.id}
               asChild
-              open={activeNav == nav.id || ind == 1}
-              defaultOpen={activeNav == nav.id || ind == 1}
+              open={activeNav == nav.id || firstNavWithChildrenId == nav.id}
+              defaultOpen={activeNav == nav.id}
               isActive={nav.id == activeNav}
               className="group/collapsible"
             >
@@ -101,7 +113,7 @@ export function NavigationsList() {
                     </div>
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
-                {nav.children && (
+                {nav.children.length > 0 && (
                   <CollapsibleContent open={activeNav == nav.id}>
                     <SidebarMenuSub>
                       {nav.children.map((subNav) => (
