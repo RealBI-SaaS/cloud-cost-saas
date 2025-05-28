@@ -4,8 +4,10 @@ import { Button } from "../ui/button";
 
 import axiosInstance from "../../axios/axiosInstance";
 import useUserStore from "@/context/userStore";
+import useOrgStore, { useOrgInitializer } from "@/context/OrgStore";
 
 const AcceptInvitation = () => {
+  const initialize = useOrgStore((state) => state.initialize);
   const { token } = useParams();
   const user = useUserStore((state) => state.user);
   const [message, setMessage] = useState(
@@ -36,7 +38,9 @@ const AcceptInvitation = () => {
       if (response.status === 200) {
         setMessage("Invitation Accepted");
         setHasAcceptedInvitation(true);
-        setTimeout(() => navigate("/home"), 2000);
+        //useOrgInitializer()
+        initialize();
+        setTimeout(() => navigate("/home"), 1000);
       } else {
         setMessage("Invalid or expired invitation link.");
       }
@@ -52,12 +56,13 @@ const AcceptInvitation = () => {
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Organization Invitation</h1>
           <p
-            className={`text-xl ${message.includes("Accepted")
+            className={`text-xl ${
+              message.includes("Accepted")
                 ? "text-green-600"
                 : message.includes("error") || message.includes("Invalid")
                   ? "text-red-600"
                   : "text-gray-600"
-              }`}
+            }`}
           >
             {message}
           </p>
@@ -71,13 +76,13 @@ const AcceptInvitation = () => {
           {(hasAcceptedInvitation ||
             message.includes("error") ||
             message.includes("Invalid")) && (
-              <p className="text-sm text-gray-500">
-                You will be redirected shortly... or go to{" "}
-                <Link to="/" className="text-primary text-lg underline">
-                  Home
-                </Link>
-              </p>
-            )}
+            <p className="text-sm text-gray-500">
+              You will be redirected shortly... or go to{" "}
+              <Link to="/" className="text-primary text-lg underline">
+                Home
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </div>
