@@ -129,34 +129,34 @@ export default function Navigation({
   //  setSortedChildNavs([...childNavs].sort((a, b) => a.order - b.order));
   //};
 
-  const handleChildReorder = async () => {
-    try {
-      const payload = {
-        parent_id: null,
-        //FIX:  include parent
-        navigations: sortedChildNavs.map((nav) => ({
-          id: nav.id,
-          order: nav.order,
-        })),
-      };
-
-      await axiosInstance.patch(
-        `/organizations/${currentOrg.id}/navigation/reorder/`,
-        payload,
-      );
-
-      //(sortedNavigations);
-
-      setReordering(false);
-
-      console.log("Reorder successful");
-      toast.success("Navigations successfully re-ordered!");
-    } catch (error) {
-      console.error("Reorder failed:", error);
-
-      toast.error("Failed to re-order navigations");
-    }
-  };
+  //const handleChildReorder = async () => {
+  //  try {
+  //    const payload = {
+  //      parent_id: null,
+  //      //FIX:  include parent
+  //      navigations: sortedChildNavs.map((nav) => ({
+  //        id: nav.id,
+  //        order: nav.order,
+  //      })),
+  //    };
+  //
+  //    await axiosInstance.patch(
+  //      `/organizations/${currentOrg.id}/navigation/reorder/`,
+  //      payload,
+  //    );
+  //
+  //    //(sortedNavigations);
+  //
+  //    setReordering(false);
+  //
+  //    console.log("Reorder successful");
+  //    toast.success("Navigations successfully re-ordered!");
+  //  } catch (error) {
+  //    console.error("Reorder failed:", error);
+  //
+  //    toast.error("Failed to re-order navigations");
+  //  }
+  //};
   //const handleDragStart = (event) => {
   //  setActiveNavId(event.active.id);
   //};
@@ -209,6 +209,7 @@ export default function Navigation({
     console.log("no  navs");
     return;
   }
+  //
   const parent = sortedNavigations.find((nav) => nav.id === navigation.id);
   const children = parent?.children || [];
   return (
@@ -263,7 +264,7 @@ export default function Navigation({
                   </CollapsibleTrigger>
                 </div>
                 <CollapsibleContent className="col-span-4">
-                  <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2">
+                  <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64  overflow-y-auto mt-2">
                     {Object.entries(navIcons).map(([name, Icon]) => (
                       <Button
                         key={name}
@@ -308,7 +309,7 @@ export default function Navigation({
                 </button>
                 {/* <span className="text-muted-foreground">{ind + 1}.</span> */}
                 <span>
-                  {navigation.order + 1}. {navigation.label}
+                  {ind + 1}. {navigation.label}
                 </span>
               </div>
               {!reordering && (

@@ -94,11 +94,12 @@ const NavigationManagement = () => {
   const [newIcon, setNewIcon] = useState("");
   const [parentNavigation, setParentNavigation] = useState(null);
   const [isSubNavigation, setIsSubNavigation] = useState(false);
-  useEffect(() => {
-    setSortedNavigations(navigations)
-    sortNavs()
+  const [sortedNavigations, setSortedNavigations] = useState(
+    [...navigations].sort((a, b) => a.order - b.order)
+  );
+  const [activeId, setActiveId] = useState(null);
+  const [reordering, setReordering] = useState(false);
 
-  }, [navigations])
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
@@ -136,26 +137,58 @@ const NavigationManagement = () => {
       },
     }),
   );
-  const [sortedNavigations, setSortedNavigations] = useState(
-    [...navigations].sort((a, b) => a.order - b.order)
-  );
+
 
   //reorder navs if the edit is canceled
   const sortNavs = () => {
     const sorted = [...navigations].sort((a, b) => a.order - b.order).map((nav) => ({
       ...nav,
-      children: nav.children
-        ? [...nav.children].sort((a, b) => a.order - b.order)
-        : [],
+      children: [...nav.children].sort((a, b) => a.order - b.order),
     }));
 
+    //console.log('x', sorted)
     setSortedNavigations(sorted);
   };
+  useEffect(() => {
+    //setSortedNavigations(navigations)
+    sortNavs()
+    //console.log("SS", sortedNavigations)
 
+  }, [navigations])
+
+
+  //const handleReorder = async () => {
+  //  try {
+  //    const payload = {
+  //      parent_id: null,
+  //      navigations: sortedNavigations.map((nav) => ({
+  //        id: nav.id,
+  //        order: nav.order,
+  //      })),
+  //    };
+  //
+  //    await axiosInstance.patch(
+  //      `/organizations/${currentOrg.id}/navigation/reorder/`,
+  //      payload
+  //    );
+  //
+  //    setNavigations(sortedNavigations)
+  //
+  //    setReordering(false)
+  //
+  //    console.log("Reorder successful");
+  //    toast.success("Navigations successfully re-ordered!");
+  //  } catch (error) {
+  //    console.error("Reorder failed:", error);
+  //
+  //    toast.error("Failed to re-order navigations");
+  //  }
+  //};
 
   const handleReorder = async () => {
     try {
-      const payload = {
+      // Send top-level navigation reordering
+      const topLevelPayload = {
         parent_id: null,
         navigations: sortedNavigations.map((nav) => ({
           id: nav.id,
@@ -165,67 +198,37 @@ const NavigationManagement = () => {
 
       await axiosInstance.patch(
         `/organizations/${currentOrg.id}/navigation/reorder/`,
-        payload
+        topLevelPayload
       );
 
-      setNavigations(sortedNavigations)
+      // Send reorder requests for children of each parent
+      for (const nav of sortedNavigations) {
+        if (nav.children && nav.children.length > 0) {
+          const childPayload = {
+            parent_id: nav.id,
+            navigations: nav.children.map((child, index) => ({
+              id: child.id,
+              order: index,
+            })),
+          };
 
-      setReordering(false)
+          await axiosInstance.patch(
+            `/organizations/${currentOrg.id}/navigation/reorder/`,
+            childPayload
+          );
+        }
+      }
 
-      console.log("Reorder successful");
+      // After all updates
+      setNavigations(sortedNavigations);
+      setReordering(false);
       toast.success("Navigations successfully re-ordered!");
+      console.log("Reorder successful");
     } catch (error) {
       console.error("Reorder failed:", error);
-
       toast.error("Failed to re-order navigations");
     }
   };
-
-  const [activeId, setActiveId] = useState(null);
-  const [reordering, setReordering] = useState(false);
-  //console.log(reordering)
-  //console.log("navs", sortedNavigations)
-
-  //const handleDragStart = (event) => {
-  //  setActiveId(event.active.id);
-  //};
-  //const handleDragEnd = (event) => {
-  //  const { active, over } = event;
-  //  if (!over || active.id === over.id) return;
-  //
-  //  const oldIndex = sortedNavigations.findIndex((nav) => nav.id === active.id);
-  //  const newIndex = sortedNavigations.findIndex((nav) => nav.id === over.id);
-  //
-  //  const newNavs = arrayMove(sortedNavigations, oldIndex, newIndex);
-  //
-  //  // Update each item's order based on new index
-  //  const updatedNavs = newNavs.map((nav, index) => ({
-  //    ...nav,
-  //    order: index, // update order based on new index
-  //  }));
-  //
-  //  setSortedNavigations(updatedNavs);
-  //  //console.log(updatedNavs)
-  //  setReordering(true)
-  //  setActiveId(null)
-  //
-  //  // TODO: send to backend
-  //  // e.g., axios.patch('/api/nav-order', updatedNavs)
-  //};
-
-  //const { attributes, listeners, setNodeRef, transform, transition } =
-  //  useSortable({ id });
-  //
-  //const style = {
-  //  transform: CSS.Transform.toString(transform),
-  //  transition,
-  //  padding: "1rem",
-  //  marginBottom: "0.5rem",
-  //  background: "#eee",
-  //  border: "1px solid #ccc",
-  //  borderRadius: "4px",
-  //  cursor: "grab",
-  //};
 
   return (
     <div className="container mx-auto p-6 ">
@@ -244,7 +247,7 @@ const NavigationManagement = () => {
             </div>
           ) : (
             <>
-              <div className="space-y-4  overflow-hidden ">
+              <div className="space-y-4  overflow-auto">
                 <h3 className="text-lg font-medium">Navigations</h3>
                 <hr />
 

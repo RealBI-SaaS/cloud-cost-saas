@@ -22,7 +22,8 @@ export const getDragStyle = ({ transform, transition, isDragging, ref }) => ({
 //
 
 export const handleDragStart = (event, setActiveNavId) => {
-  setActiveNavId(event.active.id);
+  //makes passed sortedNavigations undefined
+  //setActiveNavId(event.active.id);
 };
 export const handleDragEnd = (
   event,
@@ -37,6 +38,13 @@ export const handleDragEnd = (
   const oldIndex = sortedNavigations.findIndex((nav) => nav.id === active.id);
   const newIndex = sortedNavigations.findIndex((nav) => nav.id === over.id);
   const newNavs = arrayMove(sortedNavigations, oldIndex, newIndex);
+  if (oldIndex === -1 || newIndex === -1) {
+    console.warn("Could not find nav item by id", {
+      activeId: active.id,
+      overId: over.id,
+    });
+    return;
+  }
 
   // Update each item's order based on new index
   const updatedNavs = newNavs.map((nav, index) => ({
@@ -44,6 +52,7 @@ export const handleDragEnd = (
     order: index, // update order based on new index
   }));
 
+  //console.log(updatedNavs);
   setSortedNavigations(updatedNavs);
   //console.log(updatedNavs)
   setReordering(true);
