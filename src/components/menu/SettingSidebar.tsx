@@ -39,6 +39,7 @@ const SettingsSidebar = ({
 }: React.ComponentProps<typeof Sidebar>) => {
   const userComp = useOrgStore((state) => state.userComp);
   const currentOrg = useOrgStore((state) => state.currentOrg);
+  const userOrgs = useOrgStore((state) => state.userOrgs);
   const location = useLocation();
   const currentPath = location.pathname;
   //const { user } = useUser();
@@ -182,7 +183,7 @@ const SettingsSidebar = ({
         )}
 
         {/* Organization Section */}
-        <SidebarGroup>
+        {userOrgs.lenght > 0 && <SidebarGroup>
           <SidebarGroupLabel>Organization</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -224,19 +225,19 @@ const SettingsSidebar = ({
                   {(currentOrg?.role === "admin" ||
                     currentOrg?.role === "owner" ||
                     user.is_staff) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={isActiveExact(
-                          "/settings/organization/navigation",
-                        )}
-                      >
-                        <Link to="/settings/organization/navigation">
-                          Navigations
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={isActiveExact(
+                            "/settings/organization/navigation",
+                          )}
+                        >
+                          <Link to="/settings/organization/navigation">
+                            Navigations
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )}
 
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
@@ -250,7 +251,7 @@ const SettingsSidebar = ({
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup>}
 
         {/* admin Section */}
         {user?.is_staff && (

@@ -8,6 +8,7 @@ const resend_verification_email = async (email) => {
     );
     if (response.status === 204) {
       console.log("Verification email resent successfully! Check your inbox.");
+      alert("Verification email resent successfully! Check your inbox.");
     } else {
       console.log("Unexpected response. Please try again.");
     }
