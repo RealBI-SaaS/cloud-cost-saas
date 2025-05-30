@@ -44,7 +44,7 @@ const SettingsSidebar = ({
   const currentPath = location.pathname;
   //const { user } = useUser();
   const user = useUserStore((state) => state.user);
-  console.log(userOrgs.length);
+  //console.log(userOrgs.length);
 
   const isActive = (path: string) => {
     return currentPath.includes(path);
