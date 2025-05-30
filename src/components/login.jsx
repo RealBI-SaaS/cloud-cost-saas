@@ -54,11 +54,11 @@ const Login = () => {
   // useEffect(() => {
   //  if (user) {
   //       useOrgInitializer(); // Always call the hook
-  //       useThemeInitializer();  
+  //       useThemeInitializer();
   //     }
   // }, [user]);
   //
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -100,7 +100,7 @@ const Login = () => {
         console.log("Current location state:", location.state);
 
         // If we're redirecting to an invitation acceptance, use window.location
-        if (from.startsWith('/accept-invitation/')) {
+        if (from.startsWith("/accept-invitation/")) {
           console.log("Redirecting to invitation acceptance");
           window.location.href = from;
           return;
@@ -114,7 +114,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
       // console.log(error);
       toast.error(
         error?.response?.data?.detail ||
@@ -150,9 +150,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6 max-w-md mx-auto ">
+    <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6  mx-auto svgd w-full">
       <img src={logo_only} alt="logo" className=" h-20 object-contain " />
-      <Card className="w-100 ">
+      <Card className="w-100 backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl p-6 shadow-lg ">
         <CardHeader>
           <CardTitle>
             {isSignUp ? "Create an account" : "Login to your account"}

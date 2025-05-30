@@ -70,7 +70,6 @@ const ProtectedRoute = ({ children }) => {
   //await initializeTheme(userComp?.id || currentOrg?.id);
   //}
 
-
   if (loading) {
     return <Loading />;
   }
@@ -118,7 +117,6 @@ function App() {
       initializeOrg(); // Always call the hook
       if (currentOrg) {
         initializeTheme(currentOrg?.company);
-
       }
     }
   }, [user]);
@@ -129,7 +127,6 @@ function App() {
       //initializeOrg(); // Always call the hook
       if (currentOrg) {
         initializeTheme(currentOrg?.company);
-
       }
     }
   }, [currentOrg]);
@@ -137,7 +134,7 @@ function App() {
   return (
     <>
       <Toaster toastOptions={{ duration: 3000 }} />
-      <div className="w-full   grid grid-cols-1   mx-auto ">
+      <div className="w-full   grid grid-cols-1   mx-auto">
         <Routes>
           {/* Public routes */}
           <Route path="/home" element={<Home />} />
@@ -183,8 +180,14 @@ function App() {
             }
           >
             <Route path="/dashboard/" element={<HomeAuthenticated />} />
-            <Route path="/dashboard/:parentId" element={<HomeAuthenticated />} />
-            <Route path="/dashboard/:parentId/:subId" element={<HomeAuthenticated />} />
+            <Route
+              path="/dashboard/:parentId"
+              element={<HomeAuthenticated />}
+            />
+            <Route
+              path="/dashboard/:parentId/:subId"
+              element={<HomeAuthenticated />}
+            />
 
             {/* Setting pages */}
             <Route element={<SettingsLayout />}>

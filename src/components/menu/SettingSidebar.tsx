@@ -39,10 +39,12 @@ const SettingsSidebar = ({
 }: React.ComponentProps<typeof Sidebar>) => {
   const userComp = useOrgStore((state) => state.userComp);
   const currentOrg = useOrgStore((state) => state.currentOrg);
+  const userOrgs = useOrgStore((state) => state.userOrgs);
   const location = useLocation();
   const currentPath = location.pathname;
   //const { user } = useUser();
   const user = useUserStore((state) => state.user);
+  console.log(userOrgs.length);
 
   const isActive = (path: string) => {
     return currentPath.includes(path);
@@ -182,75 +184,79 @@ const SettingsSidebar = ({
         )}
 
         {/* Organization Section */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Organization</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  //isActive={isActive("/settings/organization")}
-                  tooltip="Organization"
-                >
-                  <Link to="/settings/organization/list">
-                    <UsersRound />
-                    <span>Organizations</span>
-                  </Link>
-                </SidebarMenuButton>
+        {userOrgs.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Organization</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    //isActive={isActive("/settings/organization")}
+                    tooltip="Organization"
+                  >
+                    <Link to="/settings/organization/list">
+                      <UsersRound />
+                      <span>Organizations</span>
+                    </Link>
+                  </SidebarMenuButton>
 
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/organization/list")}
-                    >
-                      <Link to="/settings/organization/list">
-                        List and Create
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact("/settings/organization/list")}
+                      >
+                        <Link to="/settings/organization/list">
+                          List and Create
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
 
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/organization/members")}
-                    >
-                      <Link to="/settings/organization/members">
-                        Members and Invitations
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  {(currentOrg?.role === "admin" ||
-                    currentOrg?.role === "owner" ||
-                    user.is_staff) && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
                         isActive={isActiveExact(
-                          "/settings/organization/navigation",
+                          "/settings/organization/members",
                         )}
                       >
-                        <Link to="/settings/organization/navigation">
-                          Navigations
+                        <Link to="/settings/organization/members">
+                          Members and Invitations
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
-                  )}
 
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={isActiveExact("/settings/organization/data")}
-                    >
-                      <Link to="/settings/organization/data">Your Data</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                    {(currentOrg?.role === "admin" ||
+                      currentOrg?.role === "owner" ||
+                      user.is_staff) && (
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={isActiveExact(
+                              "/settings/organization/navigation",
+                            )}
+                          >
+                            <Link to="/settings/organization/navigation">
+                              Navigations
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      )}
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={isActiveExact("/settings/organization/data")}
+                      >
+                        <Link to="/settings/organization/data">Your Data</Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* admin Section */}
         {user?.is_staff && (
