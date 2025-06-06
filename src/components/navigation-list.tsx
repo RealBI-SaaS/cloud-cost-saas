@@ -49,6 +49,7 @@ export function NavigationsList() {
   const navigations = useOrgStore((state) => state.navigations);
   const currentOrg = useOrgStore((state) => state.currentOrg);
   const [activeNav, setActiveNav] = useState<string | null>(null);
+  const [activeParent, setActiveParent] = useState<string | null>(null);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -91,7 +92,7 @@ export function NavigationsList() {
             <Collapsible
               key={nav.id}
               asChild
-              open={activeNav == nav.id || firstNavWithChildrenId == nav.id}
+              open={activeNav == nav.id || activeParent == nav.id || firstNavWithChildrenId == nav.id}
               defaultOpen={activeNav == nav.id}
               isActive={nav.id == activeNav}
               className="group/collapsible"
@@ -118,9 +119,12 @@ export function NavigationsList() {
                     <SidebarMenuSub>
                       {nav.children.map((subNav) => (
                         <SidebarMenuSubItem key={subNav.id}>
-                          <SidebarMenuSubButton asChild>
+                          <SidebarMenuSubButton asChild isActive={subNav.id == activeNav}> 
                             <div
-                              onClick={() => setActiveNav(nav.id)} // <- your custom function
+                              onClick={() => {
+                                setActiveNav(subNav.id);
+                                setActiveParent(nav.id);
+                              }}
                               className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer"
                             >
                               <span>{subNav.label}</span>

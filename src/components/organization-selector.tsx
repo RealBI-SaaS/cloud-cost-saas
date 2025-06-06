@@ -26,6 +26,8 @@ import { useNavigate } from "react-router-dom";
 import useOrgStore from "@/context/OrgStore";
 import { useThemeStore, useThemeInitializer } from "@/context/ThemeStore";
 
+import { toast } from "sonner";
+
 let orgs = [
   {
     name: "firstorg",
@@ -92,6 +94,12 @@ export function OrganizationSelector() {
     useThemeStore.getState().initializeTheme(currentOrg.company);
     //}
   }, [currentOrg.name]);
+  const handleSideMenuOrgChange = ((org)=>{
+                    setCurrentOrg(org);
+                    
+      toast.success(`You are now in ${org.name}`);
+
+  })
 
   const { isMobile } = useSidebar();
   if (activeOrg) {
@@ -129,16 +137,17 @@ export function OrganizationSelector() {
                 <DropdownMenuItem
                   key={org.name}
                   onClick={() => {
-                    //handleSideMenuOrgSelect(team);
+                    handleSideMenuOrgChange(org);
 
-                    setCurrentOrg(org);
+
+                    // setCurrentOrg(org);
                     //setActiveOrg({
                     //  name: org.name,
                     //  comp_name: org.company_name,
                     //  logo: Circle,
                     //},);
                   }}
-                  className="gap-2 p-2"
+                  className={`gap-2 p-2 ${currentOrg == org ? 'bg-sidebar-accent' : ''} hover:bg-transparent`}
                 >
                   {org.name}
                   <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>

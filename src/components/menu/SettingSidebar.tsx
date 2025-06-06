@@ -184,7 +184,7 @@ const SettingsSidebar = ({
         )}
 
         {/* Organization Section */}
-        {userOrgs.length > 0 && (
+        {userComp && (
           <SidebarGroup>
             <SidebarGroupLabel>Organization</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -201,7 +201,7 @@ const SettingsSidebar = ({
                     </Link>
                   </SidebarMenuButton>
 
-                  <SidebarMenuSub>
+                 <SidebarMenuSub>
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -213,7 +213,7 @@ const SettingsSidebar = ({
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
 
-                    <SidebarMenuSubItem>
+                     {(userOrgs.length > 0) && (<SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
                         isActive={isActiveExact(
@@ -224,7 +224,8 @@ const SettingsSidebar = ({
                           Members and Invitations
                         </Link>
                       </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
+                    </SidebarMenuSubItem>)
+                  }
 
                     {(currentOrg?.role === "admin" ||
                       currentOrg?.role === "owner" ||

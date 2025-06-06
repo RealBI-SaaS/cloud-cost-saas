@@ -228,7 +228,20 @@ const Login = () => {
             </div>
 
             <div className="grid gap-1">
+    <div className="flex justify-between">
               <Label htmlFor="password">Password</Label>
+  {!isSignUp && (
+        <Button
+          onClick={() => {
+            navigate("/reset-password");
+          }}
+          variant="link"
+          className="text-sm text-gray-500"
+        >
+          <p className="cursor-pointer">Forgot password?</p>
+        </Button>
+      )}
+    </div>
               <div className="relative">
                 <Input
                   id="password"
@@ -277,7 +290,7 @@ const Login = () => {
           </form>
         </CardContent>
       </Card>
-      {!isSignUp && (
+    {/* {!isSignUp && (
         <Button
           onClick={() => {
             navigate("/reset-password");
@@ -287,7 +300,7 @@ const Login = () => {
         >
           <p className="cursor-pointer">Forgot password?</p>
         </Button>
-      )}
+      )} */}
     </div>
   );
 };

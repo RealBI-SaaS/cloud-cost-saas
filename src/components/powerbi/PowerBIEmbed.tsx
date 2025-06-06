@@ -76,8 +76,8 @@ const PowerBIReport: React.FC = () => {
 
   return (
     <div
-      className="powerbi-container w-full"
-      style={{ aspectRatio: "1468.34 / 900" }}
+      className="powerbi-container h-full"
+      // style={{ aspectRatio: "1468.34 / 900" }}
     >
       <iframe
         title="Sample Report Demo"

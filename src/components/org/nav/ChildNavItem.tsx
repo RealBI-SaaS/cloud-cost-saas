@@ -213,6 +213,7 @@ export default function ChildNav({ navigation, ind, reordering }) {
             //navigation not being editing
             <>
               <div className="flex items-center gap-4 ">
+              {/* button for reordering */}
                 <button
                   {...attributes}
                   {...listeners}

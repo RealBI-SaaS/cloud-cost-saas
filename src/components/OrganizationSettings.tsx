@@ -161,7 +161,7 @@ export default function OrganizationSettings() {
             </form>
           )}
 
-          <div className="space-y-2">
+          {(organizations.length > 0)? (<div className="space-y-2">
             {organizations.map((org) => (
               <div
                 key={org.id}
@@ -184,6 +184,9 @@ export default function OrganizationSettings() {
               </div>
             ))}
           </div>
+                                       ): (<div className="flex justify-center">
+                                       <p className="text-3xl justify-center underline decoration-dotted"> No organizations, Create one above!</p>
+                                       </div>)}
         </CardContent>
       </Card>
     </div>

@@ -22,13 +22,13 @@ const HomeAuthenticated = () => {
   const subNav = subId ? navigations.find(nav => nav.id === subId) : null;
 
   // Construct the title based on the navigation hierarchy
-  let title = "Dashboard";
-  if (parentNav) {
-    title = parentNav.label;
-    if (subNav) {
-      title = `${parentNav.label} > ${subNav.label}`;
-    }
-  }
+  // let title = "Dashboard";
+  // if (parentNav) {
+  //   title = parentNav.label;
+  //   if (subNav) {
+  //     title = `${parentNav.label} > ${subNav.label}`;
+  //   }
+  // }
 
   // const user = useUserStore((state) => state.user, shallow);
   // const { currentOrg } = useOrg();
@@ -48,7 +48,7 @@ const HomeAuthenticated = () => {
     <div className=" flex grid grid-cols-1 justify-around items-center w-full h-full  ">
       {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
-      <h1 className="text-2xl font-bold px-5 mx-5 py-3">{title}</h1>
+    {/* <h1 className="text-2xl font-bold px-5 mx-5 py-3">{title}</h1> */}
 
       <PowerBIEmbed />
     </div>

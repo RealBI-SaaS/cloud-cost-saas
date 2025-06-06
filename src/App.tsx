@@ -106,9 +106,13 @@ const AuthRoute = ({ children }) => {
 
 function App() {
   const user = useUserStore((state) => state.user);
+  // const userComp = useUserStore((state)=> state.userComp)
+
+  const userComp = useOrgStore((state) => state.userComp);
   const initializeOrg = useOrgStore((state) => state.initialize);
   const initializeTheme = useThemeStore((state) => state.initializeTheme);
   const currentOrg = useOrgStore((state) => state.currentOrg);
+  console.log("usercomp", userComp)
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
   useEffect(() => {
@@ -117,9 +121,12 @@ function App() {
       initializeOrg(); // Always call the hook
       if (currentOrg) {
         initializeTheme(currentOrg?.company);
+      }else if(userComp){
+        initializeTheme(userComp.id)
       }
     }
   }, [user]);
+
 
   useEffect(() => {
     if (user) {
