@@ -184,7 +184,7 @@ const SettingsSidebar = ({
         )}
 
         {/* Organization Section */}
-        {userComp && (
+        {(userComp ||currentOrg?.role != "member" ||  user.is_staff) && (
           <SidebarGroup>
             <SidebarGroupLabel>Organization</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -269,7 +269,7 @@ const SettingsSidebar = ({
                   <SidebarMenuButton
                     asChild
                     //isActive={isActive("/settings/admin")}
-                    tooltip="Organization"
+                    tooltip="Admin"
                   >
                     <Link to={`${import.meta.env.VITE_BASE_URL}/admin`}>
                       <Hammer className="h-4 w-4" />
