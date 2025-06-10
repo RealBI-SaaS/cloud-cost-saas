@@ -41,13 +41,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { UserPlus, Mail, User, MoreHorizontal } from "lucide-react";
+import { UserPlus, Mail, User, MoreHorizontal ,  Users  } from "lucide-react";
 //import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/axios/axiosInstance";
 import { loadEnvFile } from "process";
 import { Loading } from "@/misc/loading";
 import useOrgStore from "@/context/OrgStore";
 import useUserStore from "@/context/userStore";
+
+
+// interfaces
+interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+interface UserGroup {
+  id: string;
+  name: string;
+  users: User[];
+}
+
+
+
 export default function OrganizationMembers() {
   // const { currentOrg } = useOrg();
   const currentOrg = useOrgStore((state) => state.currentOrg);
@@ -56,10 +74,64 @@ export default function OrganizationMembers() {
   const [invitations, setInvitations] = useState([]);
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
   const user = useUserStore((state) => state.user);
-  //console.log(user);
   //for Dialog
   const [open, setOpen] = useState(false);
-  //console.log(invi)
+  // for user group
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+const [editDialogOpen, setEditDialogOpen] = useState(false);
+const [newGroup, setNewGroup] = useState<{ name: string; users: string[] }>({
+    name: "",
+    users: [],
+  });
+const [groups, setGroups] = useState<UserGroup[]>([]);
+  // const [allUsers, setAllUsers] = useState<User[]>([]);
+
+
+
+ useEffect(() => {
+    fetchGroups();
+    // fetchUsers();
+  }, []);
+  
+
+async function fetchGroups() {
+    try {
+      const res = await axiosInstance.get(`/organizations/user-group/by-org/${currentOrg.id}/`);
+      setGroups(res.data);
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+      toast.error("Failed to fetch user groups");
+    }
+  }
+
+  // async function fetchUsers() {
+  //   const res = await axiosInstance.get("/api/users");
+  //   setAllUsers(res.data);
+  // }
+
+  async function handleCreateGroup(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      await axiosInstance.post(`/organizations/user-group/`, {name: newGroup.name,organization: currentOrg.id, users: newGroup.users});
+      setNewGroup({ name: "", users: [] });
+      setOpen(false);
+      fetchGroups();
+      toast.success("Group created successfully");
+    } catch (error) {
+      console.error("Error creating group:", error);
+      toast.error("Failed to create group");
+    }
+  }
+
+  async function handleDeleteGroup(groupId: string) {
+    await axiosInstance.delete(`/organizations/user-group/${groupId}/`);
+    fetchGroups();
+  }
+
+  async function handleRemoveUser(groupId: string, userId: string) {
+    await axiosInstance.post(`/organizations/user-group/${groupId}/remove_user/`, {user_id: userId});
+    fetchGroups();
+  }
 
   const fetchInvitations = async () => {
     try {
@@ -216,10 +288,10 @@ export default function OrganizationMembers() {
                 Manage members of your organization.
               </CardDescription>
             </div>
-            <Dialog open={open} onOpenChange={setOpen}>
+<Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
               {hasPriviledges() && (
                 <DialogTrigger asChild>
-                  <Button className="!text-white">
+                  <Button className="!text-white" onClick={()=> setInviteDialogOpen(true)}>
                     <UserPlus className="h-4 w-4 mr-2" />
                     Invite User
                   </Button>
@@ -431,6 +503,158 @@ export default function OrganizationMembers() {
               <p className="text-muted-foreground mt-1">
                 Invite new members to join your organization above.
               </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+<Card className="w-full border-none shadow-sm mb-5 mt-5">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-primary" />
+                User Groups
+              </CardTitle>
+              <CardDescription>
+                Manage user groups and their members.
+              </CardDescription>
+            </div>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="!text-white">
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Create Group
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create a New Group</DialogTitle>
+                  <DialogDescription>
+                    Give the group a name and add users to it.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleCreateGroup}>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="group-name">Group Name</Label>
+                      <Input
+                        id="group-name"
+                        value={newGroup.name}
+                        onChange={(e) =>
+                          setNewGroup({ ...newGroup, name: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Add Users</Label>
+                      <div className="flex flex-col gap-2 max-h-40 overflow-auto">
+                        {members.map((user) => (
+                          <label key={user.id} className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={newGroup.users.includes(user.id)}
+                              onChange={(e) => {
+                                const updatedUsers = e.target.checked
+                                  ? [...newGroup.users, user.id]
+                                  : newGroup.users.filter((id) => id !== user.id);
+                                setNewGroup({ ...newGroup, users: updatedUsers });
+                              }}
+                            />
+                            {user.email}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      type="submit"
+                      className="!text-white"
+                      disabled={!newGroup.name}
+                    >
+                      Create Group
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {groups.length > 0 ? (
+            <div className="space-y-6">
+              {groups.map((group) => (
+                <Card key={group.id} className="border border-muted p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-lg font-semibold">{group.name}</h3>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => handleDeleteGroup(group.id)}
+                          className="text-destructive"
+                        >
+                          Delete Group
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  {group.users.length > 0 ? (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead className="w-[100px]">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {group.users.map((userId) => {
+                          const user = members.find(m => m.id === userId);
+                          if (!user) return null;
+                          return (
+                            <TableRow key={userId}>
+                              <TableCell>{user.first_name} {user.last_name}</TableCell>
+                              <TableCell>{user.email}</TableCell>
+                              <TableCell>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      onClick={() => handleRemoveUser(group.id, userId)}
+                                      className="text-destructive"
+                                    >
+                                      Remove User
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No users in this group.
+                    </p>
+                  )}
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground py-10">
+              <Users className="w-12 h-12 mx-auto mb-4" />
+              <p>No user groups created yet.</p>
             </div>
           )}
         </CardContent>

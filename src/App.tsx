@@ -140,7 +140,7 @@ function App() {
 
   return (
     <>
-      <Toaster toastOptions={{ duration: 3000 }} />
+      <Toaster toastOptions={{ duration: 3000 }} position='top-center' />
       <div className="w-full   grid grid-cols-1   mx-auto">
         <Routes>
           {/* Public routes */}

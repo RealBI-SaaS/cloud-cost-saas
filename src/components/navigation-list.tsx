@@ -92,9 +92,9 @@ export function NavigationsList() {
             <Collapsible
               key={nav.id}
               asChild
-              open={activeNav == nav.id || activeParent == nav.id || firstNavWithChildrenId == nav.id}
-              defaultOpen={activeNav == nav.id}
-              isActive={nav.id == activeNav}
+              open={activeNav == nav.id || activeParent == nav.id }
+              defaultOpen={firstNavWithChildrenId == nav.id}
+              isActive={nav.id == activeNav || activeParent == nav.id}
               className="group/collapsible"
             >
               <SidebarMenuItem>
