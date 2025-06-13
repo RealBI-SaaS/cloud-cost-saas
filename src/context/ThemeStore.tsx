@@ -122,7 +122,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
       const res = await axiosInstance(`/organizations/${comp_id}/colorscheme`);
 
       const data = await res.data;
-      console.log(data)
+      // console.log(data)
 
       if (data.color_scheme) {
         const mapped = {
@@ -134,7 +134,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
           "--sidebar-foreground": data.color_scheme.sidebar_font_color,
         };
         useThemeStore.getState().loadColors(mapped);
-        console.log(data.color_scheme.sidebar_foreground)
+        // console.log(data.color_scheme.sidebar_foreground)
       }
     } catch (err) {
       console.error("Failed to load color scheme", err);

@@ -27,6 +27,7 @@ import useOrgStore from "@/context/OrgStore";
 import { useThemeStore, useThemeInitializer } from "@/context/ThemeStore";
 
 import { toast } from "sonner";
+import { useUserGroupStore } from "@/context/UserGroupStore";
 
 let orgs = [
   {
@@ -86,10 +87,12 @@ export function OrganizationSelector() {
 
   // Only handle org changes when activeOrg is explicitly changed by user
   useEffect(() => {
-    console.log(currentOrg.name);
+    // console.log(currentOrg.name);
     //const matchedOrg = userOrgs.find((org) => org.name === activeOrg.name);
     //if (matchedOrg && matchedOrg.id !== currentOrg?.id) {
     //setCurrentOrg(matchedOrg);
+    // useUserGroupStore.getState().fetchGroups(currentOrg.id);
+
     useOrgStore.getState().fetchNavigations();
     useThemeStore.getState().initializeTheme(currentOrg.company);
     //}

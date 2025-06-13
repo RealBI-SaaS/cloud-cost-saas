@@ -23,6 +23,14 @@ interface Company {
 interface Navigation {
   id: string;
   name: string;
+  children: Navigation[];
+  icon:string,
+  created_at :string,
+  edited_at:string,
+  label:string,
+  order:number,
+  organization:string,
+  parent:string,
 }
 
 interface OrgState {
@@ -79,7 +87,7 @@ const useOrgStore = create<OrgState>()(
           const response = await axiosInstance.get(
             `/organizations/${currentOrg.id}/navigation/`,
           );
-          console.log("navigation fetch, response", response.data);
+          // console.log("navigation fetch, response", response.data);
           const data = response.data.results;
 
           data.forEach((item) => {
@@ -95,7 +103,7 @@ const useOrgStore = create<OrgState>()(
               navsTree.push(navsById[item.id]);
             }
           });
-          console.log(navsTree);
+          // console.log(navsTree);
           set({ navigations: navsTree });
         } catch (err) {
           console.error("Error fetching navigations", err);
@@ -201,7 +209,7 @@ const useOrgStore = create<OrgState>()(
         const user = useUserStore.getState().user;
 
         if (!user) {
-          conole.log("retttornt");
+          // conole.log("retttornt");
           reset();
           set({ isInitialized: true });
           return;
@@ -248,7 +256,7 @@ const useOrgStore = create<OrgState>()(
 
 // Custom hook for initialization
 export const useOrgInitializer = () => {
-  console.log("org initializer");
+  // console.log("org initializer");
   const { currentOrg, initialize, fetchNavigations, isInitialized } =
     useOrgStore();
   const initializeTheme = useThemeStore((state) => state.initializeTheme);

@@ -48,6 +48,7 @@ import { loadEnvFile } from "process";
 import { Loading } from "@/misc/loading";
 import useOrgStore from "@/context/OrgStore";
 import useUserStore from "@/context/userStore";
+import { useUserGroupStore } from "@/context/UserGroupStore";
 
 
 // interfaces
@@ -74,35 +75,45 @@ export default function OrganizationMembers() {
   const [invitations, setInvitations] = useState([]);
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
   const user = useUserStore((state) => state.user);
-  //for Dialog
+  //for group Dialog
   const [open, setOpen] = useState(false);
-  // for user group
+  // for user invite
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 const [editDialogOpen, setEditDialogOpen] = useState(false);
 const [newGroup, setNewGroup] = useState<{ name: string; users: string[] }>({
     name: "",
     users: [],
   });
-const [groups, setGroups] = useState<UserGroup[]>([]);
+// const [groups, setGroups] = useState<UserGroup[]>([]);
+const [selectedGroup, setSelectedGroup] = useState<UserGroup | null>(null);
+const [editGroupName, setEditGroupName] = useState("");
+const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
+const [selectedGroupForAdd, setSelectedGroupForAdd] = useState<UserGroup | null>(null);
   // const [allUsers, setAllUsers] = useState<User[]>([]);
+const fetchGroups = useUserGroupStore((state) => state.fetchGroups);
+const groups = useUserGroupStore((state) => state.groups);
+const createGroup = useUserGroupStore((state) => state.createGroup);
+const updateGroup = useUserGroupStore((state) => state.updateGroup);
+const deleteGroup = useUserGroupStore((state) => state.deleteGroup);
+const addUserToGroup = useUserGroupStore((state) => state.addUserToGroup);
+const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGroup);
 
-
-
+// console.log("groups", groups)
  useEffect(() => {
-    fetchGroups();
+    fetchGroups(currentOrg.id);
     // fetchUsers();
-  }, []);
+  }, [currentOrg]);
   
 
-async function fetchGroups() {
-    try {
-      const res = await axiosInstance.get(`/organizations/user-group/by-org/${currentOrg.id}/`);
-      setGroups(res.data);
-    } catch (error) {
-      console.error("Error fetching groups:", error);
-      toast.error("Failed to fetch user groups");
-    }
-  }
+// async function fetchGroups() {
+//     try {
+//       const res = await axiosInstance.get(`/organizations/user-group/by-org/${currentOrg.id}/`);
+//       setGroups(res.data);
+//     } catch (error) {
+//       console.error("Error fetching groups:", error);
+//       toast.error("Failed to fetch user groups");
+//     }
+//   }
 
   // async function fetchUsers() {
   //   const res = await axiosInstance.get("/api/users");
@@ -111,26 +122,31 @@ async function fetchGroups() {
 
   async function handleCreateGroup(e: React.FormEvent) {
     e.preventDefault();
-    try {
-      await axiosInstance.post(`/organizations/user-group/`, {name: newGroup.name,organization: currentOrg.id, users: newGroup.users});
-      setNewGroup({ name: "", users: [] });
-      setOpen(false);
-      fetchGroups();
-      toast.success("Group created successfully");
-    } catch (error) {
-      console.error("Error creating group:", error);
-      toast.error("Failed to create group");
-    }
+    await createGroup(currentOrg.id, newGroup.name, newGroup.users);
+    fetchGroups(currentOrg.id);
+    setNewGroup({ name: "", users: [] });
+    setOpen(false);
+    toast.success("Group created successfully");
+    // try {
+    //   await axiosInstance.post(`/organizations/user-group/`, {name: newGroup.name,organization: currentOrg.id, users: newGroup.users});
+    //   setNewGroup({ name: "", users: [] });
+    //   setOpen(false);
+    //   fetchGroups();
+    //   toast.success("Group created successfully");
+    // } catch (error) {
+    //   console.error("Error creating group:", error);
+    //   toast.error("Failed to create group");
+    // }
   }
 
   async function handleDeleteGroup(groupId: string) {
-    await axiosInstance.delete(`/organizations/user-group/${groupId}/`);
-    fetchGroups();
+    await deleteGroup(groupId);
+    fetchGroups(currentOrg.id);
   }
 
   async function handleRemoveUser(groupId: string, userId: string) {
-    await axiosInstance.post(`/organizations/user-group/${groupId}/remove_user/`, {user_id: userId});
-    fetchGroups();
+    await removeUserFromGroup(groupId, userId);
+    fetchGroups(currentOrg.id);
   }
 
   const fetchInvitations = async () => {
@@ -258,6 +274,45 @@ async function fetchGroups() {
       setNewInvite({ email: "", role: "member" });
     }
   };
+
+  async function handleEditGroupName(groupId: string, newName: string) {
+    await updateGroup(groupId, newName);
+    fetchGroups(currentOrg.id);
+    setEditDialogOpen(false);
+    setSelectedGroup(null);
+    setEditGroupName("");
+    toast.success("Group name updated successfully");
+    // try {
+    //   await axiosInstance.patch(`/organizations/user-group/${groupId}/`, { name: newName });
+    //   setEditDialogOpen(false);
+    //   setSelectedGroup(null);
+    //   setEditGroupName("");
+    //   fetchGroups(currentOrg.id);
+    //   toast.success("Group name updated successfully");
+    // } catch (error) {
+    //   console.error("Error updating group name:", error);
+    //   toast.error("Failed to update group name");
+    // }
+  }
+
+  async function handleAddUserToGroup(groupId: string, userId: string) {
+    await addUserToGroup(groupId, userId);
+    fetchGroups(currentOrg.id);
+    setAddUserDialogOpen(false);
+    setSelectedGroupForAdd(null);
+    toast.success("User added to group successfully");
+    // try {
+    //   await axiosInstance.post(`/organizations/user-group/${groupId}/add_user/`, { user_id: userId });
+    //   setAddUserDialogOpen(false);
+    //   setSelectedGroupForAdd(null);
+    //   fetchGroups(currentOrg.id);
+    //   toast.success("User added to group successfully");
+    // } catch (error) {
+    //   console.error("Error adding user to group:", error);
+    //   toast.error("Failed to add user to group");
+    // }
+  }
+
   if (loading) return <Loading />;
   if (!currentOrg) {
     return (
@@ -274,6 +329,11 @@ async function fetchGroups() {
       currentOrg.role === "owner"
     );
   };
+
+  const availableUsers = (group: UserGroup) => {
+    return members.filter(member => !group.users.includes(member.id));
+  };
+
   return (
     <div className="container mx-auto px-4 py-10 ">
       <Card className="w-full border-none shadow-sm mb-5">
@@ -507,6 +567,7 @@ async function fetchGroups() {
           )}
         </CardContent>
       </Card>
+      {/* user groups */}
 <Card className="w-full border-none shadow-sm mb-5 mt-5">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -585,8 +646,8 @@ async function fetchGroups() {
           {groups.length > 0 ? (
             <div className="space-y-6">
               {groups.map((group) => (
-                <Card key={group.id} className="border border-muted p-4">
-                  <div className="flex justify-between items-center mb-3">
+                <Card key={group.id} className="border border-muted p-4 rounded-none border-l-4 border-l-primary">
+                  <div className="flex justify-between items-center ">
                     <h3 className="text-lg font-semibold">{group.name}</h3>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -596,6 +657,23 @@ async function fetchGroups() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedGroup(group);
+                            setEditGroupName(group.name);
+                            setEditDialogOpen(true);
+                          }}
+                        >
+                          Edit Name
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedGroupForAdd(group);
+                            setAddUserDialogOpen(true);
+                          }}
+                        >
+                          Add User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           onClick={() => handleDeleteGroup(group.id)}
                           className="text-destructive"
                         >
@@ -604,7 +682,7 @@ async function fetchGroups() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  {group.users.length > 0 ? (
+                  {group?.users?.length > 0 ? (
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -659,6 +737,69 @@ async function fetchGroups() {
           )}
         </CardContent>
       </Card>
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Group Name</DialogTitle>
+            <DialogDescription>
+              Update the name of your user group.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (selectedGroup) {
+              handleEditGroupName(selectedGroup.id, editGroupName);
+            }
+          }}>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-group-name">Group Name</Label>
+                <Input
+                  id="edit-group-name"
+                  value={editGroupName}
+                  onChange={(e) => setEditGroupName(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" className="!text-white" disabled={!editGroupName}>
+                Update Name
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={addUserDialogOpen} onOpenChange={setAddUserDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add User to Group</DialogTitle>
+            <DialogDescription>
+              Select a user to add to the group.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Available Users</Label>
+              <div className="flex flex-col gap-2 max-h-40 overflow-auto">
+                {selectedGroupForAdd && availableUsers(selectedGroupForAdd).map((user) => (
+                  <Button
+                    key={user.id}
+                    variant="ghost"
+                    className="justify-start"
+                    onClick={() => handleAddUserToGroup(selectedGroupForAdd.id, user.id)}
+                  >
+                    {user.first_name} {user.last_name} ({user.email})
+                  </Button>
+                ))}
+                {selectedGroupForAdd && availableUsers(selectedGroupForAdd).length === 0 && (
+                  <p className="text-sm text-muted-foreground">No available users to add.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -112,12 +112,12 @@ function App() {
   const initializeOrg = useOrgStore((state) => state.initialize);
   const initializeTheme = useThemeStore((state) => state.initializeTheme);
   const currentOrg = useOrgStore((state) => state.currentOrg);
-  console.log("usercomp", userComp)
+  // console.log("usercomp", userComp)
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
   useEffect(() => {
     if (user) {
-      console.log("initializing org and theme");
+      // console.log("initializing org and theme");
       initializeOrg(); // Always call the hook
       if (currentOrg) {
         initializeTheme(currentOrg?.company);

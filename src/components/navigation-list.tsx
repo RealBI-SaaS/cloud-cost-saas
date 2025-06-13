@@ -48,7 +48,7 @@ export function NavigationsList() {
   const { isMobile } = useSidebar();
   const navigations = useOrgStore((state) => state.navigations);
   const currentOrg = useOrgStore((state) => state.currentOrg);
-  const [activeNav, setActiveNav] = useState<string | null>(null);
+  const [activeNav, setActiveNav] = useState<string | null>("home");
   const [activeParent, setActiveParent] = useState<string | null>(null);
 
   const location = useLocation();
@@ -56,15 +56,15 @@ export function NavigationsList() {
 
   const normalize = (str) => str.toLowerCase().replace(/\/+$/, ""); // remove trailing slashes
 
-  const isActive = (navItemUrl) => {
-    const current = normalize(currentPath);
-    const target = normalize(navItemUrl);
+  // const isActive = (navItemUrl) => {
+  //   const current = normalize(currentPath);
+  //   const target = normalize(navItemUrl);
 
-    return (
-      current === target ||
-      (current.startsWith(target) && target !== "/dashboard")
-    );
-  };
+  //   return (
+  //     current === target ||
+  //     (current.startsWith(target) && target !== "/dashboard")
+  //   );
+  // };
   const firstNavWithChildrenId = navigations.find(
     (nav) => nav.children?.length > 0,
   )?.id;
@@ -76,8 +76,8 @@ export function NavigationsList() {
       </SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <div className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer">
+          <SidebarMenuButton asChild isActive={activeNav == "home"}>
+            <div className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer" onClick={() => {setActiveNav("home"); setActiveParent(null)}}>
               <Home />
               <span className="group-data-[collapsible=icon]:hidden">Home</span>
             </div>
@@ -92,17 +92,15 @@ export function NavigationsList() {
             <Collapsible
               key={nav.id}
               asChild
-              open={activeNav == nav.id || activeParent == nav.id }
-              defaultOpen={firstNavWithChildrenId == nav.id}
-              isActive={nav.id == activeNav || activeParent == nav.id}
+              open={activeParent === nav.id || nav.id === firstNavWithChildrenId}
               className="group/collapsible"
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton isActive={nav.id == activeNav} asChild>
+                  <SidebarMenuButton  asChild>
                     <div
-                      onClick={() => setActiveNav(nav.id)} // <- your custom function
-                      className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer"
+                      onClick={() => {setActiveNav(nav.children[0].id); setActiveParent(nav.id)}} // <- your custom function
+                      className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${activeParent === nav.id ? "bg-primary/10 border-l-4 border-l-primary" : ""}`}
                     >
                       <Icon />
                       <span className="group-data-[collapsible=icon]:hidden">
@@ -115,7 +113,7 @@ export function NavigationsList() {
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 {nav.children.length > 0 && (
-                  <CollapsibleContent open={activeNav == nav.id}>
+                  <CollapsibleContent>
                     <SidebarMenuSub>
                       {nav.children.map((subNav) => (
                         <SidebarMenuSubItem key={subNav.id}>

@@ -1,8 +1,10 @@
-
 // stores/useUserGroupStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import axiosInstance from '@/lib/axiosInstance'; // adjust the import path as needed
+import axiosInstance from '@/axios/axiosInstance';
+import useOrgStore  from '@/context/OrgStore';
+// import { useUserGroupStore } from '@/context/UserGroupStore';
+import { useEffect } from 'react';
 
 export interface UserGroup {
   id: string;
@@ -24,6 +26,8 @@ interface UserGroupStore {
   deleteGroup: (groupId: string) => Promise<void>;
   addUserToGroup: (groupId: string, userId: string) => Promise<void>;
   removeUserFromGroup: (groupId: string, userId: string) => Promise<void>;
+  // initialize: (orgId: string) => Promise<void>;
+  // reset: () => void;
 }
 
 export const useUserGroupStore = create<UserGroupStore>()(
@@ -33,10 +37,13 @@ export const useUserGroupStore = create<UserGroupStore>()(
       loading: false,
       error: null,
 
+
       fetchGroups: async (orgId) => {
+        // console.log("fetching groups", orgId)
         set({ loading: true, error: null });
         try {
-          const { data } = await axiosInstance.get(`/organizations/${orgId}/groups`);
+          const { data } = await axiosInstance.get(`/organizations/user-group/by-org/${orgId}/`);
+          // console.log("d", data)
           set({ groups: data, loading: false });
         } catch (err: any) {
           set({ error: err.response?.data?.detail || err.message, loading: false });
@@ -45,8 +52,8 @@ export const useUserGroupStore = create<UserGroupStore>()(
 
      createGroup: async (orgId, name, userIds = []) => {
       try {
-        const payload = { name, users: userIds }; // Adjust key if backend uses a different one
-        const { data: newGroup } = await axiosInstance.post(`/organizations/${orgId}/groups`, payload);
+        const payload = { name, users: userIds, organization: orgId }; // Adjust key if backend uses a different one
+        const { data: newGroup } = await axiosInstance.post(`/organizations/user-group/`, payload);
         set({ groups: [...get().groups, newGroup] });
       } catch (err: any) {
         set({ error: err.response?.data?.detail || err.message });
@@ -54,7 +61,7 @@ export const useUserGroupStore = create<UserGroupStore>()(
     },
       updateGroup: async (groupId, name) => {
         try {
-          const { data: updatedGroup } = await axiosInstance.put(`/groups/${groupId}`, { name });
+          const { data: updatedGroup } = await axiosInstance.patch(`/organizations/user-group/${groupId}/`, { name });
           set({
             groups: get().groups.map((g) => (g.id === groupId ? updatedGroup : g)),
           });
@@ -65,7 +72,7 @@ export const useUserGroupStore = create<UserGroupStore>()(
 
       deleteGroup: async (groupId) => {
         try {
-          await axiosInstance.delete(`/groups/${groupId}`);
+          await axiosInstance.delete(`/organizations/user-group/${groupId}/`);
           set({ groups: get().groups.filter((g) => g.id !== groupId) });
         } catch (err: any) {
           set({ error: err.response?.data?.detail || err.message });
@@ -74,7 +81,7 @@ export const useUserGroupStore = create<UserGroupStore>()(
 
       addUserToGroup: async (groupId, userId) => {
         try {
-          const { data: updatedGroup } = await axiosInstance.post(`/groups/${groupId}/add-user/`, {
+          const { data: updatedGroup } = await axiosInstance.post(`/organizations/user-group/${groupId}/add_user/`, {
             user_id: userId,
           });
           set({
@@ -87,7 +94,7 @@ export const useUserGroupStore = create<UserGroupStore>()(
 
       removeUserFromGroup: async (groupId, userId) => {
         try {
-          const { data: updatedGroup } = await axiosInstance.post(`/groups/${groupId}/remove-user/`, {
+          const { data: updatedGroup } = await axiosInstance.post(`/organizations/user-group/${groupId}/remove_user/`, {
             user_id: userId,
           });
           set({
@@ -104,3 +111,17 @@ export const useUserGroupStore = create<UserGroupStore>()(
     },
   )
 );
+
+// export const useUserGroupInitializer = () => {
+//   const currentOrg = useOrgStore((state) => state.currentOrg);
+//   const fetchGroups = useUserGroupStore((state) => state.fetchGroups);
+//   // const initialize = useUserGroupStore((state) => state.initialize);
+//   // const compId = currentOrg?.company;
+// console.log("usg")
+//   useEffect(() => {
+//     if (currentOrg) {
+//       console.log("fetching groups", currentOrg)
+//       fetchGroups(currentOrg.id);
+//     }
+//   }, [currentOrg]);
+// };
