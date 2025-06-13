@@ -97,10 +97,11 @@ export function NavigationsList() {
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton  asChild>
+                  <SidebarMenuButton  asChild               isActive={activeNav === nav.id}
+                    >
                     <div
-                      onClick={() => {setActiveNav(nav.children[0].id); setActiveParent(nav.id)}} // <- your custom function
-                      className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${activeParent === nav.id ? "bg-primary/10 border-l-4 border-l-primary" : ""}`}
+                      onClick={() => {setActiveNav(nav.children.length > 0 ? nav.children[0].id : nav.id); setActiveParent(nav.id)}} // <- your custom function
+                      className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${activeParent === nav.id && activeNav !== nav.id ? "bg-primary/10 border-l-4 border-l-primary" : ""}`}
                     >
                       <Icon />
                       <span className="group-data-[collapsible=icon]:hidden">
