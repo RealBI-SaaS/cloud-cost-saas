@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../config/axios/axiosInstance";
 
 const resend_verification_email = async (email) => {
   try {

@@ -1,0 +1,47 @@
+import { Outlet } from "react-router-dom";
+import { SidebarProvider } from "../components/ui/sidebar";
+import SettingsSidebar from "../components/sidebars/SettingSidebar";
+import { useUser } from "@/context/UserContext";
+import { Loading } from "@/components/misc/loading";
+import useUserStore from "@/stores/userStore";
+
+const SettingsLayout = () => {
+  //const { user, loading } = useUser();
+  const user = useUserStore((state) => {
+    state.user;
+  });
+  const loading = useUserStore((state) => {
+    state.loading;
+  });
+  //FIX: user data null after refresh untill fetch
+  //
+  //  if (loading) {
+  //    return (
+  //
+  //      <Loading />;
+  //    )
+  //  }
+  //
+  //if (!user) {
+  //  return (
+  //
+  //    <Loading />;
+  //      )
+  //
+  //}
+  //
+  return (
+    <SidebarProvider>
+      <div className="flex h-screen min-w-full overflow-hidden">
+        <aside className="overflow-y-auto h-full">
+          <SettingsSidebar />
+        </aside>
+        <div className="flex-1 h-full overflow-y-auto  ">
+          <Outlet />
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+};
+
+export default SettingsLayout;

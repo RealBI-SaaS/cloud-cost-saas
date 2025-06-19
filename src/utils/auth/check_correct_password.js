@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../config/axios/axiosInstance";
 
 const check_correct_password = async (email, password) => {
   try {

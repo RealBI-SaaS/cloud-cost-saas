@@ -1,9 +1,9 @@
 // navigationHandlers.js
 
-import axiosInstance from "@/axios/axiosInstance";
+import axiosInstance from "@/config/axios/axiosInstance";
 import { toast } from "sonner";
-import useUserStore from "@/context/userStore";
-import useOrgStore from "@/context/OrgStore";
+import useUserStore from "@/stores/userStore";
+import useOrgStore from "@/stores/OrgStore";
 import { findNavById } from "./helpers";
 export const handleNavEdit = async ({
 	navigationGettingEdited,

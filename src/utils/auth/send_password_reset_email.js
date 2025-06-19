@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../config/axios/axiosInstance";
 
 const send_password_reset_email = async (email) => {
   console.log(email);

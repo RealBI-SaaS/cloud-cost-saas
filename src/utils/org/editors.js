@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../config/axios/axiosInstance";
 
 export const edit_user_comp = async (company_id, data) => {
   try {

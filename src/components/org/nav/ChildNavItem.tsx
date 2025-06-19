@@ -1,4 +1,4 @@
-import { navIcons } from "@/assets/iconMap";
+import { navIcons } from "@/data/iconMap";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,8 +60,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import useUserStore from "@/context/userStore";
-import useOrgStore from "@/context/OrgStore";
+import useUserStore from "@/stores/userStore";
+import useOrgStore from "@/stores/OrgStore";
 import { handleNavDelete, handleNavEdit } from "@/utils/org/navigationHandlers";
 import { useRef } from "react";
 

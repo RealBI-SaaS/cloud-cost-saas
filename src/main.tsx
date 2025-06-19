@@ -6,13 +6,13 @@ import App from "./App.jsx";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { OrganizationProvider } from "@/context/OrganizationContext";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/sidebars/app-sidebar";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 //import { ThemeProvider } from "./context/ThemeContext";
-import { CompanyProvider } from "./context/CompanyContext";
-import Landing from "./components/Landing";
-import useUserStore from "./context/userStore";
+import { CompanyProvider } from "./stores/CompanyStore";
+import Landing from "./pages/main/Landing";
+import useUserStore from "./stores/userStore";
 
 const AppWrapper = () => {
   //const { user } = useUser();

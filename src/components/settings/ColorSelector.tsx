@@ -1,5 +1,5 @@
-import useOrgStore from "@/context/OrgStore";
-import { useThemeStore } from "@/context/ThemeStore";
+import useOrgStore from "@/stores/OrgStore";
+import { useThemeStore } from "@/stores/ThemeStore";
 import { useRef } from "react";
 import { Paintbrush, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";

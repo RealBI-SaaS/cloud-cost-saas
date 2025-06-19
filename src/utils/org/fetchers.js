@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../config/axios/axiosInstance";
 export const get_user_comp = async () => {
   try {
     const response = await axiosInstance.get("/organizations/company/");

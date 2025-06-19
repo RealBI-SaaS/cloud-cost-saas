@@ -1,7 +1,7 @@
 //TODO: improve the logging method and response
 //import axios from "axios"
-import axiosInstance from "../../axios/axiosInstance";
-import Logout from "../../components/logout";
+import axiosInstance from "../../config/axios/axiosInstance";
+import Logout from "../../pages/auth/logout";
 
 const change_password = async (current_pass, new_pass, access_token) => {
   console.log(current_pass, new_pass, access_token);
