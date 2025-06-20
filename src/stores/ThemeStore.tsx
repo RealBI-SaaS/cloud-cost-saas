@@ -25,11 +25,15 @@ const getDefaultColors = () => {
   const root = document.documentElement;
   return {
     "--primary": getComputedStyle(root).getPropertyValue("--primary").trim(),
-    "--sidebar-accent": getComputedStyle(root).getPropertyValue("--sidebar-accent").trim(),
+    "--sidebar-accent": getComputedStyle(root)
+      .getPropertyValue("--sidebar-accent")
+      .trim(),
     "--border": getComputedStyle(root).getPropertyValue("--border").trim(),
     "--input": getComputedStyle(root).getPropertyValue("--input").trim(),
     "--sidebar": getComputedStyle(root).getPropertyValue("--sidebar").trim(),
-    "--sidebar-foreground": getComputedStyle(root).getPropertyValue("--sidebar-foreground").trim(),
+    "--sidebar-foreground": getComputedStyle(root)
+      .getPropertyValue("--sidebar-foreground")
+      .trim(),
   };
 };
 
@@ -118,27 +122,28 @@ export const useThemeStore = create<ThemeState>((set) => ({
       (localStorage.getItem("theme") as ThemeMode | null) || "system";
     useThemeStore.getState().setTheme(savedTheme);
 
-    try {
-      const res = await axiosInstance(`/organizations/${comp_id}/colorscheme`);
-
-      const data = await res.data;
-      // console.log(data)
-
-      if (data.color_scheme) {
-        const mapped = {
-          "--primary": data.color_scheme.primary,
-          "--sidebar-accent": data.color_scheme.sidebar_accent,
-          "--border": data.color_scheme.borders,
-          "--input": data.color_scheme.form_input_background,
-          "--sidebar": data.color_scheme.sidebar_background,
-          "--sidebar-foreground": data.color_scheme.sidebar_font_color,
-        };
-        useThemeStore.getState().loadColors(mapped);
-        // console.log(data.color_scheme.sidebar_foreground)
-      }
-    } catch (err) {
-      console.error("Failed to load color scheme", err);
-    }
+    // works, but only allow dark and light theme
+    // try {
+    //   const res = await axiosInstance(`/organizations/${comp_id}/colorscheme`);
+    //
+    //   const data = await res.data;
+    //   // console.log(data)
+    //
+    //   if (data.color_scheme) {
+    //     const mapped = {
+    //       "--primary": data.color_scheme.primary,
+    //       "--sidebar-accent": data.color_scheme.sidebar_accent,
+    //       "--border": data.color_scheme.borders,
+    //       "--input": data.color_scheme.form_input_background,
+    //       "--sidebar": data.color_scheme.sidebar_background,
+    //       "--sidebar-foreground": data.color_scheme.sidebar_font_color,
+    //     };
+    //     useThemeStore.getState().loadColors(mapped);
+    //     // console.log(data.color_scheme.sidebar_foreground)
+    //   }
+    // } catch (err) {
+    //   console.error("Failed to load color scheme", err);
+    // }
   },
 
   reset: () => {

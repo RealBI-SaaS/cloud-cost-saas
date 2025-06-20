@@ -45,8 +45,10 @@ export default function CompanyDetails() {
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [creatingCompany, setCreatingCompany] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(userComp?.logo || null);
-console.log(userComp);
+  const [logoPreview, setLogoPreview] = useState<string | null>(
+    userComp?.logo || null,
+  );
+  console.log(userComp);
   useEffect(() => {
     if (userComp) {
       //console.log(userComp);
@@ -72,9 +74,9 @@ console.log(userComp);
   const handleCompanyUpdate = async () => {
     try {
       const formData = new FormData();
-      formData.append('name', compName);
+      formData.append("name", compName);
       if (logoFile) {
-        formData.append('logo', logoFile);
+        formData.append("logo", logoFile);
       }
 
       const res = await axiosInstance.patch(
@@ -82,9 +84,9 @@ console.log(userComp);
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       fetchUserCompany();
@@ -119,20 +121,20 @@ console.log(userComp);
   //};
   if (userComp) {
     return (
-      <div className="container mx-auto px-4 py-10">
+      <div className="container mx-auto px-4 py-10  ml-5">
         <Card className="w-full shadow-none border-none w-3/4">
           <CardHeader>
-            <div className="flex items-center gap-3 border-bottom mb-5">
+            <div className="flex items-center gap-3 border-bottom mb-0">
               {logoPreview ? (
-                <img 
-                  src={logoPreview} 
-                  alt="Company Logo" 
+                <img
+                  src={logoPreview}
+                  alt="Company Logo"
                   className="h-12 w-12 object-contain rounded-md"
                 />
               ) : (
                 <Building2 className="h-6 w-6" />
               )}
-              <h1 className="text-3xl font-bold">{userComp?.name}</h1>
+              <h1 className="text-lg font-bold">{userComp?.name}</h1>
             </div>
 
             <CardDescription>
@@ -222,10 +224,12 @@ console.log(userComp);
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => document.getElementById('company-logo')?.click()}
+                      onClick={() =>
+                        document.getElementById("company-logo")?.click()
+                      }
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      {logoPreview ? 'Change Logo' : 'Upload Logo'}
+                      {logoPreview ? "Change Logo" : "Upload Logo"}
                     </Button>
                   </div>
                 </div>
@@ -234,7 +238,8 @@ console.log(userComp);
 
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">
-                Created on {userComp?.created_at
+                Created on{" "}
+                {userComp?.created_at
                   ? format(new Date(userComp.created_at), "MMM d, yyyy")
                   : "Invalid date"}
               </Label>

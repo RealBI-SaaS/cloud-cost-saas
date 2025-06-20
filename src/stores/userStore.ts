@@ -73,7 +73,7 @@ const userStore = (set, get) => ({
     //localStorage.removeItem("org-store");
     //reset()
     useOrgStore.getState().reset();
-    useThemeStore.getState().reset();
+    // useThemeStore.getState().reset();
     set({ user: null });
   },
 

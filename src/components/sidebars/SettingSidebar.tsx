@@ -168,14 +168,14 @@ const SettingsSidebar = ({
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                   <SidebarMenuSub>
-                    <SidebarMenuSubItem>
+                    {/* <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
                         isActive={isActiveExact("/settings/company/styles")}
                       >
                         <Link to="settings/company/styles">Manage Colors</Link>
                       </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
+                    </SidebarMenuSubItem> */}
                   </SidebarMenuSub>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -184,7 +184,7 @@ const SettingsSidebar = ({
         )}
 
         {/* Organization Section */}
-        {(userComp ||currentOrg?.role != "member" ||  user.is_staff) && (
+        {(userComp || currentOrg?.role != "member" || user.is_staff) && (
           <SidebarGroup>
             <SidebarGroupLabel>Organization</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -201,7 +201,7 @@ const SettingsSidebar = ({
                     </Link>
                   </SidebarMenuButton>
 
-                 <SidebarMenuSub>
+                  <SidebarMenuSub>
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -213,36 +213,37 @@ const SettingsSidebar = ({
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
 
-                     {(userOrgs.length > 0) && (<SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={isActiveExact(
-                          "/settings/organization/members",
-                        )}
-                      >
-                        <Link to="/settings/organization/members">
-                          Members and Invitations
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>)
-                  }
+                    {userOrgs.length > 0 && (
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={isActiveExact(
+                            "/settings/organization/members",
+                          )}
+                        >
+                          <Link to="/settings/organization/members">
+                            Members and Invitations
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )}
 
                     {(currentOrg?.role === "admin" ||
                       currentOrg?.role === "owner" ||
                       user.is_staff) && (
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={isActiveExact(
-                              "/settings/organization/navigation",
-                            )}
-                          >
-                            <Link to="/settings/organization/navigation">
-                              Navigations
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      )}
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={isActiveExact(
+                            "/settings/organization/navigation",
+                          )}
+                        >
+                          <Link to="/settings/organization/navigation">
+                            Navigations
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )}
 
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton

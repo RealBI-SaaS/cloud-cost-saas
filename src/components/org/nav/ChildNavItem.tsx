@@ -143,7 +143,7 @@ export default function ChildNav({ navigation, ind, reordering }) {
               onSubmit={handleNavigationEdit}
             >
               <Collapsible className="grid grid-cols-4 space-x-2">
-                <div className="col-span-3 flex flex-col gap-1 ">
+                <div className="col-span-4 flex flex-col gap-1 ">
                   <label
                     htmlFor="navigation-label"
                     className="text-sm  mb-1 text-foreground"
@@ -159,7 +159,7 @@ export default function ChildNav({ navigation, ind, reordering }) {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                   <span className="text-sm text-foreground">
                     Select an Icon
                   </span>
@@ -192,7 +192,7 @@ export default function ChildNav({ navigation, ind, reordering }) {
                       </Button>
                     ))}
                   </div>
-                </CollapsibleContent>
+                </CollapsibleContent> */}
               </Collapsible>
 
               <div className="grid grid-cols-4 justify-between items-center">

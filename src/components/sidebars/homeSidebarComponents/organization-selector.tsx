@@ -94,15 +94,15 @@ export function OrganizationSelector() {
     // useUserGroupStore.getState().fetchGroups(currentOrg.id);
 
     useOrgStore.getState().fetchNavigations();
-    useThemeStore.getState().initializeTheme(currentOrg.company);
+    // only allow dark and light theme
+    // useThemeStore.getState().initializeTheme(currentOrg.company);
     //}
   }, [currentOrg.name]);
-  const handleSideMenuOrgChange = ((org)=>{
-                    setCurrentOrg(org);
-                    
-      toast.success(`You are now in ${org.name}`);
+  const handleSideMenuOrgChange = (org) => {
+    setCurrentOrg(org);
 
-  })
+    toast.success(`You are now in ${org.name}`);
+  };
 
   const { isMobile } = useSidebar();
   if (activeOrg) {
@@ -142,7 +142,6 @@ export function OrganizationSelector() {
                   onClick={() => {
                     handleSideMenuOrgChange(org);
 
-
                     // setCurrentOrg(org);
                     //setActiveOrg({
                     //  name: org.name,
@@ -150,7 +149,7 @@ export function OrganizationSelector() {
                     //  logo: Circle,
                     //},);
                   }}
-                  className={`gap-2 p-2 ${currentOrg == org ? 'bg-sidebar-accent' : ''} hover:bg-transparent`}
+                  className={`gap-2 p-2 ${currentOrg == org ? "bg-sidebar-accent" : ""} hover:bg-transparent my-1`}
                 >
                   {org.name}
                   <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>

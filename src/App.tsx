@@ -121,12 +121,12 @@ function App() {
       initializeOrg(); // Always call the hook
       if (currentOrg) {
         initializeTheme(currentOrg?.company);
-      }else if(userComp){
-        initializeTheme(userComp.id)
+      } else if (userComp) {
+        // allow only dark and light
+        // initializeTheme(userComp.id)
       }
     }
   }, [user]);
-
 
   useEffect(() => {
     if (user) {
@@ -140,8 +140,8 @@ function App() {
 
   return (
     <>
-      <Toaster toastOptions={{ duration: 3000 }} position='top-center' />
-      <div className="w-full   grid grid-cols-1   mx-auto">
+      <Toaster toastOptions={{ duration: 3000 }} position="top-center" />
+      <div className="w-full   grid grid-cols-1   mx-auto bg-background">
         <Routes>
           {/* Public routes */}
           <Route path="/home" element={<Home />} />
@@ -313,7 +313,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<NotFound />} /> 
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>
