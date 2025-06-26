@@ -35,6 +35,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.487.0",
+    "posthog-js": "^1.255.1",
     "powerbi-client": "^2.23.1",
     "powerbi-client-react": "^2.0.0",
     "react": "^19.1.0",

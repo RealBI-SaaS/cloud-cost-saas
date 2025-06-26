@@ -14,6 +14,14 @@ import { CompanyProvider } from "./stores/CompanyStore";
 import Landing from "./pages/main/Landing";
 import useUserStore from "./stores/userStore";
 
+import { PostHogProvider } from 'posthog-js/react'
+
+const options = {
+  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+  defaults: '2025-05-24',
+}
+
+
 const AppWrapper = () => {
   //const { user } = useUser();
   // const user = useUserStore((state) => state.user);
@@ -40,10 +48,15 @@ const AppWrapper = () => {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
     <BrowserRouter>
       {/* <UserProvider> */}
       <AppWrapper />
       {/* </UserProvider> */}
     </BrowserRouter>
+
+    </PostHogProvider>
   </StrictMode>,
 );
+
+
