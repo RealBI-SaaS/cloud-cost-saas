@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { FcGoogle } from "react-icons/fc";
-import { Eye, EyeClosed } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { FcGoogle } from 'react-icons/fc';
+import { Eye, EyeClosed } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 //import { useUser } from "../context/UserContext";
-import { validatePassword } from "../../utils/auth/password_validate";
-import { cn } from "@/utils/utils";
+import { validatePassword } from '../../utils/auth/password_validate';
+import { cn } from '@/utils/utils';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import logo_only from "/logo-only.png";
-import useUserStore from "@/stores/userStore";
-import { useOrgInitializer } from "@/stores/OrgStore";
-import { useThemeInitializer } from "@/stores/ThemeStore";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import logo_only from '/logo-only.png';
+import useUserStore from '@/stores/userStore';
+import { useOrgInitializer } from '@/stores/OrgStore';
+import { useThemeInitializer } from '@/stores/ThemeStore';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   //const [redirectToAdmin, setRedirectToAdmin] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    first_name: "",
-    last_name: "",
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
   });
 
   //const { error, setError, login, signup, user } = useUser();
@@ -69,7 +69,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
@@ -81,44 +81,44 @@ const Login = () => {
           return;
         }
         await signup(formData);
-        navigate("/ask-email-verification", {
+        navigate('/ask-email-verification', {
           state: { user_email: formData.email },
         });
       } else {
         const myUser = await login(formData.email, formData.password);
-        console.log("Login successful, user:", myUser);
+        console.log('Login successful, user:', myUser);
         if (myUser.is_staff) {
-          console.log("Admin user detected, redirecting to admin signin");
-          navigate("/admin/signin", { replace: true });
+          console.log('Admin user detected, redirecting to admin signin');
+          navigate('/admin/signin', { replace: true });
           return;
         }
         // useOrgInitializer(); // Always call the hook
         // useThemeInitializer();
 
-        const from = location.state?.redirectTo || "/dashboard";
-        console.log("Attempting to redirect to:", from);
-        console.log("Current location state:", location.state);
+        const from = location.state?.redirectTo || '/dashboard';
+        console.log('Attempting to redirect to:', from);
+        console.log('Current location state:', location.state);
 
         // If we're redirecting to an invitation acceptance, use window.location
-        if (from.startsWith("/accept-invitation/")) {
-          console.log("Redirecting to invitation acceptance");
+        if (from.startsWith('/accept-invitation/')) {
+          console.log('Redirecting to invitation acceptance');
           window.location.href = from;
           return;
         }
 
         try {
           navigate(from, { replace: true });
-          console.log("Navigation triggered");
+          console.log('Navigation triggered');
         } catch (navError) {
-          console.error("Navigation error:", navError);
+          console.error('Navigation error:', navError);
         }
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       // console.log(error);
       toast.error(
         error?.response?.data?.detail ||
-        "An error occurred, try again or another account",
+          'An error occurred, try again or another account',
       );
       if (error?.response?.data?.password?.[0]) {
         toast.error(error.response.data.password[0]);
@@ -130,11 +130,11 @@ const Login = () => {
   };
   const handleGoogleSignIn = async () => {
     const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const state = crypto.randomUUID(16).toString("hex");
-    localStorage.setItem("latestCSRFToken", state);
+    const state = crypto.randomUUID(16).toString('hex');
+    localStorage.setItem('latestCSRFToken', state);
 
     const redirectUri = `${import.meta.env.VITE_BASE_URL}/myauth/google/oauth2/callback/`;
-    const scope = "email profile";
+    const scope = 'email profile';
 
     const link =
       `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -150,61 +150,61 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  justify-center align-center gap-6  mx-auto svgd w-full">
-      <img src={logo_only} alt="logo" className=" h-20 object-contain " />
-      <Card className="w-100 backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl p-6 shadow-lg ">
+    <div className='flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto svgd w-full'>
+      <img src={logo_only} alt='logo' className=' h-20 object-contain ' />
+      <Card className='w-100 backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl p-6 shadow-lg '>
         <CardHeader>
-          <CardTitle>
-            {isSignUp ? "Create an account" : "Login to your account"}
+          <CardTitle className='text-primary'>
+            {isSignUp ? 'Create an account' : 'Login to your account'}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className='text-foreground'>
             {isSignUp
-              ? "Enter your information below to create your account"
-              : "Enter your email below to login to your account"}
+              ? 'Enter your information below to create your account'
+              : 'Enter your email below to login to your account'}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
             <Button
-              type="button"
-              variant="outline"
+              type='button'
+              variant='outline'
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="w-full"
+              className='w-full bg-foreground '
             >
-              <FcGoogle className="mr-2 h-4 w-4" />
+              <FcGoogle className='mr-2 h-4 w-4' />
               Sign in with Google
             </Button>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+            <div className='relative'>
+              <div className='absolute inset-0 flex items-center'>
+                <span className='w-full border-t' />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
+              <div className='relative flex justify-center text-xs uppercase'>
+                <span className='bg-background px-2 text-muted-foreground'>
                   Or continue with
                 </span>
               </div>
             </div>
 
             {isSignUp && (
-              <div className="grid gap-2">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="grid gap-1">
-                    <Label htmlFor="first_name">First name</Label>
+              <div className='grid gap-2'>
+                <div className='grid grid-cols-2 gap-2'>
+                  <div className='grid gap-1'>
+                    <Label htmlFor='first_name'>First name</Label>
                     <Input
-                      id="first_name"
-                      name="first_name"
+                      id='first_name'
+                      name='first_name'
                       value={formData.first_name}
                       onChange={handleInputChange}
                       required
                     />
                   </div>
-                  <div className="grid gap-1">
-                    <Label htmlFor="last_name">Last name</Label>
+                  <div className='grid gap-1'>
+                    <Label htmlFor='last_name'>Last name</Label>
                     <Input
-                      id="last_name"
-                      name="last_name"
+                      id='last_name'
+                      name='last_name'
                       value={formData.last_name}
                       onChange={handleInputChange}
                       required
@@ -214,54 +214,54 @@ const Login = () => {
               </div>
             )}
 
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
+            <div className='grid gap-1'>
+              <Label htmlFor='email'>Email</Label>
               <Input
-                id="email"
-                name="email"
-                type="email"
+                id='email'
+                name='email'
+                type='email'
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="m@example.com"
+                placeholder='m@example.com'
                 required
               />
             </div>
 
-            <div className="grid gap-1">
-    <div className="flex justify-between">
-              <Label htmlFor="password">Password</Label>
-  {!isSignUp && (
-        <Button
-          onClick={() => {
-            navigate("/reset-password");
-          }}
-          variant="link"
-          className="text-sm text-gray-500"
-        >
-          <p className="cursor-pointer">Forgot password?</p>
-        </Button>
-      )}
-    </div>
-              <div className="relative">
+            <div className='grid gap-1'>
+              <div className='flex justify-between'>
+                <Label htmlFor='password'>Password</Label>
+                {!isSignUp && (
+                  <Button
+                    onClick={() => {
+                      navigate('/reset-password');
+                    }}
+                    variant='link'
+                    className='text-sm text-gray-500'
+                  >
+                    <p className='cursor-pointer'>Forgot password?</p>
+                  </Button>
+                )}
+              </div>
+              <div className='relative'>
                 <Input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
+                  id='password'
+                  name='password'
+                  type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleInputChange}
                   required
                 />
                 <Button
-                  type="button"
-                  variant="icon"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 "
+                  type='button'
+                  variant='icon'
+                  size='sm'
+                  className='absolute right-0 top-0 h-full px-3 py-2 '
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeClosed className="h-4 w-4 " />
+                    <EyeClosed className='h-4 w-4 ' />
                   ) : (
-                    <Eye className="h-4 w-4" />
+                    <Eye className='h-4 w-4' />
                   )}
                 </Button>
               </div>
@@ -269,28 +269,28 @@ const Login = () => {
 
             {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
 
-            <Button type="submit" disabled={loading} className="!text-white">
+            <Button type='submit' disabled={loading} className='!text-white'>
               {loading
                 ? isSignUp
-                  ? "Signing up..."
-                  : "Signing in..."
+                  ? 'Signing up...'
+                  : 'Signing in...'
                 : isSignUp
-                  ? "Sign Up"
-                  : "Sign In"}
+                  ? 'Sign Up'
+                  : 'Sign In'}
             </Button>
             <Button
-              variant="link"
-              className="text-sm !text-gray-700"
+              variant='link'
+              className='text-sm !text-gray-700'
               onClick={() => setIsSignUp(!isSignUp)}
             >
               {isSignUp
-                ? "Already have an account? Sign in"
+                ? 'Already have an account? Sign in'
                 : "Don't have an account? Sign up"}
             </Button>
           </form>
         </CardContent>
       </Card>
-    {/* {!isSignUp && (
+      {/* {!isSignUp && (
         <Button
           onClick={() => {
             navigate("/reset-password");

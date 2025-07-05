@@ -1,4 +1,18 @@
 .svgd {
-background-color: #e5e5f7;
+  background-color: #e5e5f7; 
+  background-color: hls(var(--muted));
+  opacity: 0.8;
+  background-image:
+    repeating-radial-gradient(circle at 0 0, transparent 0, #e5e5f7 22px),
+    repeating-linear-gradient(#20468155, #204681);
+}
+
+
+
+
+.svgd-dark{
+background-color: #262626;
 opacity: 0.8;
-background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 22px ), repeating-linear-gradient( #20468155, #204681 );}
+background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #262626 10px ), repeating-linear-gradient( #00000055, #000000 );
+}
+

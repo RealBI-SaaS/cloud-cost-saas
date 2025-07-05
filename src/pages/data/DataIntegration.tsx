@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
 const DataIntegration: React.FC = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full p-8">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className='flex flex-col items-center justify-center h-full p-8'>
+      <h1 className='text-2xl font-bold mb-4 text-primary'>
         Data Integration and Credentials' Management
       </h1>
-      <p className="text-gray-600">Coming soon...</p>
+      <p className='text-gray-600'>Coming soon...</p>
     </div>
   );
 };

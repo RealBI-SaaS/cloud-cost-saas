@@ -41,7 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { UserPlus, Mail, User, MoreHorizontal ,  Users  } from "lucide-react";
+import { UserPlus, Mail, User, MoreHorizontal, Users } from "lucide-react";
 //import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/config/axios/axiosInstance";
 import { loadEnvFile } from "process";
@@ -49,7 +49,6 @@ import { Loading } from "@/components/misc/loading";
 import useOrgStore from "@/stores/OrgStore";
 import useUserStore from "@/stores/userStore";
 import { useUserGroupStore } from "@/stores/UserGroupStore";
-
 
 // interfaces
 interface User {
@@ -65,8 +64,6 @@ interface UserGroup {
   users: User[];
 }
 
-
-
 export default function OrganizationMembers() {
   // const { currentOrg } = useOrg();
   const currentOrg = useOrgStore((state) => state.currentOrg);
@@ -79,41 +76,43 @@ export default function OrganizationMembers() {
   const [open, setOpen] = useState(false);
   // for user invite
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-const [editDialogOpen, setEditDialogOpen] = useState(false);
-const [newGroup, setNewGroup] = useState<{ name: string; users: string[] }>({
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [newGroup, setNewGroup] = useState<{ name: string; users: string[] }>({
     name: "",
     users: [],
   });
-// const [groups, setGroups] = useState<UserGroup[]>([]);
-const [selectedGroup, setSelectedGroup] = useState<UserGroup | null>(null);
-const [editGroupName, setEditGroupName] = useState("");
-const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
-const [selectedGroupForAdd, setSelectedGroupForAdd] = useState<UserGroup | null>(null);
+  // const [groups, setGroups] = useState<UserGroup[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<UserGroup | null>(null);
+  const [editGroupName, setEditGroupName] = useState("");
+  const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
+  const [selectedGroupForAdd, setSelectedGroupForAdd] =
+    useState<UserGroup | null>(null);
   // const [allUsers, setAllUsers] = useState<User[]>([]);
-const fetchGroups = useUserGroupStore((state) => state.fetchGroups);
-const groups = useUserGroupStore((state) => state.groups);
-const createGroup = useUserGroupStore((state) => state.createGroup);
-const updateGroup = useUserGroupStore((state) => state.updateGroup);
-const deleteGroup = useUserGroupStore((state) => state.deleteGroup);
-const addUserToGroup = useUserGroupStore((state) => state.addUserToGroup);
-const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGroup);
+  const fetchGroups = useUserGroupStore((state) => state.fetchGroups);
+  const groups = useUserGroupStore((state) => state.groups);
+  const createGroup = useUserGroupStore((state) => state.createGroup);
+  const updateGroup = useUserGroupStore((state) => state.updateGroup);
+  const deleteGroup = useUserGroupStore((state) => state.deleteGroup);
+  const addUserToGroup = useUserGroupStore((state) => state.addUserToGroup);
+  const removeUserFromGroup = useUserGroupStore(
+    (state) => state.removeUserFromGroup,
+  );
 
-// console.log("groups", groups)
- useEffect(() => {
+  // console.log("groups", groups)
+  useEffect(() => {
     fetchGroups(currentOrg.id);
     // fetchUsers();
   }, [currentOrg]);
-  
 
-// async function fetchGroups() {
-//     try {
-//       const res = await axiosInstance.get(`/organizations/user-group/by-org/${currentOrg.id}/`);
-//       setGroups(res.data);
-//     } catch (error) {
-//       console.error("Error fetching groups:", error);
-//       toast.error("Failed to fetch user groups");
-//     }
-//   }
+  // async function fetchGroups() {
+  //     try {
+  //       const res = await axiosInstance.get(`/organizations/user-group/by-org/${currentOrg.id}/`);
+  //       setGroups(res.data);
+  //     } catch (error) {
+  //       console.error("Error fetching groups:", error);
+  //       toast.error("Failed to fetch user groups");
+  //     }
+  //   }
 
   // async function fetchUsers() {
   //   const res = await axiosInstance.get("/api/users");
@@ -331,7 +330,7 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
   };
 
   const availableUsers = (group: UserGroup) => {
-    return members.filter(member => !group.users.includes(member.id));
+    return members.filter((member) => !group.users.includes(member.id));
   };
 
   return (
@@ -348,10 +347,13 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
                 Manage members of your organization.
               </CardDescription>
             </div>
-<Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+            <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
               {hasPriviledges() && (
                 <DialogTrigger asChild>
-                  <Button className="!text-white" onClick={()=> setInviteDialogOpen(true)}>
+                  <Button
+                    className="!text-white"
+                    onClick={() => setInviteDialogOpen(true)}
+                  >
                     <UserPlus className="h-4 w-4 mr-2" />
                     Invite User
                   </Button>
@@ -568,7 +570,7 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
         </CardContent>
       </Card>
       {/* user groups */}
-<Card className="w-full border-none shadow-sm mb-5 mt-5">
+      <Card className="w-full border-none shadow-sm mb-5 mt-5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -611,15 +613,23 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
                       <Label>Add Users</Label>
                       <div className="flex flex-col gap-2 max-h-40 overflow-auto">
                         {members.map((user) => (
-                          <label key={user.id} className="flex items-center gap-2">
+                          <label
+                            key={user.id}
+                            className="flex items-center gap-2"
+                          >
                             <input
                               type="checkbox"
                               checked={newGroup.users.includes(user.id)}
                               onChange={(e) => {
                                 const updatedUsers = e.target.checked
                                   ? [...newGroup.users, user.id]
-                                  : newGroup.users.filter((id) => id !== user.id);
-                                setNewGroup({ ...newGroup, users: updatedUsers });
+                                  : newGroup.users.filter(
+                                      (id) => id !== user.id,
+                                    );
+                                setNewGroup({
+                                  ...newGroup,
+                                  users: updatedUsers,
+                                });
                               }}
                             />
                             {user.email}
@@ -646,7 +656,10 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
           {groups.length > 0 ? (
             <div className="space-y-6">
               {groups.map((group) => (
-                <Card key={group.id} className="border border-muted p-4 rounded-none border-l-4 border-l-primary">
+                <Card
+                  key={group.id}
+                  className="border border-muted p-4 rounded-none border-l-4 border-l-primary"
+                >
                   <div className="flex justify-between items-center ">
                     <h3 className="text-lg font-semibold">{group.name}</h3>
                     <DropdownMenu>
@@ -693,11 +706,13 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
                       </TableHeader>
                       <TableBody>
                         {group.users.map((userId) => {
-                          const user = members.find(m => m.id === userId);
+                          const user = members.find((m) => m.id === userId);
                           if (!user) return null;
                           return (
                             <TableRow key={userId}>
-                              <TableCell>{user.first_name} {user.last_name}</TableCell>
+                              <TableCell>
+                                {user.first_name} {user.last_name}
+                              </TableCell>
                               <TableCell>{user.email}</TableCell>
                               <TableCell>
                                 <DropdownMenu>
@@ -708,7 +723,9 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
                                     <DropdownMenuItem
-                                      onClick={() => handleRemoveUser(group.id, userId)}
+                                      onClick={() =>
+                                        handleRemoveUser(group.id, userId)
+                                      }
                                       className="text-destructive"
                                     >
                                       Remove User
@@ -745,12 +762,14 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
               Update the name of your user group.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            if (selectedGroup) {
-              handleEditGroupName(selectedGroup.id, editGroupName);
-            }
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (selectedGroup) {
+                handleEditGroupName(selectedGroup.id, editGroupName);
+              }
+            }}
+          >
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-group-name">Group Name</Label>
@@ -763,7 +782,11 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="!text-white" disabled={!editGroupName}>
+              <Button
+                type="submit"
+                className="!text-white"
+                disabled={!editGroupName}
+              >
                 Update Name
               </Button>
             </DialogFooter>
@@ -782,19 +805,25 @@ const removeUserFromGroup = useUserGroupStore((state) => state.removeUserFromGro
             <div className="space-y-2">
               <Label>Available Users</Label>
               <div className="flex flex-col gap-2 max-h-40 overflow-auto">
-                {selectedGroupForAdd && availableUsers(selectedGroupForAdd).map((user) => (
-                  <Button
-                    key={user.id}
-                    variant="ghost"
-                    className="justify-start"
-                    onClick={() => handleAddUserToGroup(selectedGroupForAdd.id, user.id)}
-                  >
-                    {user.first_name} {user.last_name} ({user.email})
-                  </Button>
-                ))}
-                {selectedGroupForAdd && availableUsers(selectedGroupForAdd).length === 0 && (
-                  <p className="text-sm text-muted-foreground">No available users to add.</p>
-                )}
+                {selectedGroupForAdd &&
+                  availableUsers(selectedGroupForAdd).map((user) => (
+                    <Button
+                      key={user.id}
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={() =>
+                        handleAddUserToGroup(selectedGroupForAdd.id, user.id)
+                      }
+                    >
+                      {user.first_name} {user.last_name} ({user.email})
+                    </Button>
+                  ))}
+                {selectedGroupForAdd &&
+                  availableUsers(selectedGroupForAdd).length === 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      No available users to add.
+                    </p>
+                  )}
               </div>
             </div>
           </div>

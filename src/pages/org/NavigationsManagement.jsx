@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import ChildNav from "@/components/org/nav/ChildNavItem";
-import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
 import React from "react";
 import {
   DndContext,
@@ -25,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useUserGroupInitializer } from "@/stores/UserGroupStore";
 import {
   Select,
   SelectContent,
@@ -32,11 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ChevronDown,
-  Plus,
-  Check,
-} from "lucide-react";
+import { ChevronDown, Plus, Check } from "lucide-react";
 
 import {
   Collapsible,
@@ -51,7 +51,11 @@ import Navigation from "@/components/org/nav/NavigationListItem";
 import { DragOverlay } from "@dnd-kit/core";
 import { handleDragStart, handleDragEnd } from "@/components/misc/DnD";
 import { useUserGroupStore } from "@/stores/UserGroupStore";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 const NavigationManagement = () => {
   // const { loading, setLoading } = useUser();
   const loading = useUserStore((state) => state.loading);
@@ -72,13 +76,15 @@ const NavigationManagement = () => {
   const [parentNavigation, setParentNavigation] = useState(null);
   const [isSubNavigation, setIsSubNavigation] = useState(false);
   const [sortedNavigations, setSortedNavigations] = useState(
-    [...navigations].sort((a, b) => a.order - b.order)
+    [...navigations].sort((a, b) => a.order - b.order),
   );
   const [activeId, setActiveId] = useState(null);
   const [reordering, setReordering] = useState(false);
   const [selectedUserGroups, setSelectedUserGroups] = useState([]);
   // const [iconListOpen, setIconListOpen] = useState(false);
   const groups = useUserGroupStore((state) => state.groups);
+
+  useUserGroupInitializer();
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
@@ -118,24 +124,23 @@ const NavigationManagement = () => {
     }),
   );
 
-
   //reorder navs if the edit is canceled
   const sortNavs = () => {
-    const sorted = [...navigations].sort((a, b) => a.order - b.order).map((nav) => ({
-      ...nav,
-      children: [...nav.children].sort((a, b) => a.order - b.order),
-    }));
+    const sorted = [...navigations]
+      .sort((a, b) => a.order - b.order)
+      .map((nav) => ({
+        ...nav,
+        children: [...nav.children].sort((a, b) => a.order - b.order),
+      }));
 
     //console.log('x', sorted)
     setSortedNavigations(sorted);
   };
   useEffect(() => {
     //setSortedNavigations(navigations)
-    sortNavs()
+    sortNavs();
     //console.log("SS", sortedNavigations)
-
-  }, [navigations])
-
+  }, [navigations]);
 
   //const handleReorder = async () => {
   //  try {
@@ -178,7 +183,7 @@ const NavigationManagement = () => {
 
       await axiosInstance.patch(
         `/organizations/${currentOrg.id}/navigation/reorder/`,
-        topLevelPayload
+        topLevelPayload,
       );
 
       // Send reorder requests for children of each parent
@@ -194,7 +199,7 @@ const NavigationManagement = () => {
 
           await axiosInstance.patch(
             `/organizations/${currentOrg.id}/navigation/reorder/`,
-            childPayload
+            childPayload,
           );
         }
       }
@@ -235,7 +240,6 @@ const NavigationManagement = () => {
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
-
                     onDragStart={(e) => handleDragStart(e, setActiveId)}
                     onDragEnd={(e) =>
                       handleDragEnd(
@@ -243,12 +247,12 @@ const NavigationManagement = () => {
                         sortedNavigations,
                         setSortedNavigations,
                         setReordering,
-                        setActiveId
+                        setActiveId,
                       )
                     }
                     modifiers={[
                       restrictToParentElement,
-                      restrictToVerticalAxis // if you want only vertical drag
+                      restrictToVerticalAxis, // if you want only vertical drag
                     ]}
                   >
                     <SortableContext
@@ -260,7 +264,16 @@ const NavigationManagement = () => {
                           //if (navigation.id === activeId) return null;
                           return (
                             <React.Fragment key={navigation.id}>
-                              <Navigation ind={ind} navigation={navigation} reordering={reordering} setReordering={setReordering} sortedNavigations={sortedNavigations} setSortedNavigations={setSortedNavigations} activeNavId={activeId} setActiveNavId={setActiveId} />
+                              <Navigation
+                                ind={ind}
+                                navigation={navigation}
+                                reordering={reordering}
+                                setReordering={setReordering}
+                                sortedNavigations={sortedNavigations}
+                                setSortedNavigations={setSortedNavigations}
+                                activeNavId={activeId}
+                                setActiveNavId={setActiveId}
+                              />
                               {/* Children rendered, but not sortable */}
                               {/* {navigation.children?.map((childNav, subInd) => (
                               <Navigation
@@ -269,7 +282,7 @@ const NavigationManagement = () => {
                                 navigation={childNav}
                               />
                             ))} */}
-                            </React.Fragment>,
+                            </React.Fragment>
                           );
                         })}
                       </div>
@@ -293,10 +306,26 @@ const NavigationManagement = () => {
 
                 {reordering && (
                   <div className="flex justify-end gap-3">
-                    <Button className="flex-1" onClick={() => { handleReorder() }}>Save</Button>
+                    <Button
+                      className="flex-1"
+                      onClick={() => {
+                        handleReorder();
+                      }}
+                    >
+                      Save
+                    </Button>
 
-                    <Button variant="outline" onClick={() => { setReordering(false); sortNavs() }}>cancel</Button>
-                  </div>)}
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setReordering(false);
+                        sortNavs();
+                      }}
+                    >
+                      cancel
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Create New Navigation</h3>
@@ -350,102 +379,124 @@ const NavigationManagement = () => {
 
                       {/* icon -- 3rd item and maybe 4th with icon list */}
                       {!isSubNavigation && (
-                                                  <div className="space-y-2 col-span-2">
+                        <div className="space-y-2 col-span-2">
+                          <Collapsible>
+                            <div>
+                              <Label className="text-sm font-medium">
+                                Select Icon
+                              </Label>
+                              <CollapsibleTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full flex items-center justify-between"
+                                >
+                                  <span>
+                                    {icon ? `Icon: ${icon}` : "Select Icon"}
+                                  </span>
+                                  <ChevronDown className="h-4 w-4" />
+                                </Button>
+                              </CollapsibleTrigger>
+                            </div>
+                            <div className="col-span-2">
+                              <CollapsibleContent className="col-span-4">
+                                <div
+                                  className={`grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2`}
+                                >
+                                  {Object.entries(navIcons).map(
+                                    ([name, Icon]) => (
+                                      <Button
+                                        key={name}
+                                        type="button"
+                                        variant={
+                                          icon === name ? "default" : "outline"
+                                        }
+                                        size="sm"
+                                        className="flex flex-col items-center gap-1 h-auto py-2"
+                                        onClick={() => setIcon(name)}
+                                      >
+                                        <Icon className="h-4 w-4" />
+                                        <span className="text-xs">{name}</span>
+                                      </Button>
+                                    ),
+                                  )}
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
+                        </div>
+                      )}
 
-                        <Collapsible
-        
-                        >
-                          <div>
-                            <Label className="text-sm font-medium">Select Icon</Label>
-                            <CollapsibleTrigger asChild>
+                      {!isSubNavigation && (
+                        <div className="col-span-2 space-y-2">
+                          <Label className="text-sm font-medium">
+                            Assign User Groups
+                          </Label>
+                          <Popover>
+                            <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
-                                className="w-full flex items-center justify-between"
+                                className="w-full justify-start"
                               >
-                                <span>{icon ? `Icon: ${icon}` : "Select Icon"}</span>
-                                <ChevronDown className="h-4 w-4" />
+                                {selectedUserGroups.length > 0
+                                  ? groups
+                                      .filter((g) =>
+                                        selectedUserGroups.includes(g.id),
+                                      )
+                                      .map((g) => g.name)
+                                      .join(", ")
+                                  : "Select user groups"}
                               </Button>
-                            </CollapsibleTrigger>
-                          </div>
-                          <div className="col-span-2">
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full max-h-60 overflow-y-auto p-2">
+                              {groups && groups.length > 0 ? (
+                                groups.map((group) => {
+                                  const selected = selectedUserGroups.includes(
+                                    group.id,
+                                  );
+                                  return (
+                                    <div
+                                      key={group.id}
+                                      className="flex items-center justify-between px-2 py-1 cursor-pointer hover:bg-muted rounded"
+                                      onClick={() => {
+                                        setSelectedUserGroups((prev) =>
+                                          selected
+                                            ? prev.filter(
+                                                (id) => id !== group.id,
+                                              )
+                                            : [...prev, group.id],
+                                        );
+                                      }}
+                                    >
+                                      <span>{group.name}</span>
+                                      {selected && (
+                                        <Check className="w-4 h-4 text-primary" />
+                                      )}
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <span className="text-sm text-muted-foreground">
+                                  No user groups available
+                                </span>
+                              )}
+                            </PopoverContent>
+                          </Popover>
 
-                          <CollapsibleContent className="col-span-4">
-                            <div
-                              className={`grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64 overflow-y-auto mt-2`}
-                            >
-                              {Object.entries(navIcons).map(([name, Icon]) => (
-                                <Button
-                                  key={name}
-                                  type="button"
-                                  variant={icon === name ? "default" : "outline"}
-                                  size="sm"
-                                  className="flex flex-col items-center gap-1 h-auto py-2"
-                                  onClick={() => setIcon(name)}
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {selectedUserGroups.map((id) => {
+                              const group = groups.find((g) => g.id === id);
+                              return (
+                                <span
+                                  key={id}
+                                  className="px-2 py-1 bg-gray-200 rounded text-sm"
                                 >
-                                  <Icon className="h-4 w-4" />
-                                  <span className="text-xs">{name}</span>
-                                </Button>
-                              ))}
-                            </div>
-                                                        </CollapsibleContent>
-                                                        </div>
-
-                        </Collapsible>
+                                  {group?.name}
+                                </span>
+                              );
+                            })}
+                          </div>
                         </div>
-
                       )}
-                      
-{!isSubNavigation && (<div className="col-span-2 space-y-2">
-  <Label className="text-sm font-medium">Assign User Groups</Label>
-  <Popover>
-    <PopoverTrigger asChild>
-      <Button variant="outline" className="w-full justify-start">
-        {selectedUserGroups.length > 0
-          ? groups
-              .filter((g) => selectedUserGroups.includes(g.id))
-              .map((g) => g.name)
-              .join(", ")
-          : "Select user groups"}
-      </Button>
-    </PopoverTrigger>
-    <PopoverContent className="w-full max-h-60 overflow-y-auto p-2">
-      {groups && groups.length > 0 ? (
-        groups.map((group) => {
-          const selected = selectedUserGroups.includes(group.id);
-          return (
-            <div
-              key={group.id}
-              className="flex items-center justify-between px-2 py-1 cursor-pointer hover:bg-muted rounded"
-              onClick={() => {
-                setSelectedUserGroups((prev) =>
-                  selected
-                    ? prev.filter((id) => id !== group.id)
-                    : [...prev, group.id]
-                );
-              }}
-            >
-              <span>{group.name}</span>
-              {selected && <Check className="w-4 h-4 text-primary" />}
-            </div>
-          );
-        })
-      ) : (
-        <span className="text-sm text-muted-foreground">No user groups available</span>
-      )}
-    </PopoverContent>
-  </Popover>
-
-  <div className="flex flex-wrap gap-2 mt-2">
-    {selectedUserGroups.map((id) => {
-      const group = groups.find((g) => g.id === id);
-      return (
-        <span key={id} className="px-2 py-1 bg-gray-200 rounded text-sm">
-          {group?.name}
-        </span>
-      );
-    })}
-  </div>
-</div>)}
                     </div>
 
                     <div className="flex items-center space-x-2">
