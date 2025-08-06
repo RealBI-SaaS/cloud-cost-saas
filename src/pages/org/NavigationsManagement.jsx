@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useUserGroupInitializer } from "@/stores/UserGroupStore";
+// import { useUserGroupInitializer } from "@/stores/UserGroupStore";
 import {
   Select,
   SelectContent,
@@ -50,7 +50,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Navigation from "@/components/org/nav/NavigationListItem";
 import { DragOverlay } from "@dnd-kit/core";
 import { handleDragStart, handleDragEnd } from "@/components/misc/DnD";
-import { useUserGroupStore } from "@/stores/UserGroupStore";
+// import { useUserGroupStore } from "@/stores/UserGroupStore";
 import {
   Popover,
   PopoverContent,
@@ -82,9 +82,9 @@ const NavigationManagement = () => {
   const [reordering, setReordering] = useState(false);
   const [selectedUserGroups, setSelectedUserGroups] = useState([]);
   // const [iconListOpen, setIconListOpen] = useState(false);
-  const groups = useUserGroupStore((state) => state.groups);
+  // const groups = useUserGroupStore((state) => state.groups);
 
-  useUserGroupInitializer();
+  // useUserGroupInitializer();
 
   const handleNavigationCreation = async (e) => {
     e.preventDefault();
@@ -101,7 +101,7 @@ const NavigationManagement = () => {
         label,
         icon: icon ? icon : "PieChart",
         parent: isSubNavigation ? parentNavigation : null,
-        user_groups: selectedUserGroups,
+        // user_groups: selectedUserGroups,
       });
       toast.success("Navigation created successfully");
       setLabel("");
@@ -423,78 +423,6 @@ const NavigationManagement = () => {
                               </CollapsibleContent>
                             </div>
                           </Collapsible>
-                        </div>
-                      )}
-
-                      {!isSubNavigation && (
-                        <div className="col-span-2 space-y-2">
-                          <Label className="text-sm font-medium">
-                            Assign User Groups
-                          </Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className="w-full justify-start"
-                              >
-                                {selectedUserGroups.length > 0
-                                  ? groups
-                                      .filter((g) =>
-                                        selectedUserGroups.includes(g.id),
-                                      )
-                                      .map((g) => g.name)
-                                      .join(", ")
-                                  : "Select user groups"}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-full max-h-60 overflow-y-auto p-2">
-                              {groups && groups.length > 0 ? (
-                                groups.map((group) => {
-                                  const selected = selectedUserGroups.includes(
-                                    group.id,
-                                  );
-                                  return (
-                                    <div
-                                      key={group.id}
-                                      className="flex items-center justify-between px-2 py-1 cursor-pointer hover:bg-muted rounded"
-                                      onClick={() => {
-                                        setSelectedUserGroups((prev) =>
-                                          selected
-                                            ? prev.filter(
-                                                (id) => id !== group.id,
-                                              )
-                                            : [...prev, group.id],
-                                        );
-                                      }}
-                                    >
-                                      <span>{group.name}</span>
-                                      {selected && (
-                                        <Check className="w-4 h-4 text-primary" />
-                                      )}
-                                    </div>
-                                  );
-                                })
-                              ) : (
-                                <span className="text-sm text-muted-foreground">
-                                  No user groups available
-                                </span>
-                              )}
-                            </PopoverContent>
-                          </Popover>
-
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {selectedUserGroups.map((id) => {
-                              const group = groups.find((g) => g.id === id);
-                              return (
-                                <span
-                                  key={id}
-                                  className="px-2 py-1 bg-gray-200 rounded text-sm"
-                                >
-                                  {group?.name}
-                                </span>
-                              );
-                            })}
-                          </div>
                         </div>
                       )}
                     </div>

@@ -47,8 +47,9 @@ import { NavigationsList } from "@/components/sidebars/homeSidebarComponents/nav
 import { SideBarUser } from "@/components/sidebars/homeSidebarComponents/sidebar-footer-account";
 import { Link } from "react-router-dom";
 import text_and_logo from "/text-and-logo.png";
-import { useOrg } from "@/context/OrganizationContext";
-import useOrgStore from "@/stores/OrgStore";
+import useCompany from "@/stores/CompanyStore";
+// import { useOrg } from "@/context/OrganizationContext";
+// import useOrgStore from "@/stores/OrgStore";
 // Menu items.
 const items = [
   {
@@ -81,10 +82,10 @@ const items = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, setOpen } = useSidebar();
   const location = useLocation();
-  // const { userComp, userOrgs } = useOrg();
-  const userComp = useOrgStore((state) => state.userComp);
-  const userOrgs = useOrgStore((state) => state.userOrgs);
-  const currentOrg = useOrgStore((state) => state.currentOrg);
+  // const { userComp } = useCompany();
+  const userComp = useCompany((state) => state.userComp);
+  // const userOrgs = useOrgStore((state) => state.userOrgs);
+  // const currentOrg = useOrgStore((state) => state.currentOrg);
   // Check if we're on a settings page
   const isSettingsPage =
     location.pathname.includes("/settings") ||
@@ -102,37 +103,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      {state == "expanded" ? (
-        !currentOrg?.company_logo ? (
-          <SidebarHeader>
-            {/* <p className="text-3xl text-primary px-3 py-5 bold-lg">
-              {currentOrg?.company_name || "RealBI"}
-            </p> */}
-            <img
-              src={text_and_logo}
-              alt="Logo"
-              className="h-14 object-contain "
-            />
-          </SidebarHeader>
-        ) : (
-          <img
-            src={`${import.meta.env.VITE_BASE_URL}${currentOrg.company_logo}` }
-            alt={`${currentOrg?.company_name} logo`}
-            className="h-24 object-contain px-3 py-5"
-          />
-        )
-      ) : (
-        <></>
-      )}
+      {/* {state == "expanded" ? ( */}
+      {/*   <img */}
+      {/*     src={`${import.meta.env.VITE_BASE_URL}${userComp.company_logo}`} */}
+      {/*     alt={`${currentOrg?.company_name} logo`} */}
+      {/*     className="h-24 object-contain px-3 py-5" */}
+      {/*   /> */}
+      {/* ) : ( */}
+      {/*   <></> */}
+      {/* )} */}
       <SidebarContent>
         <hr />
         {/* navigations list*/}
-        <NavigationsList />
+        {/* <NavigationsList /> */}
       </SidebarContent>
       <SidebarFooter>
         {/*setting menu item */}
 
-        {userOrgs.length > 0 && <OrganizationSelector />}
+        {/* {userOrgs.length > 0 && <OrganizationSelector />} */}
 
         <hr className="" />
 

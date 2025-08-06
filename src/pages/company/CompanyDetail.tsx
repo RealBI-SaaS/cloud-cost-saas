@@ -26,20 +26,21 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Building2, Pencil, Trash2, Upload } from "lucide-react";
-import { useOrg } from "@/context/OrganizationContext";
+// import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/config/axios/axiosInstance";
 import { edit_user_comp } from "@/utils/org/editors";
 import CreateCompany from "./CreateCompany";
-import useOrgStore from "@/stores/OrgStore";
+// import useOrgStore from "@/stores/OrgStore";
+import useCompanyStore from "@/stores/CompanyStore";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
   // const { userComp, fetchUserCompany, fetchUserOrganizations } = useOrg();
-  const userComp = useOrgStore((state) => state.userComp);
-  const fetchUserCompany = useOrgStore((state) => state.fetchUserCompany);
-  const fetchUserOrganizations = useOrgStore(
-    (state) => state.fetchUserOrganizations,
-  );
+  const userComp = useCompanyStore((state) => state.userComp);
+  const fetchUserCompany = useCompanyStore((state) => state.fetchUserCompany);
+  // const fetchUserOrganizations = useOrgStore(
+  //   (state) => state.fetchUserOrganizations,
+  // );
 
   const [compName, setCompName] = useState(userComp?.name || "");
   const [isEditingOrg, setIsEditingOrg] = useState(false);
@@ -75,12 +76,13 @@ export default function CompanyDetails() {
     try {
       const formData = new FormData();
       formData.append("name", compName);
-      if (logoFile) {
-        formData.append("logo", logoFile);
-      }
+      console.log(formData);
+      // if (logoFile) {
+      //   formData.append("logo", logoFile);
+      // }
 
       const res = await axiosInstance.patch(
-        `/organizations/company/${userComp?.id}/`,
+        `/company/${userComp?.id}/`,
         formData,
         {
           headers: {
@@ -90,7 +92,7 @@ export default function CompanyDetails() {
       );
 
       fetchUserCompany();
-      fetchUserOrganizations();
+      // fetchUserOrganizations();
 
       toast.success("Company updated successfully");
       setIsEditingOrg(false);
@@ -197,44 +199,44 @@ export default function CompanyDetails() {
               )}
             </div>
 
-            {isEditingOrg && (
-              <div className="space-y-2">
-                <Label
-                  htmlFor="company-logo"
-                  className="text-xs text-muted-foreground"
-                >
-                  Company Logo
-                </Label>
-                <div className="flex items-center gap-4">
-                  {logoPreview && (
-                    <img
-                      src={logoPreview}
-                      alt="Company Logo Preview"
-                      className="h-16 w-16 object-contain rounded-md border"
-                    />
-                  )}
-                  <div className="flex-1">
-                    <Input
-                      id="company-logo"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleLogoChange}
-                      className="hidden"
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        document.getElementById("company-logo")?.click()
-                      }
-                    >
-                      <Upload className="h-4 w-4 mr-2" />
-                      {logoPreview ? "Change Logo" : "Upload Logo"}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* {isEditingOrg && ( */}
+            {/*   <div className="space-y-2"> */}
+            {/*     <Label */}
+            {/*       htmlFor="company-logo" */}
+            {/*       className="text-xs text-muted-foreground" */}
+            {/*     > */}
+            {/*       Company Logo */}
+            {/*     </Label> */}
+            {/*     <div className="flex items-center gap-4"> */}
+            {/*       {logoPreview && ( */}
+            {/*         <img */}
+            {/*           src={logoPreview} */}
+            {/*           alt="Company Logo Preview" */}
+            {/*           className="h-16 w-16 object-contain rounded-md border" */}
+            {/*         /> */}
+            {/*       )} */}
+            {/*       <div className="flex-1"> */}
+            {/*         <Input */}
+            {/*           id="company-logo" */}
+            {/*           type="file" */}
+            {/*           accept="image/*" */}
+            {/*           onChange={handleLogoChange} */}
+            {/*           className="hidden" */}
+            {/*         /> */}
+            {/*         <Button */}
+            {/*           variant="outline" */}
+            {/*           size="sm" */}
+            {/*           onClick={() => */}
+            {/*             document.getElementById("company-logo")?.click() */}
+            {/*           } */}
+            {/*         > */}
+            {/*           <Upload className="h-4 w-4 mr-2" /> */}
+            {/*           {logoPreview ? "Change Logo" : "Upload Logo"} */}
+            {/*         </Button> */}
+            {/*       </div> */}
+            {/*     </div> */}
+            {/*   </div> */}
+            {/* )} */}
 
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">

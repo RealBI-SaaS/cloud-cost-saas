@@ -4,10 +4,10 @@ import { Button } from "../../components/ui/button";
 
 import axiosInstance from "../../config/axios/axiosInstance";
 import useUserStore from "@/stores/userStore";
-import useOrgStore, { useOrgInitializer } from "@/stores/OrgStore";
+// import useOrgStore, { useOrgInitializer } from "@/stores/OrgStore";
 
 const AcceptInvitation = () => {
-  const initialize = useOrgStore((state) => state.initialize);
+  // const initialize = useOrgStore((state) => state.initialize);
   const { token } = useParams();
   const user = useUserStore((state) => state.user);
   const [message, setMessage] = useState(
@@ -39,7 +39,7 @@ const AcceptInvitation = () => {
         setMessage("Invitation Accepted");
         setHasAcceptedInvitation(true);
         //useOrgInitializer()
-        initialize();
+        // initialize();
         setTimeout(() => navigate("/home"), 1000);
       } else {
         setMessage("Invalid or expired invitation link.");

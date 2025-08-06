@@ -1,19 +1,19 @@
-import { navIcons } from '@/data/iconMap';
+import { navIcons } from "@/data/iconMap";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
 import {
   restrictToParentElement,
   restrictToVerticalAxis,
-} from '@dnd-kit/modifiers';
-import { useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+} from "@dnd-kit/modifiers";
+import { useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,14 +24,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Home,
   Building2,
@@ -50,41 +50,41 @@ import {
   X,
   Pointer,
   Check,
-} from 'lucide-react';
+} from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+} from "@/components/ui/collapsible";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import useUserStore from '@/stores/userStore';
-import ChildNav from './ChildNavItem';
-import { handleNavDelete, handleNavEdit } from '@/utils/org/navigationHandlers';
-import useOrgStore from '@/stores/OrgStore';
-import axiosInstance from '@/config/axios/axiosInstance';
-import { useUserGroupStore } from '@/stores/UserGroupStore';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import useUserStore from "@/stores/userStore";
+import ChildNav from "./ChildNavItem";
+import { handleNavDelete, handleNavEdit } from "@/utils/org/navigationHandlers";
+import useOrgStore from "@/stores/OrgStore";
+import axiosInstance from "@/config/axios/axiosInstance";
+// import { useUserGroupStore } from "@/stores/UserGroupStore";
 
 import {
   handleDragStart,
   handleDragEnd,
   handleChildDragEnd,
-} from '@/components/misc/DnD';
+} from "@/components/misc/DnD";
 
 export default function Navigation({
   navigation,
@@ -159,11 +159,11 @@ export default function Navigation({
   };
   //local states
   const [navigationGettingEdited, setNavigationGettingEdited] = useState(null);
-  const [newNavigationLabel, setNewNavigationLabel] = useState('');
-  const [newIcon, setNewIcon] = useState('');
+  const [newNavigationLabel, setNewNavigationLabel] = useState("");
+  const [newIcon, setNewIcon] = useState("");
 
   if (!sortedNavigations) {
-    console.log('no  navs');
+    console.log("no  navs");
     return;
   }
   //
@@ -177,148 +177,80 @@ export default function Navigation({
           ref.current = el;
         }}
         style={style}
-        className=''
+        className=""
       >
-        <div className='flex items-center justify-between  p-4 py-2 border rounded-lg hover:bg-accent/50 transition-colors min-h-12 group'>
+        <div className="flex items-center justify-between  p-4 py-2 border rounded-lg hover:bg-accent/50 transition-colors min-h-12 group">
           {navigationGettingEdited === navigation.id ? (
             //if navigation is getting edited
             <form
-              className='grid gap-4 w-full p-4 '
+              className="grid gap-4 w-full p-4 "
               onSubmit={handleNavigationEdit}
             >
-              <Collapsible className='grid grid-cols-4 space-x-2'>
-                <div className='col-span-3 flex flex-col gap-1 '>
+              <Collapsible className="grid grid-cols-4 space-x-2">
+                <div className="col-span-3 flex flex-col gap-1 ">
                   <label
-                    htmlFor='navigation-label'
-                    className='text-sm  mb-1 text-foreground'
+                    htmlFor="navigation-label"
+                    className="text-sm  mb-1 text-foreground"
                   >
                     Navigation Label
                   </label>
                   <Input
-                    id='navigation-label'
+                    id="navigation-label"
                     value={newNavigationLabel}
                     onChange={(e) => setNewNavigationLabel(e.target.value)}
-                    className='w-full'
-                    placeholder='Enter navigation label'
+                    className="w-full"
+                    placeholder="Enter navigation label"
                   />
                 </div>
 
-                <div className='flex flex-col gap-2'>
-                  <span className='text-sm text-foreground'>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm text-foreground">
                     Select an Icon
                   </span>
 
                   {/* icons list */}
                   <CollapsibleTrigger asChild>
                     <Button
-                      variant='outline'
-                      className='flex items-center gap-2'
+                      variant="outline"
+                      className="flex items-center gap-2"
                     >
                       <span>
-                        {newIcon ? `Icon: ${newIcon}` : 'Select Icon'}
+                        {newIcon ? `Icon: ${newIcon}` : "Select Icon"}
                       </span>
-                      <ChevronDown className='h-4 w-4' />
+                      <ChevronDown className="h-4 w-4" />
                     </Button>
                   </CollapsibleTrigger>
                 </div>
-                <CollapsibleContent className='col-span-4'>
-                  <div className='grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64  overflow-y-auto mt-2'>
+                <CollapsibleContent className="col-span-4">
+                  <div className="grid grid-cols-4 gap-2 p-2 border rounded-md max-h-64  overflow-y-auto mt-2">
                     {Object.entries(navIcons).map(([name, Icon]) => (
                       <Button
                         key={name}
-                        type='button'
-                        variant={newIcon === name ? 'default' : 'outline'}
-                        size='sm'
-                        className='flex flex-col items-center gap-1 h-auto py-2'
+                        type="button"
+                        variant={newIcon === name ? "default" : "outline"}
+                        size="sm"
+                        className="flex flex-col items-center gap-1 h-auto py-2"
                         onClick={() => setNewIcon(name)}
                       >
-                        <Icon className='h-4 w-4' />
-                        <span className='text-xs'>{name}</span>
+                        <Icon className="h-4 w-4" />
+                        <span className="text-xs">{name}</span>
                       </Button>
                     ))}
                   </div>
                 </CollapsibleContent>
-
-                {/* user groups */}
-                <div className='col-span-2 space-y-2'>
-                  <Label className='text-sm font-medium'>
-                    Edit User Groups
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant='outline'
-                        className='w-full justify-start'
-                      >
-                        {selectedUserGroups.length > 0
-                          ? groups
-                              .filter((g) => selectedUserGroups.includes(g.id))
-                              .map((g) => g.name)
-                              .join(', ')
-                          : 'Select user groups'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-full max-h-60 overflow-y-auto p-2'>
-                      {groups && groups.length > 0 ? (
-                        groups.map((group) => {
-                          const selected = selectedUserGroups.includes(
-                            group.id,
-                          );
-                          return (
-                            <div
-                              key={group.id}
-                              className='flex items-center justify-between px-2 py-1 cursor-pointer hover:bg-muted rounded'
-                              onClick={() => {
-                                setSelectedUserGroups((prev) =>
-                                  selected
-                                    ? prev.filter((id) => id !== group.id)
-                                    : [...prev, group.id],
-                                );
-                              }}
-                            >
-                              <span>{group.name}</span>
-                              {selected && (
-                                <Check className='w-4 h-4 text-primary' />
-                              )}
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <span className='text-sm text-muted-foreground'>
-                          No user groups available
-                        </span>
-                      )}
-                    </PopoverContent>
-                  </Popover>
-
-                  {/* navigation's current user groups */}
-                  <div className='flex flex-wrap gap-2 mt-2'>
-                    {navigation.user_groups.map((id) => {
-                      const group = groups.find((g) => g.id === id);
-                      return (
-                        <span
-                          key={id}
-                          className='px-2 py-1 bg-secondary rounded text-sm'
-                        >
-                          {group?.name}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
               </Collapsible>
 
               {/* action buttons */}
-              <div className='grid grid-cols-4 justify-between items-center'>
-                <Button type='submit' size='sm' className='col-span-3'>
+              <div className="grid grid-cols-4 justify-between items-center">
+                <Button type="submit" size="sm" className="col-span-3">
                   Save
                 </Button>
                 <Button
-                  type='button'
-                  variant='ghost'
+                  type="button"
+                  variant="ghost"
                   onClick={() => setNavigationGettingEdited(null)}
                 >
-                  <X className='h-4 w-4' />
+                  <X className="h-4 w-4" />
                   cancel
                 </Button>
               </div>
@@ -326,11 +258,11 @@ export default function Navigation({
           ) : (
             //navigation not being editing
             <>
-              <div className='flex items-center gap-4  '>
+              <div className="flex items-center gap-4  ">
                 <button
                   {...attributes}
                   {...listeners}
-                  className='cursor-grab h-10 text-2xl text-gray-500 hover:text-black pr-1 border-r-2 border-r-secondary'
+                  className="cursor-grab h-10 text-2xl text-gray-500 hover:text-black pr-1 border-r-2 border-r-secondary"
                 >
                   ⠿
                 </button>
@@ -340,22 +272,22 @@ export default function Navigation({
                 </span>
               </div>
               {!reordering && (
-                <div className='flex items-center gap-2  hidden group-hover:block'>
+                <div className="flex items-center gap-2  hidden group-hover:block">
                   <Button
-                    variant='ghost'
-                    size='icon'
+                    variant="ghost"
+                    size="icon"
                     onClick={() => {
                       setNavigationGettingEdited(navigation.id);
                       setNewNavigationLabel(navigation.label);
                       setNewIcon(navigation.icon);
                     }}
                   >
-                    <Pencil className='h-4 w-4' />
+                    <Pencil className="h-4 w-4" />
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant='ghost' size='icon'>
-                        <Trash2 className='h-4 w-4' />
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -369,7 +301,7 @@ export default function Navigation({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          className='bg-destructive hover:bg-destructive'
+                          className="bg-destructive hover:bg-destructive"
                           onClick={() =>
                             handleNavDelete({
                               navigationId: navigation.id,
@@ -410,7 +342,7 @@ export default function Navigation({
             items={children.map((childNav) => childNav.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className=''>
+            <div className="">
               {children.map((childNav, subInd) => (
                 <ChildNav
                   key={childNav.id}
@@ -418,7 +350,7 @@ export default function Navigation({
                   navigation={childNav}
                   reordering={reordering}
                 />
-              ))}{' '}
+              ))}{" "}
             </div>
           </SortableContext>
         </DndContext>

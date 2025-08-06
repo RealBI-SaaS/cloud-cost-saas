@@ -1,3 +1,4 @@
+import IntegrationSources from "@/pages/data/IntegrationSources";
 import {
   BrowserRouter as Router,
   Routes,
@@ -23,9 +24,9 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import AcceptInvitation from "./pages/org/AcceptInvitation";
 import { useLocation } from "react-router-dom";
 //import { OrganizationProvider } from "./context/OrganizationContext";
-import NavigationManagement from "@/pages/org/NavigationsManagement";
+// import NavigationManagement from "@/pages/org/NavigationsManagement";
 //import { MenuProvider } from "./context/MenuContext";
-import OrganizationDetailsPage from "./pages/org/OrganizationDetail";
+// import OrganizationDetailsPage from "./pages/org/OrganizationDetail";
 import { Toaster } from "sonner";
 import SettingsLayout from "./layout/SettingsLayout";
 import MainLayout from "./layout/MainLayout";
@@ -34,8 +35,8 @@ import AccountPassword from "./pages/user/AccountPassword";
 //import UserOrganization from "./components/org/UserOrganizations";
 //import Organizations from "./components/Organizations";
 //import OrganizationDetail from "./components/OrganizationDetail";
-import OrganizationSettings from "./pages/org/OrganizationSettings";
-import OrganizationMembers from "./pages/org/OrganizationMembers";
+// import OrganizationSettings from "./pages/org/OrganizationSettings";
+// import OrganizationMembers from "./pages/org/OrganizationMembers";
 import DataIntegration from "./pages/data/DataIntegration";
 import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { Loading } from "@/components/misc/loading";
@@ -50,18 +51,20 @@ import { CompanyStyles } from "./pages/company/CompanyStyles";
 import Welcome from "./pages/main/Welcome";
 import HomeAuthenticated from "./pages/main/HomeAuthenticated";
 import useUserStore from "@/stores/userStore";
-import { useOrgInitializer } from "./stores/OrgStore";
+// import { useOrgInitializer } from "./stores/OrgStore";
 // import NavigationManagement from "./components/org/NavigationsManagement";
-import useOrgStore from "./stores/OrgStore";
+// import useOrgStore from "./stores/OrgStore";
 import NotFound from "./pages/misc/NotFound";
-import { useThemeInitializer, useThemeStore } from "./stores/ThemeStore";
+import CompanyMembers from "@/pages/company/CompanyMembers";
+// import { useThemeInitializer, useThemeStore } from "./stores/ThemeStore";
 import { useEffect } from "react";
+import useCompany from "@/stores/CompanyStore";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
-  const userComp = useOrgStore((state) => state.userComp);
+  const userComp = useCompany((state) => state.userComp);
   //const currentOrg = useOrgStore((state) => state.currentOrg);
 
   //const initializeTheme = useThemeStore((state) => state.initializeTheme);
@@ -106,37 +109,39 @@ const AuthRoute = ({ children }) => {
 
 function App() {
   const user = useUserStore((state) => state.user);
+  const initializeCompany = useCompany((state) => state.initializeCompany);
   // const userComp = useUserStore((state)=> state.userComp)
 
-  const userComp = useOrgStore((state) => state.userComp);
-  const initializeOrg = useOrgStore((state) => state.initialize);
-  const initializeTheme = useThemeStore((state) => state.initializeTheme);
-  const currentOrg = useOrgStore((state) => state.currentOrg);
+  // const userComp = useOrgStore((state) => state.userComp);
+  // const initializeOrg = useOrgStore((state) => state.initialize);
+  // const initializeTheme = useThemeStore((state) => state.initializeTheme);
+  // const currentOrg = useOrgStore((state) => state.currentOrg);
   // console.log("usercomp", userComp)
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
   useEffect(() => {
     if (user) {
       // console.log("initializing org and theme");
-      initializeOrg(); // Always call the hook
-      if (currentOrg) {
-        initializeTheme(currentOrg?.company);
-      } else if (userComp) {
-        // allow only dark and light
-        // initializeTheme(userComp.id)
-      }
+      // initializeOrg(); // Always call the hook
+      initializeCompany();
+      // if (currentOrg) {
+      //   initializeTheme(currentOrg?.company);
+      // } else if (userComp) {
+      // allow only dark and light
+      // initializeTheme(userComp.id)
+      // }
     }
   }, [user]);
 
-  useEffect(() => {
-    if (user) {
-      // console.log("initializing org and theme");
-      //initializeOrg(); // Always call the hook
-      if (currentOrg) {
-        initializeTheme(currentOrg?.company);
-      }
-    }
-  }, [currentOrg]);
+  // useEffect(() => {
+  //   if (user) {
+  //     // console.log("initializing org and theme");
+  //     //initializeOrg(); // Always call the hook
+  //     if (currentOrg) {
+  //       initializeTheme(currentOrg?.company);
+  //     }
+  //   }
+  // }, [currentOrg]);
 
   return (
     <>
@@ -198,40 +203,40 @@ function App() {
 
             {/* Setting pages */}
             <Route element={<SettingsLayout />}>
-              <Route
-                path="/settings/organization/list"
-                element={
-                  <ProtectedRoute>
-                    <OrganizationSettings />
-                  </ProtectedRoute>
-                }
-              />
+              {/* <Route */}
+              {/*   path="/settings/organization/list" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <OrganizationSettings /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
               <Route
                 path="/settings/organization/members"
                 element={
                   <ProtectedRoute>
-                    <OrganizationMembers />
+                    <CompanyMembers />
                   </ProtectedRoute>
                 }
               />
 
-              <Route
-                path="/settings/organization/navigation"
-                element={
-                  <ProtectedRoute>
-                    <NavigationManagement />
-                  </ProtectedRoute>
-                }
-              />
+              {/* <Route */}
+              {/*   path="/settings/organization/navigation" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <NavigationManagement /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
 
-              <Route
-                path="/manage-all/navigations"
-                element={
-                  <ProtectedRoute>
-                    <NavigationManagement />
-                  </ProtectedRoute>
-                }
-              />
+              {/* <Route */}
+              {/*   path="/manage-all/navigations" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <NavigationManagement /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
               <Route
                 path="/settings/account/info"
                 element={
@@ -266,27 +271,35 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/settings/company/styles"
-                element={
-                  <ProtectedRoute>
-                    <CompanyStyles />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="settings/organization/detail"
-                element={
-                  <ProtectedRoute>
-                    <OrganizationDetailsPage />
-                  </ProtectedRoute>
-                }
-              />
+              {/* <Route */}
+              {/*   path="/settings/company/styles" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <CompanyStyles /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
+              {/* <Route */}
+              {/*   path="settings/organization/detail" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <OrganizationDetailsPage /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
               <Route
                 path="/settings/organization/data"
                 element={
                   <ProtectedRoute>
                     <DataIntegration />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/organization/sources"
+                element={
+                  <ProtectedRoute>
+                    <IntegrationSources />
                   </ProtectedRoute>
                 }
               />

@@ -1,73 +1,114 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import axiosInstance from "@/config/axios/axiosInstance";
-//import { useUser } from "./UserContext";
 import useUserStore from "./userStore";
 
-// Create Context
-const CompanyContext = createContext(null);
+// interface Company {
+//   id: string;
+//   name: string;
+//   logo?: string;
+//   created_at?: string;
+// }
+const useCompany = create(
+  persist(
+    (set, get) => ({
+      // State
+      allCompanies: [],
+      filteredCompanies: [],
 
-export const useCompany = () => {
-  const context = useContext(CompanyContext);
-  if (!context) {
-    throw new Error("useCompany must be used within a CompanyProvider");
-  }
-  return context;
-};
+      userComp: null,
+      searchTerm: "",
+      loading: false,
 
-// Provider Component
-export const CompanyProvider = ({ children }) => {
-  const [allCompanies, setAllCompanies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCompanies, setFilteredCompanies] = useState([]);
-  //const { user } = useUser();
-  const user = useUserStore((state) => state.user);
+      // Setters
+      setAllCompanies: (companies) => set({ allCompanies: companies }),
+      setFilteredCompanies: (companies) =>
+        set({ filteredCompanies: companies }),
 
-  // Fetch all companies from the backend (with optional search query)
-  const fetchCompanies = async (search = "") => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get(
-        `/organizations/all-companies/?search=${search}`,
-      );
-      //console.log(response.data);
-      setAllCompanies(response.data.results);
-      setFilteredCompanies(response.data.results);
-    } catch (err) {
-      console.error("Error fetching companies", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      setUserComp: (comp) => set({ userComp: comp }),
+      setSearchTerm: (term) => set({ searchTerm: term }),
+      setLoading: (loading) => set({ loading }),
 
-  // Handle search term change
-  const handleSearchChange = (search) => {
-    setSearchTerm(search);
-    if (search) {
-      // If there's a search term, filter from the backend
-      fetchCompanies(search);
-    } else {
-      // If no search term, fetch all companies
-      setFilteredCompanies(allCompanies);
-    }
-  };
+      // Fetch all companies (with optional search)
+      fetchCompanies: async (search = "") => {
+        set({ loading: true });
+        try {
+          const response = await axiosInstance.get(
+            `/organizations/all-companies/?search=${search}`,
+          );
+          const companies = response.data.results;
+          set({
+            allCompanies: companies,
+            filteredCompanies: companies,
+          });
+        } catch (err) {
+          console.error("Error fetching companies", err);
+        } finally {
+          set({ loading: false });
+        }
+      },
 
-  // Fetch companies on initial load and when the search term changes
-  useEffect(() => {
-    if (user?.is_staff) fetchCompanies(searchTerm);
-  }, [searchTerm, user]);
+      // Fetch current user's company
+      fetchUserCompany: async () => {
+        const { user, userComp, setUserComp } = useUserStore.getState();
+        try {
+          if (user?.is_staff && userComp?.id) {
+            const response = await axiosInstance.get(`/company/`);
+            if (response.data) set({ userComp: response.data });
+          } else {
+            const response = await axiosInstance.get(`/company/`);
+            const comp = response.data?.results?.[0] || null;
 
-  return (
-    <CompanyContext.Provider
-      value={{
-        allCompanies,
-        filteredCompanies,
-        loading,
-        searchTerm,
-        handleSearchChange,
-      }}
-    >
-      {children}
-    </CompanyContext.Provider>
-  );
-};
+            if (comp) set({ userComp: comp });
+          }
+        } catch (err) {
+          console.error("Error fetching user company:", err);
+        }
+      },
+
+      // Search logic
+      handleSearchChange: (search) => {
+        const { fetchCompanies, allCompanies } = get();
+        set({ searchTerm: search });
+
+        if (search) {
+          fetchCompanies(search);
+        } else {
+          set({ filteredCompanies: allCompanies });
+        }
+      },
+
+      // Reset all
+      resetCompanyStore: () =>
+        set({
+          allCompanies: [],
+          filteredCompanies: [],
+          userComp: null,
+          searchTerm: "",
+          loading: false,
+        }),
+      // Init
+      initializeCompany: async () => {
+        const fetchUserCompany = get().fetchUserCompany;
+        await fetchUserCompany();
+      },
+      // set({
+      //   allCompanies: [],
+      //   filteredCompanies: [],
+      //   userComp: null,
+      //   searchTerm: "",
+      //   loading: false,
+      // }),
+    }),
+    {
+      name: "company-storage", // Key in localStorage
+      partialize: (state) => ({
+        allCompanies: state.allCompanies,
+        filteredCompanies: state.filteredCompanies,
+        searchTerm: state.searchTerm,
+      }),
+    },
+  ),
+);
+
+export default useCompany;

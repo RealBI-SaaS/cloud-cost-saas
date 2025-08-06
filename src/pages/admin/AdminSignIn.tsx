@@ -16,17 +16,22 @@ import {
   ShieldUser,
 } from "lucide-react";
 import { cn } from "@/utils/utils";
-import { useCompany } from "@/stores/CompanyStore";
-import { useOrg } from "@/context/OrganizationContext";
+import useCompany from "@/stores/CompanyStore";
+// import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/config/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { fetchCompOrgs } from "@/utils/org/fetchers";
-import useOrgStore from "@/stores/OrgStore";
+// import { fetchCompOrgs } from "@/utils/org/fetchers";
+// import useOrgStore from "@/stores/OrgStore";
 
 export default function CompanySelector() {
   const navigate = useNavigate();
-  const { filteredCompanies, loading, searchTerm, handleSearchChange } =
-    useCompany();
+  const {
+    filteredCompanies,
+    loading,
+    searchTerm,
+    handleSearchChange,
+    setUserComp,
+  } = useCompany();
   const [selectedCompany, setSelectedCompany] = useState<{
     id: string;
     name: string;
@@ -34,9 +39,9 @@ export default function CompanySelector() {
   //const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   //const { setUserComp, setUserOrgs, setCurrentOrg } = useOrg();
-  const setUserComp = useOrgStore((state) => state.setUserComp);
-  const setUserOrgs = useOrgStore((state) => state.setUserOrgs);
-  const setCurrentOrg = useOrgStore((state) => state.setCurrentOrg);
+  // const setUserComp = useCompanyStore((state) => state.setUserComp);
+  // const setUserOrgs = useOrgStore((state) => state.setUserOrgs);
+  // const setCurrentOrg = useOrgStore((state) => state.setCurrentOrg);
   console.log("on adminnn");
 
   //const companies = [
@@ -61,10 +66,10 @@ export default function CompanySelector() {
     if (selectedCompany) {
       console.log(`Signed in as: ${selectedCompany.id}`);
       setUserComp(selectedCompany);
-      const orgs = await fetchCompOrgs(selectedCompany.id);
-      console.log(orgs);
-      setUserOrgs(orgs);
-      setCurrentOrg(orgs[0]);
+      // const orgs = await fetchCompOrgs(selectedCompany.id);
+      // console.log(orgs);
+      // setUserOrgs(orgs);
+      // setCurrentOrg(orgs[0]);
 
       navigate("/home");
       //set the selected company as user's comp.

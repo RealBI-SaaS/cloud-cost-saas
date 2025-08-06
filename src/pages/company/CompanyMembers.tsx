@@ -1,4 +1,5 @@
 "use client";
+import useCompany from "@/stores/CompanyStore";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,7 +65,7 @@ interface User {
 //   users: User[];
 // }
 //
-export default function OrganizationMembers() {
+export default function CompanyMembers() {
   // const { currentOrg } = useOrg();
   // const currentOrg = useOrgStore((state) => state.currentOrg);
   const [loading, setLoading] = useState(false);
@@ -77,11 +78,12 @@ export default function OrganizationMembers() {
   // for user invite
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const userComp = useCompany((state) => state.userComp);
 
   const fetchInvitations = async () => {
     try {
       const response = await axiosInstance.get(
-        `/organizations/${currentOrg.id}/invitations`,
+        `/company/${userComp.id}/invitations`,
       );
       setInvitations(response.data);
     } catch (error) {
@@ -94,7 +96,7 @@ export default function OrganizationMembers() {
   const fetchMembers = async () => {
     try {
       const response = await axiosInstance.get(
-        `/organizations/organization/${currentOrg.id}/members/`,
+        `/company/${userComp.id}/members/`,
       );
       setMembers(response.data);
     } catch (error) {
@@ -102,12 +104,12 @@ export default function OrganizationMembers() {
     }
   };
   useEffect(() => {
-    if (!currentOrg) return;
+    if (!userComp) return;
 
     setLoading(true);
     fetchMembers();
     fetchInvitations();
-  }, [currentOrg]);
+  }, [userComp]);
 
   // Handle member role change
   const handleRoleChange = async (memberId: number, newRole: string) => {
@@ -115,7 +117,7 @@ export default function OrganizationMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.patch(
-        `organizations/${currentOrg.id}/members/${memberId}/role/`,
+        `company/${userComp.id}/members/${memberId}/role/`,
         { role: newRole },
       );
 
@@ -138,7 +140,7 @@ export default function OrganizationMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.delete(
-        `organizations/${currentOrg.id}/members/${memberId}/`,
+        `company/${userComp.id}/members/${memberId}/`,
       );
 
       fetchMembers();
@@ -162,7 +164,7 @@ export default function OrganizationMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.delete(
-        `/organizations/invitations/revoke/${id}/`,
+        `/company/invitations/revoke/${id}/`,
       );
 
       fetchInvitations();
@@ -186,7 +188,7 @@ export default function OrganizationMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.post(
-        `/organizations/${currentOrg.id}/invite/`,
+        `/company/${userComp.id}/invite/`,
         { email: newInvite.email, role: newInvite.role },
       );
 
@@ -216,8 +218,8 @@ export default function OrganizationMembers() {
   const hasPriviledges = () => {
     return (
       user.is_staff ||
-      currentOrg.role === "admin" ||
-      currentOrg.role === "owner"
+      userComp.membership.role === "admin" ||
+      userComp.membership.role === "owner"
     );
   };
 
@@ -233,7 +235,7 @@ export default function OrganizationMembers() {
             <div>
               <CardTitle>
                 Members in{" "}
-                <span className="text-lg text-primary">{currentOrg.name} </span>
+                <span className="text-lg text-primary">{userComp.name} </span>
               </CardTitle>
               <CardDescription>
                 Manage members of your organization.
@@ -461,81 +463,6 @@ export default function OrganizationMembers() {
           )}
         </CardContent>
       </Card>
-      {/* <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}> */}
-      {/*   <DialogContent> */}
-      {/*     <DialogHeader> */}
-      {/*       <DialogTitle>Edit Group Name</DialogTitle> */}
-      {/*       <DialogDescription> */}
-      {/*         Update the name of your user group. */}
-      {/*       </DialogDescription> */}
-      {/*     </DialogHeader> */}
-      {/*     <form */}
-      {/*       onSubmit={(e) => { */}
-      {/*         e.preventDefault(); */}
-      {/*         if (selectedGroup) { */}
-      {/*           handleEditGroupName(selectedGroup.id, editGroupName); */}
-      {/*         } */}
-      {/*       }} */}
-      {/*     > */}
-      {/*       <div className="space-y-4 py-4"> */}
-      {/*         <div className="space-y-2"> */}
-      {/*           <Label htmlFor="edit-group-name">Group Name</Label> */}
-      {/*           <Input */}
-      {/*             id="edit-group-name" */}
-      {/*             value={editGroupName} */}
-      {/*             onChange={(e) => setEditGroupName(e.target.value)} */}
-      {/*             required */}
-      {/*           /> */}
-      {/*         </div> */}
-      {/*       </div> */}
-      {/*       <DialogFooter> */}
-      {/*         <Button */}
-      {/*           type="submit" */}
-      {/*           className="!text-white" */}
-      {/*           disabled={!editGroupName} */}
-      {/*         > */}
-      {/*           Update Name */}
-      {/*         </Button> */}
-      {/*       </DialogFooter> */}
-      {/*     </form> */}
-      {/*   </DialogContent> */}
-      {/* </Dialog> */}
-      {/* <Dialog open={addUserDialogOpen} onOpenChange={setAddUserDialogOpen}> */}
-      {/*   <DialogContent> */}
-      {/*     <DialogHeader> */}
-      {/*       <DialogTitle>Add User to Group</DialogTitle> */}
-      {/*       <DialogDescription> */}
-      {/*         Select a user to add to the group. */}
-      {/*       </DialogDescription> */}
-      {/*     </DialogHeader> */}
-      {/*     <div className="space-y-4 py-4"> */}
-      {/*       <div className="space-y-2"> */}
-      {/*         <Label>Available Users</Label> */}
-      {/*         <div className="flex flex-col gap-2 max-h-40 overflow-auto"> */}
-      {/*           {selectedGroupForAdd && */}
-      {/*             availableUsers(selectedGroupForAdd).map((user) => ( */}
-      {/*               <Button */}
-      {/*                 key={user.id} */}
-      {/*                 variant="ghost" */}
-      {/*                 className="justify-start" */}
-      {/*                 onClick={() => */}
-      {/*                   handleAddUserToGroup(selectedGroupForAdd.id, user.id) */}
-      {/*                 } */}
-      {/*               > */}
-      {/*                 {user.first_name} {user.last_name} ({user.email}) */}
-      {/*               </Button> */}
-      {/*             ))} */}
-      {/*           {selectedGroupForAdd && */}
-      {/*             availableUsers(selectedGroupForAdd).length === 0 && ( */}
-      {/*               <p className="text-sm text-muted-foreground"> */}
-      {/*                 No available users to add. */}
-      {/*               </p> */}
-      {/*             )} */}
-      {/*         </div> */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*   </DialogContent> */}
-      {/* </Dialog> */}
     </div>
   );
 }
