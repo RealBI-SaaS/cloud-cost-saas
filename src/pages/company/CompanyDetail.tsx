@@ -153,18 +153,20 @@ export default function CompanyDetails() {
                 >
                   Name
                 </Label>
-                {!isEditingOrg && (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsEditingOrg(true)}
-                    >
-                      <Pencil className="h-4 w-4 mr-1" />
-                      Edit
-                    </Button>
-                  </div>
-                )}
+                {!isEditingOrg &&
+                  (userComp.membership.role == "admin" ||
+                    userComp.membership.role == "owner") && (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsEditingOrg(true)}
+                      >
+                        <Pencil className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                    </div>
+                  )}
               </div>
               {isEditingOrg ? (
                 <div className="flex items-center gap-2">

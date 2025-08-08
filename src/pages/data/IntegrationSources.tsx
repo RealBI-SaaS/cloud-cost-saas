@@ -1,31 +1,49 @@
+import useCompany from "@/stores/CompanyStore";
 import React from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import AWSOnboardingModal from "./AWSOnboardingModal.tsx";
+import VendorSelectModal from "./VendorSelectModal.tsx";
+
+import { toast } from "sonner";
+
 const IntegrationSources: React.FC = () => {
+  const userComp = useCompany((state) => state.userComp);
+
+  // for aws
+  const [awsExternaId, setAWSExternalId] = useState(false);
+  const [awsARN, setAWSARN] = useState(false);
+  const [awsOpen, setAwsOpen] = useState(false);
+  const [connectionName, setConnectionName] = useState("");
   const handleGoogleIntegration = async () => {
     const client_id = import.meta.env.VITE_GOOGLE_DATA_CLIENT_ID;
     const state = crypto.randomUUID();
     localStorage.setItem("latestCSRFToken", state);
 
-    const redirectUri = `${import.meta.env.VITE_BASE_URL}/data/google/callback/`;
+    const googleOauthURL = `${import.meta.env.VITE_BASE_URL}/data/google/auth/`;
 
-    const params = new URLSearchParams({
-      client_id,
-      redirect_uri: redirectUri,
-      response_type: "code",
-      scope: [
-        "openid",
-        "email",
-        "profile",
-        "https://www.googleapis.com/auth/cloud-platform",
-      ].join(" "),
-      state,
-      access_type: "offline",
-      prompt: "consent",
-    });
+    window.location.href = googleOauthURL;
+  };
+  const handleAWSIntegration = () => {};
+  const handleAzureIntegration = () => {
+    window.location.href = `${import.meta.env.VITE_BASE_URL}/data/azure/oauth/start/${userComp.id}`;
+  };
 
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  const onNext = ({ vendor, connectionName }) => {
+    // console.log(vendor, connectionName);
+    if (vendor == "aws") {
+      console.log("There");
+      setAwsOpen(true);
+    } else {
+      toast("Redirecting to OAuth");
+      if (vendor == "gcp") {
+        handleGoogleIntegration();
+      } else if (vendor == "azure") {
+        handleAzureIntegration();
+      }
+    }
   };
 
   return (
@@ -33,15 +51,46 @@ const IntegrationSources: React.FC = () => {
       <h1 className="text-2xl font-bold mb-4 text-primary">
         Manage integrated sources and add new ones{" "}
       </h1>
-      <div>
-        <Button
-          onClick={() => {
-            handleGoogleIntegration();
-          }}
-          className="text-secondary bg-amber-300 p-5"
-        >
-          GOOGLE
-        </Button>
+      <div className="w-full m-10 flex justify-around border">
+        {/* <Button */}
+        {/*   onClick={() => { */}
+        {/*     handleGoogleIntegration(); */}
+        {/*   }} */}
+        {/*   className="text-secondary bg-amber-300 p-5" */}
+        {/* > */}
+        {/*   GOOGLE */}
+        {/* </Button> */}
+        {/**/}
+        {/* <Button */}
+        {/*   onClick={() => { */}
+        {/*     // handleAWSIntegration(); */}
+        {/*     setAwsOpen(!awsOpen); */}
+        {/*   }} */}
+        {/*   className="text-secondary bg-amber-300 p-5" */}
+        {/* > */}
+        {/*   AWS */}
+        {/* </Button> */}
+        {/* <Button */}
+        {/*   onClick={() => { */}
+        {/*     handleAzureIntegration(); */}
+        {/*   }} */}
+        {/*   className="text-secondary bg-amber-300 p-5" */}
+        {/* > */}
+        {/*   Azure */}
+        {/* </Button> */}
+        <VendorSelectModal
+          onNext={onNext}
+          connectionName={connectionName}
+          setConnectionName={setConnectionName}
+        />
+        <AWSOnboardingModal
+          open={awsOpen}
+          onOpenChange={setAwsOpen}
+          setAWSExternalId={setAWSExternalId}
+          setAWSARN={setAWSARN}
+          connectionName={connectionName}
+        />
+        {/* <AWSOnboardingModal /> */}
       </div>
     </div>
   );
