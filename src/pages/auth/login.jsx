@@ -81,9 +81,11 @@ const Login = () => {
           return;
         }
         await signup(formData);
-        navigate("/ask-email-verification", {
-          state: { user_email: formData.email },
-        });
+        toast("Account created, Sign in!");
+        navigate("/login");
+        // navigate("/ask-email-verification", {
+        // state: { user_email: formData.email },
+        // });
       } else {
         const myUser = await login(formData.email, formData.password);
         console.log("Login successful, user:", myUser);
