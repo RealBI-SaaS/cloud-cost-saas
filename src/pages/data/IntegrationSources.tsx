@@ -28,7 +28,7 @@ const IntegrationSources: React.FC = () => {
   };
   // const handleAWSIntegration = () => {};
   const handleAzureIntegration = () => {
-    window.location.href = `${import.meta.env.VITE_BASE_URL}/data/azure/oauth/start/${userComp.id}`;
+    window.location.href = `${import.meta.env.VITE_BASE_URL}/data/azure/oauth/start/${userComp.id}/${connectionName}`;
   };
 
   const onNext = ({ vendor, connectionName }) => {
