@@ -36,108 +36,101 @@ import { act, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { navIcons, defaultIcon } from "@/data/iconMap";
 import useOrgStore from "@/stores/OrgStore";
+
+import vendorMeta from "@/data/VendorMeta";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import useCompany from "@/stores/CompanyStore";
 
+import axiosInstance from "@/config/axios/axiosInstance";
+import useCloudAccountsStore from "@/stores/CloudAccountStore";
 import { Button } from "../../ui/button";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar();
-  const navigations = useOrgStore((state) => state.navigations);
-  const currentOrg = useOrgStore((state) => state.currentOrg);
-  const [activeNav, setActiveNav] = useState<string | null>("home");
-  const [activeParent, setActiveParent] = useState<string | null>(null);
 
-  const location = useLocation();
-  const currentPath = location.pathname;
+  const userComp = useCompany((state) => state.userComp);
+  const { accounts, currentAccount, setCurrentAccount, loading, error } =
+    useCloudAccountsStore();
+  // const [loading, setLoading] = useState(true);
+  // const [activeNav, setActiveNav] = useState(null);
 
-  const normalize = (str) => str.toLowerCase().replace(/\/+$/, ""); // remove trailing slashes
-
-  // const isActive = (navItemUrl) => {
-  //   const current = normalize(currentPath);
-  //   const target = normalize(navItemUrl);
-
-  //   return (
-  //     current === target ||
-  //     (current.startsWith(target) && target !== "/dashboard")
-  //   );
+  // const fetchIntegrations = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/`,
+  //     );
+  //     setIntegratedAccounts(response.data.results);
+  //   } catch (error) {
+  //     console.error("Error fetching integrations", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
   // };
-  const firstNavWithChildrenId = navigations.find(
-    (nav) => nav.children?.length > 0,
-  )?.id;
 
+  // useEffect(() => {
+  //   if (userComp) {
+  //     fetchIntegrations();
+  //   }
+  // }, [userComp]);
+
+  // Sidebar Rendering
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="group-data-[collapsible=icon]:sr-only">
-        Navigations
+        Cloud Accounts
       </SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={activeNav == "home"}>
-            <div className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer" onClick={() => {setActiveNav("home"); setActiveParent(null)}}>
+          <SidebarMenuButton asChild isActive={"" === "home"}>
+            <div
+              className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer"
+              onClick={() => {}}
+            >
               <Home />
               <span className="group-data-[collapsible=icon]:hidden">Home</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
 
-        {navigations.map((nav, ind) => {
-          const Icon = navIcons[nav?.icon] || defaultIcon;
-          const navUrl = `/dashboard/${nav.label}`;
+        {loading && (
+          <div className="px-2 py-1 text-sm text-muted-foreground">
+            Loading accounts...
+          </div>
+        )}
 
-          return (
-            <Collapsible
-              key={nav.id}
-              asChild
-              open={activeParent === nav.id || nav.id === firstNavWithChildrenId}
-              className="group/collapsible"
-            >
-              <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton  asChild               isActive={activeNav === nav.id}
-                    >
-                    <div
-                      onClick={() => {setActiveNav(nav.children.length > 0 ? nav.children[0].id : nav.id); setActiveParent(nav.id)}} // <- your custom function
-                      className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${activeParent === nav.id && activeNav !== nav.id ? "bg-primary/10 border-l-4 border-l-primary" : ""}`}
-                    >
-                      <Icon />
-                      <span className="group-data-[collapsible=icon]:hidden">
-                        {nav.label}
-                      </span>
-                      {nav.children.length > 0 && (
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      )}
-                    </div>
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-                {nav.children.length > 0 && (
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {nav.children.map((subNav) => (
-                        <SidebarMenuSubItem key={subNav.id}>
-                          <SidebarMenuSubButton asChild isActive={subNav.id == activeNav}> 
-                            <div
-                              onClick={() => {
-                                setActiveNav(subNav.id);
-                                setActiveParent(nav.id);
-                              }}
-                              className="flex items-center w-full gap-2 px-2 py-1 cursor-pointer"
-                            >
-                              <span>{subNav.label}</span>
-                            </div>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                )}
+        {!loading &&
+          accounts.map((acc) => {
+            const Icon = vendorMeta[acc.vendor]?.icon || defaultIcon;
+            return (
+              <SidebarMenuItem key={acc.id}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={currentAccount?.id === acc.id}
+                >
+                  <div
+                    onClick={() => {
+                      setCurrentAccount(acc);
+                    }}
+                    className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${
+                      currentAccount?.id === acc.id
+                        ? "bg-primary/10 border-l-4 border-l-primary"
+                        : ""
+                    }`}
+                  >
+                    <Icon />
+                    <span className="group-data-[collapsible=icon]:hidden">
+                      {acc.account_name}
+                    </span>
+                  </div>
+                </SidebarMenuButton>
               </SidebarMenuItem>
-            </Collapsible>
-          );
-        })}
+            );
+          })}
       </SidebarMenu>
     </SidebarGroup>
   );

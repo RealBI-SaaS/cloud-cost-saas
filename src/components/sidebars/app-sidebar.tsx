@@ -114,8 +114,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* )} */}
       <SidebarContent>
         <hr />
-        {/* navigations list*/}
-        {/* <NavigationsList /> */}
+        {/* navigations list */}
+        <NavigationsList />
       </SidebarContent>
       <SidebarFooter>
         {/*setting menu item */}

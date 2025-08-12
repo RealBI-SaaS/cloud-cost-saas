@@ -61,9 +61,9 @@ export default function AWSOnboardingModal({
   const [loading, setLoading] = useState(false);
   const [validationStatus, setValidationStatus] = useState(null); // null | 'valid' | 'invalid'
 
-  // useEffect(() => {
-  //   if (!externalId) setExternalId(genExternalId());
-  // }, []);
+  useEffect(() => {
+    if (!externalId) setExternalId(genExternalId());
+  }, []);
 
   const launchCloudFormation = () => {
     // Build the CloudFormation console URL with templateURL encoded and prefill params

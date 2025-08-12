@@ -17,6 +17,7 @@ const useCompany = create(
       filteredCompanies: [],
 
       userComp: null,
+      noUserComp: false,
       searchTerm: "",
       loading: false,
 
@@ -59,7 +60,12 @@ const useCompany = create(
             const response = await axiosInstance.get(`/company/`);
             const comp = response.data?.results?.[0] || null;
 
-            if (comp) set({ userComp: comp });
+            if (comp) {
+              set({ userComp: comp });
+              set({ noUserComp: false });
+            } else {
+              set({ noUserComp: true });
+            }
           }
         } catch (err) {
           console.error("Error fetching user company:", err);

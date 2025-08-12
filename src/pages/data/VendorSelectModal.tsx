@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Cloud, CloudCog, Server } from "lucide-react";
+import { Cloud, CloudCog, Server, Plus } from "lucide-react";
 
 export default function VendorSelectModal({
   onNext,
@@ -35,7 +35,10 @@ export default function VendorSelectModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Select Vendor</Button>
+        <Button>
+          <Plus />
+          New Connection
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

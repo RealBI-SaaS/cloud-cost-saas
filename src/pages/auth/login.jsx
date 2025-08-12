@@ -150,9 +150,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto svgd w-full">
+    <div className="flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto  w-full">
       <img src={logo_only} alt="logo" className=" h-20 object-contain " />
-      <Card className="w-100 backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl p-6 shadow-lg ">
+      <Card className="w-100 backdrop-blur-3xl border border-white/20 rounded-xl p-6 shadow-xl bg-cyan-50/20">
         <CardHeader>
           <CardTitle className="text-primary">
             {isSignUp ? "Create an account" : "Login to your account"}

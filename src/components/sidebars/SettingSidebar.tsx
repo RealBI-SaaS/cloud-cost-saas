@@ -142,34 +142,36 @@ const SettingsSidebar = ({
         </SidebarGroup>
 
         {/* Company Section */}
-        {userComp && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Company</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    //isActive={isActive("/settings/organization")}
-                    tooltip="Company"
-                  >
-                    <Link to="settings/company/details">
-                      <Building className="h-4 w-4" />
-                      <span>Company</span>
-                    </Link>
-                  </SidebarMenuButton>
+        {/* {userComp && ( */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Company</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  //isActive={isActive("/settings/organization")}
+                  tooltip="Company"
+                >
+                  <Link to="settings/company/details">
+                    <Building className="h-4 w-4" />
+                    <span>Company</span>
+                  </Link>
+                </SidebarMenuButton>
 
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={isActiveExact("/settings/company/details")}
-                      >
-                        <Link to="settings/company/details">Your Company</Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                  <SidebarMenuSub>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={isActiveExact("/settings/company/details")}
+                    >
+                      <Link to="settings/company/details">Your Company</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+
+                <SidebarMenuSub>
+                  {userComp && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -182,25 +184,26 @@ const SettingsSidebar = ({
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
+                  )}
 
-                    {(userComp?.role === "admin" ||
-                      userComp?.role === "owner" ||
-                      user.is_staff) && (
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton
-                          asChild
-                          isActive={isActiveExact(
-                            "/settings/organization/navigation",
-                          )}
-                        >
-                          <Link to="/settings/organization/navigation">
-                            Navigations
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    )}
+                  {/* {(userComp?.role === "admin" || */}
+                  {/*   userComp?.role === "owner" || */}
+                  {/*   user.is_staff) && ( */}
+                  {/*   <SidebarMenuSubItem> */}
+                  {/*     <SidebarMenuSubButton */}
+                  {/*       asChild */}
+                  {/*       isActive={isActiveExact( */}
+                  {/*         "/settings/organization/navigation", */}
+                  {/*       )} */}
+                  {/*     > */}
+                  {/*       <Link to="/settings/organization/navigation"> */}
+                  {/*         Navigations */}
+                  {/*       </Link> */}
+                  {/*     </SidebarMenuSubButton> */}
+                  {/*   </SidebarMenuSubItem> */}
+                  {/* )} */}
 
-                    {/* <SidebarMenuSubItem>
+                  {/* <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
                         isActive={isActiveExact("/settings/company/styles")}
@@ -208,15 +211,14 @@ const SettingsSidebar = ({
                         <Link to="settings/company/styles">Manage Colors</Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem> */}
-                  </SidebarMenuSub>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
         {/* Organization Section */}
-        {(userComp || userComp?.role != "member" || user.is_staff) && (
+        {((userComp && userComp?.role != "member") || user.is_staff) && (
           <SidebarGroup>
             <SidebarGroupLabel>Data and Integration</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -227,7 +229,7 @@ const SettingsSidebar = ({
                     //isActive={isActive("/settings/organization")}
                     tooltip="Organization"
                   >
-                    <Link to="/settings/organization/list">
+                    <Link to="/settings/organization/data">
                       <Blocks />
                       <span>Data and Sources</span>
                     </Link>
@@ -250,21 +252,23 @@ const SettingsSidebar = ({
                         asChild
                         isActive={isActiveExact("/settings/organization/data")}
                       >
-                        <Link to="/settings/organization/data">Your Data</Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={isActiveExact(
-                          "/settings/organization/sources",
-                        )}
-                      >
-                        <Link to="/settings/organization/sources">
-                          Integrated Sources
+                        <Link to="/settings/organization/data">
+                          Data Sources
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
+                    {/* <SidebarMenuSubItem> */}
+                    {/*   <SidebarMenuSubButton */}
+                    {/*     asChild */}
+                    {/*     isActive={isActiveExact( */}
+                    {/*       "/settings/organization/sources", */}
+                    {/*     )} */}
+                    {/*   > */}
+                    {/*     <Link to="/settings/organization/sources"> */}
+                    {/*       Integrated Sources */}
+                    {/*     </Link> */}
+                    {/*   </SidebarMenuSubButton> */}
+                    {/* </SidebarMenuSubItem> */}
                   </SidebarMenuSub>
                 </SidebarMenuItem>
               </SidebarMenu>

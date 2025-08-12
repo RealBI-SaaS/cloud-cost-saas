@@ -29,7 +29,7 @@ import { Building2, Pencil, Trash2, Upload } from "lucide-react";
 // import { useOrg } from "@/context/OrganizationContext";
 import axiosInstance from "@/config/axios/axiosInstance";
 import { edit_user_comp } from "@/utils/org/editors";
-import CreateCompany from "./CreateCompany";
+import CreateCompanyForm from "./CreateCompanyForm";
 // import useOrgStore from "@/stores/OrgStore";
 import useCompanyStore from "@/stores/CompanyStore";
 
@@ -261,7 +261,7 @@ export default function CompanyDetails() {
     );
   }
   if (creatingCompany) {
-    return <CreateCompany />;
+    return <CreateCompanyForm />;
   }
   //if (!userComp) {
   return (

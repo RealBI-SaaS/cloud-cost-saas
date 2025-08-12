@@ -1,10 +1,8 @@
 .svgd {
-  background-color: #e5e5f7; 
-  background-color: hls(var(--muted));
-  opacity: 0.8;
-  background-image:
-    repeating-radial-gradient(circle at 0 0, transparent 0, #e5e5f7 22px),
-    repeating-linear-gradient(#20468155, #204681);
+background: repeating-linear-gradient(90deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%), repeating-linear-gradient(180deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%);
+        background-size: 3em 3em;
+        background-color: #ffffff;
+
 }
 
 

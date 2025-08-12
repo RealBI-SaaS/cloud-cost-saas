@@ -1,4 +1,15 @@
 import IntegrationSources from "@/pages/data/IntegrationSources";
+import useCloudAccountsStore from "@/stores/CloudAccountStore";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +25,7 @@ import Home from "./pages/main/Home";
 //import Account from "./components/Account";
 import Logout from "./pages/auth/logout";
 // import { useUser } from "./context/UserContext";
-import CreateCompany from "./pages/company/CreateCompany";
+import CreateCompanyForm from "./pages/company/CreateCompanyForm";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import AskEmailVerificatioin from "./pages/auth/AskEmailVerification";
 import AskForPasswordReset from "./pages/auth/AskForPasswordReset";
@@ -58,7 +69,7 @@ import NotFound from "./pages/misc/NotFound";
 import CompanyMembers from "@/pages/company/CompanyMembers";
 import { useThemeStore } from "@/stores/ThemeStore";
 // import { useThemeInitializer, useThemeStore } from "./stores/ThemeStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useCompany from "@/stores/CompanyStore";
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -70,7 +81,7 @@ const ProtectedRoute = ({ children }) => {
 
   // const initializeTheme = useThemeStore((state) => state.initializeTheme);
   //
-  // if (userComp) {
+  // if (!userComp) {
   //   await initializeTheme(userComp?.id);
   // }
 
@@ -109,6 +120,8 @@ const AuthRoute = ({ children }) => {
 };
 
 function App() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const user = useUserStore((state) => state.user);
   const initializeCompany = useCompany((state) => state.initializeCompany);
   // const userComp = useUserStore((state)=> state.userComp)
@@ -117,7 +130,18 @@ function App() {
   // const initializeOrg = useOrgStore((state) => state.initialize);
   const initializeTheme = useThemeStore((state) => state.initializeTheme);
 
+  const fetchAccounts = useCloudAccountsStore((state) => state.fetchAccounts);
+
   const userComp = useCompany((state) => state.userComp);
+  const noUserComp = useCompany((state) => state.noUserComp);
+  useEffect(() => {
+    if (noUserComp) {
+      setOpen(true);
+    }
+  }, [noUserComp]);
+  const onCreateCompany = () => {
+    navigate("/settings/company/details");
+  };
   // const currentOrg = useOrgStore((state) => state.currentOrg);
   // console.log("usercomp", userComp)
   //const { loading } = useUser();
@@ -145,6 +169,7 @@ function App() {
       if (userComp) {
         console.log("comp", userComp);
         initializeTheme(userComp?.id);
+        fetchAccounts(userComp?.id);
       }
     }
   }, [userComp]);
@@ -152,7 +177,46 @@ function App() {
   return (
     <>
       <Toaster toastOptions={{ duration: 3000 }} position="top-center" />
+      {/* create company warning */}
       <div className="w-full   grid grid-cols-1   mx-auto bg-background">
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <div className="flex items-center space-x-3">
+                <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                <DialogTitle className="text-lg font-semibold">
+                  No Company Found
+                </DialogTitle>
+              </div>
+              <DialogDescription>
+                You are not currently part of any company. You can create a new
+                company and invite team members, or contact your administrator
+                to send you an invite.
+              </DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+              {/* <Button */}
+              {/*   variant="outline" */}
+              {/*   onClick={() => { */}
+              {/*     setOpen(false); */}
+              {/*     // Maybe direct to a "Contact Admin" page or docs */}
+              {/*   }} */}
+              {/* > */}
+              {/*   Ask Admin for Invite */}
+              {/* </Button> */}
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                  onCreateCompany();
+                }}
+              >
+                Create Company
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* ----------------------- */}
         <Routes>
           {/* Public routes */}
           <Route path="/home" element={<Home />} />
@@ -301,14 +365,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/settings/organization/sources"
-                element={
-                  <ProtectedRoute>
-                    <IntegrationSources />
-                  </ProtectedRoute>
-                }
-              />
+              {/* <Route */}
+              {/*   path="/settings/organization/sources" */}
+              {/*   element={ */}
+              {/*     <ProtectedRoute> */}
+              {/*       <IntegrationSources /> */}
+              {/*     </ProtectedRoute> */}
+              {/*   } */}
+              {/* /> */}
             </Route>
 
             <Route path="/welcome" element={<Welcome />} />
@@ -327,7 +391,7 @@ function App() {
             path="/company/create"
             element={
               <ProtectedRoute>
-                <CreateCompany />
+                <CreateCompanyForm />
               </ProtectedRoute>
             }
           />

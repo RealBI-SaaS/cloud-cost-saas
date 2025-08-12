@@ -1,56 +1,69 @@
 //import React, { useState } from "react";
+import useCloudAccountsStore from "@/stores/CloudAccountStore";
 
 import React from "react";
 //import { useNavigate } from "react-router-dom";
 //import { useOrg } from "../context/OrganizationContext";
 //import HomeOrgMenu from "./menu/HomeOrgMenu";
-import { useState } from "react";
+import { useEffect } from "react";
 import PowerBIEmbed from "../../components/powerbi/PowerBIEmbed";
 import useUserStore from "@/stores/userStore";
 import { shallow } from "zustand/shallow";
 // import useOrgStore from "@/stores/OrgStore";
 import { useLocation, useParams } from "react-router-dom";
+import CostOverTime from "@/components/data/CostOverTime";
+import UsageByServiceChart from "@/components/data/DailyUsageByService";
+import CostByServicePieChart from "@/components/data/CostByService";
+
+import { Frown } from "lucide-react";
+
+// import useCompany from "@/stores/CompanyStore";
 
 const HomeAuthenticated = () => {
   const { parentId, subId } = useParams();
-  // const navigations = useOrgStore((state) => state.navigations);
+  const {
+    currentAccount,
+    fetchCosts,
+    costOverTime,
+    costByService,
+    costByServicePerDay,
+  } = useCloudAccountsStore();
+  useEffect(() => {
+    fetchCosts();
+  }, [currentAccount]);
+  if (
+    !costByServicePerDay ||
+    costByServicePerDay.length === 0 ||
+    !costByService ||
+    costByService.length === 0 ||
+    !costOverTime ||
+    costOverTime.length === 0
+  ) {
+    return (
+      <div className="flex items-center justify-center gap-2 p-4 text-yellow-800 h-full ">
+        <Frown className="w-6 h-6 flex-shrink-0" />
+        <span className="font-semibold">Sorry, No Data To Display.</span>
+      </div>
+    );
+  }
 
-  // Get the parent navigation item
-  // const parentNav = parentId ? navigations.find(nav => nav.id === parentId) : null;
-
-  // Get the sub navigation item if it exists
-  // const subNav = subId ? navigations.find(nav => nav.id === subId) : null;
-
-  // Construct the title based on the navigation hierarchy
-  // let title = "Dashboard";
-  // if (parentNav) {
-  //   title = parentNav.label;
-  //   if (subNav) {
-  //     title = `${parentNav.label} > ${subNav.label}`;
-  //   }
-  // }
-
-  // const user = useUserStore((state) => state.user, shallow);
-  // const { currentOrg } = useOrg();
-  // const currentOrg = useOrgStore((state) => state.currentOrg);
-  //const navigate = useNavigate();
-  //const [value, setValue] = useState([50]);
-  // console.log(title);
-  // console.log(location);
-  // const [selectedItem, setSelectedItem] = useState("Welcome");
-
-  // Function to update the clicked label
-  //const handleItemClick = (label) => {
-  //  setSelectedItem(label); // Update selected label
-  //};
+  // const userComp = useCompany((state) => state.userComp);
 
   return (
-    <div className=" flex grid grid-cols-1 justify-around items-center w-full h-full  ">
+    <div className="  grid grid-cols-1 justify-around items-center w-full h-full  ">
       {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
       {/* Pass the click handler */}
       {/* <h1 className="text-2xl font-bold px-5 mx-5 py-3">{title}</h1> */}
 
-      <PowerBIEmbed />
+      {/* <PowerBIEmbed /> */}
+      <div className="grid grid-cols-2 mx-5">
+        <CostOverTime data={costOverTime} />
+
+        <CostByServicePieChart data={costByService} />
+        <div className="col-span-2  mt-10 ">
+          <UsageByServiceChart data={costByServicePerDay} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -22,11 +22,11 @@ const IntegrationSources: React.FC = () => {
     const state = crypto.randomUUID();
     localStorage.setItem("latestCSRFToken", state);
 
-    const googleOauthURL = `${import.meta.env.VITE_BASE_URL}/data/google/auth/`;
+    const googleOauthURL = `${import.meta.env.VITE_BASE_URL}/data/google/oauth/start/${userComp.id}/${connectionName}`;
 
     window.location.href = googleOauthURL;
   };
-  const handleAWSIntegration = () => {};
+  // const handleAWSIntegration = () => {};
   const handleAzureIntegration = () => {
     window.location.href = `${import.meta.env.VITE_BASE_URL}/data/azure/oauth/start/${userComp.id}`;
   };
@@ -34,7 +34,6 @@ const IntegrationSources: React.FC = () => {
   const onNext = ({ vendor, connectionName }) => {
     // console.log(vendor, connectionName);
     if (vendor == "aws") {
-      console.log("There");
       setAwsOpen(true);
     } else {
       toast("Redirecting to OAuth");
@@ -47,11 +46,11 @@ const IntegrationSources: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-full p-8">
-      <h1 className="text-2xl font-bold mb-4 text-primary">
-        Manage integrated sources and add new ones{" "}
-      </h1>
-      <div className="w-full m-10 flex justify-around border">
+    <div className="flex flex-col items-end justify-center">
+      {/* <h1 className="text-2xl font-bold mb-4 text-primary"> */}
+      {/*   Manage integrated sources and add new ones{" "} */}
+      {/* </h1> */}
+      <div className="w-full flex justify-center border">
         {/* <Button */}
         {/*   onClick={() => { */}
         {/*     handleGoogleIntegration(); */}
