@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import useCloudAccountsStore from "@/stores/CloudAccountStore";
+
 import useCompanyStore from "@/stores/CompanyStore";
 // Uses shadcn/ui components + lucide-react icons
 // Default export: <AWSOnboardingModal />
@@ -60,6 +62,7 @@ export default function AWSOnboardingModal({
   const [roleArn, setRoleArn] = useState("");
   const [loading, setLoading] = useState(false);
   const [validationStatus, setValidationStatus] = useState(null); // null | 'valid' | 'invalid'
+  const { fetchAccounts } = useCloudAccountsStore();
 
   useEffect(() => {
     if (!externalId) setExternalId(genExternalId());
@@ -320,6 +323,7 @@ export default function AWSOnboardingModal({
                 <Button
                   onClick={() => {
                     changeDialogState(false);
+                    fetchAccounts();
                   }}
                 >
                   Done
