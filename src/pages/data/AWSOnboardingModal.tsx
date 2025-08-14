@@ -293,7 +293,6 @@ export default function AWSOnboardingModal({
               {validationStatus === "invalid" && (
                 <div className="text-red-600">
                   Validation failed. Check role ARN, ExternalId, and permissions
-                  (use job-function/Billing & AWSBillingReadOnlyAccess).
                 </div>
               )}
             </div>
@@ -322,8 +321,8 @@ export default function AWSOnboardingModal({
                 </Button>
                 <Button
                   onClick={() => {
+                    fetchAccounts(userComp.id);
                     changeDialogState(false);
-                    fetchAccounts();
                   }}
                 >
                   Done
