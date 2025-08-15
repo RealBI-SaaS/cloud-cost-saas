@@ -135,10 +135,11 @@ function App() {
   const userComp = useCompany((state) => state.userComp);
   const noUserComp = useCompany((state) => state.noUserComp);
   useEffect(() => {
-    if (noUserComp) {
+    if (noUserComp && !location.pathname.startsWith("/accept-invitation")) {
+      console.log("DFDDFDF");
       setOpen(true);
     }
-  }, [noUserComp]);
+  }, [noUserComp, location.pathname]);
   const onCreateCompany = () => {
     navigate("/settings/company/details");
   };
@@ -160,7 +161,7 @@ function App() {
       // initializeTheme(userComp.id);
       // }
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -196,15 +197,6 @@ function App() {
             </DialogHeader>
 
             <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-end">
-              {/* <Button */}
-              {/*   variant="outline" */}
-              {/*   onClick={() => { */}
-              {/*     setOpen(false); */}
-              {/*     // Maybe direct to a "Contact Admin" page or docs */}
-              {/*   }} */}
-              {/* > */}
-              {/*   Ask Admin for Invite */}
-              {/* </Button> */}
               <Button
                 onClick={() => {
                   setOpen(false);
@@ -273,14 +265,6 @@ function App() {
 
             {/* Setting pages */}
             <Route element={<SettingsLayout />}>
-              {/* <Route */}
-              {/*   path="/settings/organization/list" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <OrganizationSettings /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
               <Route
                 path="/settings/organization/members"
                 element={
@@ -290,23 +274,6 @@ function App() {
                 }
               />
 
-              {/* <Route */}
-              {/*   path="/settings/organization/navigation" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <NavigationManagement /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
-
-              {/* <Route */}
-              {/*   path="/manage-all/navigations" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <NavigationManagement /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
               <Route
                 path="/settings/account/info"
                 element={
@@ -341,22 +308,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* <Route */}
-              {/*   path="/settings/company/styles" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <CompanyStyles /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
-              {/* <Route */}
-              {/*   path="settings/organization/detail" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <OrganizationDetailsPage /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
+
               <Route
                 path="/settings/organization/data"
                 element={
@@ -365,14 +317,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* <Route */}
-              {/*   path="/settings/organization/sources" */}
-              {/*   element={ */}
-              {/*     <ProtectedRoute> */}
-              {/*       <IntegrationSources /> */}
-              {/*     </ProtectedRoute> */}
-              {/*   } */}
-              {/* /> */}
             </Route>
 
             <Route path="/welcome" element={<Welcome />} />

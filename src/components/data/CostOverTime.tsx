@@ -16,7 +16,9 @@ const CostOverTime = ({ data }) => {
 
   return (
     <div className="flex flex-col ">
-      <h2 className="text-xl font-semibold mb-4">Cost Over Time</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-foreground">
+        Cost Over Time
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <XAxis dataKey="date" />

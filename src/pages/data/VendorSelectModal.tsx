@@ -42,7 +42,9 @@ export default function VendorSelectModal({
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Connect Your Cloud Provider</DialogTitle>
+          <DialogTitle className="dark:text-foreground">
+            Connect Your Cloud Provider
+          </DialogTitle>
           <DialogDescription>
             Choose your vendor and name this connection.
           </DialogDescription>
@@ -52,6 +54,7 @@ export default function VendorSelectModal({
           <Input
             placeholder="Connection Name"
             value={connectionName}
+            className="dark:text-foreground"
             onChange={(e) => setConnectionName(e.target.value)}
           />
 
@@ -61,7 +64,7 @@ export default function VendorSelectModal({
             className="grid grid-cols-3 gap-4"
           >
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted"
+              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="aws"
             >
               <RadioGroupItem value="aws" id="aws" className="mb-2" />
@@ -69,7 +72,7 @@ export default function VendorSelectModal({
               AWS
             </Label>
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted"
+              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="azure"
             >
               <RadioGroupItem value="azure" id="azure" className="mb-2" />
@@ -77,7 +80,7 @@ export default function VendorSelectModal({
               Azure
             </Label>
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted"
+              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="gcp"
             >
               <RadioGroupItem value="gcp" id="gcp" className="mb-2" />
@@ -89,7 +92,9 @@ export default function VendorSelectModal({
 
         <div className="flex justify-end gap-2 mt-4">
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button className="dark:text-foreground" variant="outline">
+              Cancel
+            </Button>
           </DialogClose>
           <Button onClick={handleProceed} disabled={!vendor || !connectionName}>
             Continue

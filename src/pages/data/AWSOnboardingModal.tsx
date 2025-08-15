@@ -138,7 +138,8 @@ export default function AWSOnboardingModal({
       <DialogContent className="min-w-3xl w-full p-6">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-foreground ">
-            <Cloud className="w-5 h-5" /> Connect AWS Billing
+            <Cloud className="w-5 h-5 dark:text-foreground" /> Connect AWS
+            Billing
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-2  w-full  ">
@@ -174,20 +175,25 @@ export default function AWSOnboardingModal({
           {/* Step content */}
           {step === 1 && (
             <div className="grid grid-cols-1 gap-4">
-              <p className="text-sm">
+              <p className="text-sm dark:text-foreground">
                 We generate a unique <strong>External ID</strong> to protect
                 this account's role. Copy it and paste into the CloudFormation
                 parameter when creating the stack.
               </p>
               <div className="flex items-center gap-2">
-                <Input className="rounded-xs" value={externalId} readOnly />
+                <Input
+                  className="rounded-xs"
+                  value={externalId}
+                  className="dark:text-foreground"
+                  readOnly
+                />
                 <Button
                   onClick={() => {
                     setExternalId(genExternalId());
                   }}
                   variant="outline"
                 >
-                  <RefreshCcw className="" />
+                  <RefreshCcw className="dark:text-foreground" />
                   {/* Regenerate */}
                 </Button>
                 <Button
@@ -203,9 +209,9 @@ export default function AWSOnboardingModal({
                 Make sure to keep this External ID secret — it prevents confused
                 deputy attacks.
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="flex gap-2 justify-end dark:text-foreground">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => changeDialogState(!open)}
                 >
                   Cancel
@@ -224,11 +230,11 @@ export default function AWSOnboardingModal({
 
           {step === 2 && (
             <div className="grid grid-cols-1 gap-4">
-              <p className="text-sm">
+              <p className="text-sm dark:text-foreground">
                 Click the button below to open AWS CloudFormation. On the Create
                 stack page, set the following parameters:
               </p>
-              <ul className="list-disc pl-6 text-sm">
+              <ul className="list-disc pl-6 text-sm dark:text-foreground">
                 <li>
                   <strong>ExternalId</strong>: paste the External ID from step
                   1.
@@ -246,7 +252,11 @@ export default function AWSOnboardingModal({
                 <Button onClick={launchCloudFormation}>
                   <LinkIcon className="mr-2" /> Open CloudFormation
                 </Button>
-                <Button onClick={() => setStep(3)} variant="outline">
+                <Button
+                  onClick={() => setStep(3)}
+                  className="dark:text-foreground"
+                  variant="outline"
+                >
                   I created the stack — next
                 </Button>
               </div>
@@ -259,12 +269,12 @@ export default function AWSOnboardingModal({
 
           {step === 3 && (
             <div className="grid grid-cols-1 gap-4">
-              <p className="text-sm">
+              <p className="text-sm dark:text-foreground">
                 After the stack reaches <strong>CREATE_COMPLETE</strong>, open
                 the stack and copy the <code>RoleArn</code> from the outputtab .
                 Paste it below.
               </p>
-              <Label>Role ARN</Label>
+              <Label className="dark:text-foreground">Role ARN</Label>
               <Input
                 placeholder="arn:aws:iam::123456789012:role/NumlockBillingAccessRole"
                 value={roleArn}
@@ -276,6 +286,7 @@ export default function AWSOnboardingModal({
                 </Button>
                 <Button
                   variant="outline"
+                  className="dark:text-foreground"
                   onClick={() => {
                     // setAWSARN(roleArn);
                     setStep(2);
@@ -304,7 +315,7 @@ export default function AWSOnboardingModal({
                 <ShieldCheck className="w-5 h-5 text-green-600" /> Your AWS
                 account is connected.
               </p>
-              <p className="text-sm">What happens next:</p>
+              <p className="text-sm dark:text-foreground">What happens next:</p>
               <ul className="list-disc pl-6 text-sm">
                 <li>
                   We validate the role and start a background job to sync
@@ -357,12 +368,12 @@ function Step({ label, active, done }) {
   return (
     <div className={`flex items-center gap-2  ${done ? "opacity-60" : ""}   `}>
       <div
-        className={`w-4 h-4 rounded-full flex items-center justify-center   ${done ? "bg-green-100 text-green-700 text-foreground" : active ? "bg-blue-600 text-white block text-foreground" : " hidden bg-gray-100 text-gray-600 text-foreground"} text-foreground`}
+        className={`w-4 h-4 rounded-full flex items-center justify-center   ${done ? "bg-green-100 text-green-700 text-foreground" : active ? "bg-blue-600 text-white block text-foreground" : " hidden bg-gray-100 text-gray-600 text-foreground"} `}
       >
         {done ? <Check className="w-4 h-4" /> : active ? "•" : "—"}
       </div>
       <div
-        className={`text-xs ${active ? "opacity-95 font-bold" : "opacity-50"}`}
+        className={`text-xs ${active ? "opacity-95 font-bold" : "opacity-50"} dark:text-foreground`}
       >
         {label}
       </div>

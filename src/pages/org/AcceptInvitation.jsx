@@ -4,17 +4,19 @@ import { Button } from "../../components/ui/button";
 
 import axiosInstance from "../../config/axios/axiosInstance";
 import useUserStore from "@/stores/userStore";
-// import useOrgStore, { useOrgInitializer } from "@/stores/OrgStore";
+
+import useCompany from "@/stores/CompanyStore";
 
 const AcceptInvitation = () => {
   // const initialize = useOrgStore((state) => state.initialize);
   const { token } = useParams();
   const user = useUserStore((state) => state.user);
-  const [message, setMessage] = useState(
-    "Click the button to accept the invitation.",
-  );
-  const [hasAcceptedInvitation, setHasAcceptedInvitation] = useState(false);
+
+  const [notification, setNotification] = useState({ type: "", text: "" });
+  // const [hasAcceptedInvitation, setHasAcceptedInvitation] = useState(false);
   const [hasSentRequest, setHasSentRequest] = useState(false);
+
+  const initializeCompany = useCompany((state) => state.initializeCompany);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,64 +27,78 @@ const AcceptInvitation = () => {
   }, [user, navigate, location]);
 
   const handleAcceptInvitation = async () => {
-    if (!token || hasSentRequest) return;
+    if (!token) return;
 
-    setHasSentRequest(true);
-    setMessage("Processing...");
+    setNotification({ type: "info", text: "Processing..." });
 
     try {
+
+      setHasSentRequest(true)
       const response = await axiosInstance.post(
-        `/organizations/invitations/accept/${token}/`,
+        `/company/invitations/accept/${token}/`,
       );
 
       if (response.status === 200) {
-        setMessage("Invitation Accepted");
-        setHasAcceptedInvitation(true);
-        //useOrgInitializer()
-        // initialize();
+        setNotification({ type: "success", text: "Invitation Accepted!" });
+        // setHasAcceptedInvitation(true);
+        initializeCompany();
         setTimeout(() => navigate("/home"), 1000);
       } else {
-        setMessage("Invalid or expired invitation link.");
+        setNotification({
+          type: "error",
+          text: "Invalid or expired invitation link.",
+        });
       }
     } catch (error) {
       console.error("Error accepting invitation:", error);
-      setMessage("An error occurred. Please try again.");
+      setNotification({
+        type: "error",
+        text:
+          error.response?.data?.error || "An error occurred. Please try again.",
+      });
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full mx-auto p-8 rounded-lg shadow-lg">
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Organization Invitation</h1>
-          <p
-            className={`text-xl ${
-              message.includes("Accepted")
-                ? "text-green-600"
-                : message.includes("error") || message.includes("Invalid")
-                  ? "text-red-600"
-                  : "text-gray-600"
-            }`}
-          >
-            {message}
-          </p>
-
-          {!hasAcceptedInvitation && !hasSentRequest && (
-            <Button onClick={handleAcceptInvitation} variant="">
-              Accept Invitation
-            </Button>
-          )}
-
-          {(hasAcceptedInvitation ||
-            message.includes("error") ||
-            message.includes("Invalid")) && (
-            <p className="text-sm text-gray-500">
-              You will be redirected shortly... or go to{" "}
-              <Link to="/" className="text-primary text-lg underline">
-                Home
-              </Link>
+          {notification.text && (
+            <p
+              className={`text-sm px-5 py-3 rounded-md ${
+                notification.type === "success"
+                  ? "text-green-600 bg-green-200"
+                  : notification.type === "error"
+                    ? "text-red-600 bg-red-200"
+                    : "text-gray-600 bg-gray-200"
+              }`}
+            >
+              {notification.text}
             </p>
           )}
+
+          {(
+            !hasSentRequest &&
+            notification.type !== "error"
+          ) && (
+            <Button onClick={handleAcceptInvitation} variant="">
+              Accept Invitation
+            </Button>,
+          )}
+
+         
+{hasSentRequest && (
+  <p className="text-sm text-gray-500">
+    You will be redirected shortly... or go to{" "}
+    <Link
+      to={notification.type === "error" ? "/logout" : "/"}
+      className="text-primary text-md underline"
+    >
+      {notification.type === "error" ? "Login" : "Home"}
+    </Link>
+  </p>
+)}
+
         </div>
       </div>
     </div>

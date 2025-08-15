@@ -29,7 +29,9 @@ export default function CostByServicePieChart({ data }) {
 
   return (
     <div className="w-full h-[400px] p-4  ">
-      <h2 className="text-xl font-semibold mb-4">Cost by Service</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-foreground">
+        Cost by Service
+      </h2>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

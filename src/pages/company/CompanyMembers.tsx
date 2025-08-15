@@ -1,4 +1,4 @@
-"use client";
+"usC client";
 import useCompany from "@/stores/CompanyStore";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -74,11 +74,12 @@ export default function CompanyMembers() {
   const [newInvite, setNewInvite] = useState({ email: "", role: "member" });
   const user = useUserStore((state) => state.user);
   //for group Dialog
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   // for user invite
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const userComp = useCompany((state) => state.userComp);
+  const fetchUserCompany = useCompany((state) => state.fetchUserCompany);
 
   const fetchInvitations = async () => {
     try {
@@ -122,6 +123,7 @@ export default function CompanyMembers() {
       );
 
       fetchMembers();
+      fetchUserCompany();
       setLoading(false);
 
       toast.success("Memeber's role changed successfully");
@@ -183,17 +185,17 @@ export default function CompanyMembers() {
   const handleInviteUser = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(newInvite);
-    setOpen(false); // close dialog on submit
+    setInviteDialogOpen(false); // close dialog on submit
+
+    setLoading(true);
 
     try {
-      setLoading(true);
       const response = await axiosInstance.post(
         `/company/${userComp.id}/invite/`,
         { email: newInvite.email, role: newInvite.role },
       );
 
       fetchInvitations();
-      setLoading(false);
 
       toast.success("Invitation sent successfully");
 
@@ -203,10 +205,11 @@ export default function CompanyMembers() {
       toast.error("Failed to send invitation");
     } finally {
       setNewInvite({ email: "", role: "member" });
+      setLoading(false);
     }
   };
 
-  if (loading) return <Loading />;
+  if (loading || !userComp) return <Loading />;
   // if (!currentOrg) {
   //   return (
   //     <div className="flex flex-col h-full items-center justify-center">

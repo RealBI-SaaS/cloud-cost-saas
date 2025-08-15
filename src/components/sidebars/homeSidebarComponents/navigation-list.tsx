@@ -117,9 +117,7 @@ export function NavigationsList() {
                       setCurrentAccount(acc);
                     }}
                     className={`flex items-center w-full gap-2 px-2 py-1 cursor-pointer ${
-                      currentAccount?.id === acc.id
-                        ? "bg-primary/10 border-l-4 border-l-primary"
-                        : ""
+                      currentAccount?.id === acc.id ? "bg-primary/10 " : ""
                     }`}
                   >
                     <Icon />
