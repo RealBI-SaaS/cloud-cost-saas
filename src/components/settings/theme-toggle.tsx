@@ -8,19 +8,47 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { useThemeStore } from "@/stores/ThemeStore";
+import { setTheme } from "@/utils/misc/theme";
 
 //import { useThemeContext } from "@/context/ThemeContext";
 
 export function ThemeToggle() {
-  //const { theme, setTheme } = useThemeContext();
-  const theme = useThemeStore((state) => state.theme);
-  const setTheme = useThemeStore((state) => state.setTheme);
+  const [theme, setThemeState] = useState("dark"); // default dark
+
+  // Apply theme on mount
+  // useEffect(() => {
+  //   const saved = localStorage.getItem("theme") || "dark";
+  //   setTheme(saved);
+  // }, []);
+
+  // const setTheme = (theme) => {
+  //   const root = document.documentElement;
+  //   localStorage.setItem("theme", theme);
+  //   root.classList.remove("light", "dark");
+  //   if (theme === "system") {
+  //     const system = window.matchMedia("(prefers-color-scheme: dark)").matches
+  //       ? "dark"
+  //       : "light";
+  //     root.classList.add(system);
+  //     setThemeState(system);
+  //   } else {
+  //     root.classList.add(theme);
+  //     setThemeState(theme);
+  //   }
+  // };
+  // const setMyTheme = ((theme)=>{
+  //
+  //   setTheme(theme)
+  // })
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          {theme == "dark" ? (
+            <Sun className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          ) : (
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          )}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

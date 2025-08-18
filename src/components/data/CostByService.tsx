@@ -25,24 +25,24 @@ import {
 const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"];
 
 export default function CostByServicePieChart({ data }) {
-  console.log(data);
-
   return (
-    <div className="w-full h-[400px] p-4  ">
-      <h2 className="text-xl font-semibold mb-4 dark:text-foreground">
+    <div className=" h-full  rounded-2xl shadow-lg border border-border p-3 ">
+      {/* <div className="h-full p-3 border border-white "> */}
+      <h2 className="text-lg font-semibold  dark:text-foreground text-white">
         Cost by Service
       </h2>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie
             data={data}
             dataKey="total_cost"
             nameKey="service_name"
-            cx="50%"
+            cx="45%"
             cy="50%"
-            outerRadius={120}
-            fill="#8884d8"
-            label
+            innerRadius="40%"
+            outerRadius="70%"
+            paddingAngle={3}
+            labelLine={false}
           >
             {data.map((entry, index) => (
               <Cell
@@ -51,10 +51,28 @@ export default function CostByServicePieChart({ data }) {
               />
             ))}
           </Pie>
-          <Tooltip />
-          <Legend />
+          <Tooltip
+            contentStyle={{
+              borderRadius: "10px",
+              backgroundColor: "#1e293b",
+              color: "white",
+              border: "none",
+            }}
+          />
+          <Legend
+            layout="vertical"
+            verticalAlign="middle"
+            align="right"
+            iconType="circle"
+            wrapperStyle={{
+              fontSize: "0.8rem",
+              fontWeight: 500,
+              color: "white",
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
+      {/* </div> */}
     </div>
   );
 }

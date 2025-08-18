@@ -108,7 +108,7 @@ const DataIntegration: React.FC = () => {
             Data Integrations
           </h1>
           <p className="text-muted-foreground">
-            Manage and review your connected cloud accounts
+            Add and manage your connected cloud accounts
           </p>
         </div>
 

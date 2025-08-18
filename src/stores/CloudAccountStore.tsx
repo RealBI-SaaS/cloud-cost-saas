@@ -22,6 +22,7 @@ interface CloudAccountsState {
   costOverTime: CostData[];
   costByService: CostData[];
   costByServicePerDay: CostData[];
+  costAccountSummary: null;
   loading: boolean;
   error: string | null;
 
@@ -29,6 +30,7 @@ interface CloudAccountsState {
   fetchCostOverTime: () => Promise<void>;
   fetchCostByService: () => Promise<void>;
   fetchCostByServicePerDay: () => Promise<void>;
+  fetchCostSummaries: () => Promise<void>;
 
   setCurrentAccount: (account: CloudAccount) => void;
 
@@ -66,14 +68,12 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
   fetchCostOverTime: async () => {
     const currentAccount = get().currentAccount;
     if (!currentAccount) return;
-    console.log("sretw", currentAccount);
 
     set({ loading: true, error: null });
     try {
       const res = await axiosInstance.get(
         `${import.meta.env.VITE_BASE_URL}/data/cost/region/${currentAccount.id}/`,
       );
-      console.log(res.data);
       set({ costOverTime: res.data || [], loading: false });
     } catch (err: any) {
       console.error("fetchCostOverTime error", err);
@@ -121,6 +121,25 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
       });
     }
   },
+  // TODO: fetch by service summary and replay cost by service above
+  fetchCostAccountSummary: async () => {
+    const currentAccount = get().currentAccount;
+    if (!currentAccount) return;
+
+    set({ loading: true, error: null });
+    try {
+      const res = await axiosInstance.get(
+        `${import.meta.env.VITE_BASE_URL}/data/cost-summary/account/${currentAccount.id}/`,
+      );
+      set({ costAccountSummary: res.data || [], loading: false });
+    } catch (err: any) {
+      console.error("fetchCostAccountSummary error", err);
+      set({
+        error: err.message || "Failed to fetch cost by service per day",
+        loading: false,
+      });
+    }
+  },
 
   setCurrentAccount: (account) => {
     set({ currentAccount: account });
@@ -132,6 +151,7 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
       get().fetchCostOverTime(),
       get().fetchCostByService(),
       get().fetchCostByServicePerDay(),
+      get().fetchCostAccountSummary(),
     ]);
   },
 }));

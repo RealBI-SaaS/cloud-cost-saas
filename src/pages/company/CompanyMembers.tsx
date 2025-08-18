@@ -258,14 +258,16 @@ export default function CompanyMembers() {
               )}
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Invite New User</DialogTitle>
+                  <DialogTitle className="dark:text-foreground">
+                    Invite New User
+                  </DialogTitle>
                   <DialogDescription>
                     Send an invitation to join your organization.
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleInviteUser}>
                   <div className="space-y-4 py-4">
-                    <div className="space-y-2">
+                    <div className="space-y-2 dark:text-foreground">
                       <Label htmlFor="invite-email">Email</Label>
                       <Input
                         id="invite-email"
@@ -281,7 +283,7 @@ export default function CompanyMembers() {
                         required
                       />
                     </div>
-                    <div className="space-y-2 space-x-3">
+                    <div className="space-y-2 space-x-3 dark:text-foreground">
                       <Label htmlFor="invite-role">Role</Label>
                       <div className="flex space-x-3">
                         <Button

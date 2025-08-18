@@ -14,6 +14,7 @@ import { useLocation, useParams } from "react-router-dom";
 import CostOverTime from "@/components/data/CostOverTime";
 import UsageByServiceChart from "@/components/data/DailyUsageByService";
 import CostByServicePieChart from "@/components/data/CostByService";
+import CostSummaries from "@/components/data/CostSummaries";
 
 import { Frown } from "lucide-react";
 
@@ -27,22 +28,25 @@ const HomeAuthenticated = () => {
     costOverTime,
     costByService,
     costByServicePerDay,
+    costAccountSummary,
   } = useCloudAccountsStore();
   useEffect(() => {
     fetchCosts();
   }, [currentAccount]);
+  console.log(costAccountSummary);
   if (
     !costByServicePerDay ||
     costByServicePerDay.length === 0 ||
     !costByService ||
     costByService.length === 0 ||
     !costOverTime ||
-    costOverTime.length === 0
+    costOverTime.length === 0 ||
+    !costAccountSummary
   ) {
     return (
-      <div className="flex items-center justify-center gap-2 p-4 text-yellow-800 h-full ">
-        <Frown className="w-6 h-6 flex-shrink-0" />
-        <span className="font-semibold">Sorry, No Data To Display.</span>
+      <div className="flex  flex-col gap-5 items-center justify-center  p-4 h-full text-xl text-primary text-pretty ">
+        <Frown className="w-16 h-16 flex-shrink-0" />
+        <span className="font-semibold ">Sorry, No Data To Display.</span>
       </div>
     );
   }
@@ -50,19 +54,21 @@ const HomeAuthenticated = () => {
   // const userComp = useCompany((state) => state.userComp);
 
   return (
-    <div className="  grid grid-cols-1 justify-around items-center w-full h-full  ">
-      {/*<HomeOrgMenu onItemClick={handleItemClick} />*/}
-      {/* Pass the click handler */}
-      {/* <h1 className="text-2xl font-bold px-5 mx-5 py-3">{title}</h1> */}
-
+    <div className="max-h-full  grid grid-cols-2  space-x-4 w-full   h-screen  ">
       {/* <PowerBIEmbed /> */}
-      <div className="grid grid-cols-2 mx-5">
-        <CostOverTime data={costOverTime} />
-
-        <CostByServicePieChart data={costByService} />
-        <div className="col-span-2  mt-10 ">
-          <UsageByServiceChart data={costByServicePerDay} />
+      <div className=" h-3/5 flex flex-col gap-3 ml-3  ">
+        <div className="  ">
+          <CostSummaries data={costAccountSummary} />
         </div>
+
+        <div className="h-full ">
+          <CostByServicePieChart data={costByService} />
+        </div>
+      </div>
+      <CostOverTime data={costOverTime} />
+
+      <div className="col-span-2 h-2/5 ">
+        <UsageByServiceChart data={costByServicePerDay} />
       </div>
     </div>
   );

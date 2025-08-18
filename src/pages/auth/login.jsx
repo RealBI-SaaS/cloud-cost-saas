@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import logo_only from "/logo-only.png";
 import useUserStore from "@/stores/userStore";
 // import { useOrgInitializer } from '@/stores/OrgStore';
-import { useThemeInitializer } from "@/stores/ThemeStore";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -54,7 +53,6 @@ const Login = () => {
   // useEffect(() => {
   //  if (user) {
   //       useOrgInitializer(); // Always call the hook
-  //       useThemeInitializer();
   //     }
   // }, [user]);
   //
@@ -81,7 +79,7 @@ const Login = () => {
           return;
         }
         await signup(formData);
-        toast("Account created, Sign in!");
+        toast.success("Account created, Sign in!");
         navigate("/login");
         // navigate("/ask-email-verification", {
         // state: { user_email: formData.email },
@@ -95,7 +93,6 @@ const Login = () => {
           return;
         }
         // useOrgInitializer(); // Always call the hook
-        // useThemeInitializer();
 
         const from = location.state?.redirectTo || "/dashboard";
         console.log("Attempting to redirect to:", from);
@@ -154,9 +151,9 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto  w-full">
       <img src={logo_only} alt="logo" className=" h-20 object-contain " />
-      <Card className="w-100 backdrop-blur-3xl border border-white/20 rounded-xl p-6 shadow-xl bg-cyan-50/20">
+      <Card className="w-100  border border-white/20 rounded-xl p-6 shadow-xl ">
         <CardHeader>
-          <CardTitle className="text-primary">
+          <CardTitle className="text-xl text-primary">
             {isSignUp ? "Create an account" : "Login to your account"}
           </CardTitle>
           <CardDescription className="text-foreground">
@@ -172,7 +169,7 @@ const Login = () => {
               variant="outline"
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="w-full bg-foreground "
+              className="w-full bg-foreground border !border-primary/60 "
             >
               <FcGoogle className="mr-2 h-4 w-4" />
               Sign in with Google
@@ -240,7 +237,9 @@ const Login = () => {
                     variant="link"
                     className="text-sm text-gray-500"
                   >
-                    <p className="cursor-pointer">Forgot password?</p>
+                    <p className="cursor-pointer text-foreground/70 underline decoration-primary">
+                      Forgot password?
+                    </p>
                   </Button>
                 )}
               </div>
@@ -282,7 +281,7 @@ const Login = () => {
             </Button>
             <Button
               variant="link"
-              className="text-sm !text-gray-700"
+              className="text-sm text-foreground/60"
               onClick={() => setIsSignUp(!isSignUp)}
             >
               {isSignUp

@@ -64,7 +64,7 @@ export default function VendorSelectModal({
             className="grid grid-cols-3 gap-4"
           >
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
+              className="cursor-pointer flex flex-col items-center p-4 border  border-foreground/30 rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="aws"
             >
               <RadioGroupItem value="aws" id="aws" className="mb-2" />
@@ -72,7 +72,7 @@ export default function VendorSelectModal({
               AWS
             </Label>
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
+              className="cursor-pointer flex flex-col items-center p-4 border border-foreground/30 rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="azure"
             >
               <RadioGroupItem value="azure" id="azure" className="mb-2" />
@@ -80,7 +80,7 @@ export default function VendorSelectModal({
               Azure
             </Label>
             <Label
-              className="cursor-pointer flex flex-col items-center p-4 border rounded-lg hover:bg-muted dark:text-foreground"
+              className="cursor-pointer flex flex-col items-center p-4 border border-foreground/30 rounded-lg hover:bg-muted dark:text-foreground"
               htmlFor="gcp"
             >
               <RadioGroupItem value="gcp" id="gcp" className="mb-2" />

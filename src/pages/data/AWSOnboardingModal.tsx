@@ -316,7 +316,7 @@ export default function AWSOnboardingModal({
                 account is connected.
               </p>
               <p className="text-sm dark:text-foreground">What happens next:</p>
-              <ul className="list-disc pl-6 text-sm">
+              <ul className="list-disc pl-6 text-sm dark:text-foreground">
                 <li>
                   We validate the role and start a background job to sync
                   billing data daily.
@@ -327,9 +327,9 @@ export default function AWSOnboardingModal({
                 </li>
               </ul>
               <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setStep(3)}>
-                  View Role
-                </Button>
+                {/* <Button variant="outline" onClick={() => setStep(3)}> */}
+                {/*   View Role */}
+                {/* </Button> */}
                 <Button
                   onClick={() => {
                     fetchAccounts(userComp.id);

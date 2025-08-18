@@ -6,6 +6,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const CostOverTime = ({ data }) => {
   // data = [
@@ -15,24 +16,44 @@ const CostOverTime = ({ data }) => {
   // ];
 
   return (
-    <div className="flex flex-col ">
-      <h2 className="text-xl font-semibold mb-4 dark:text-foreground">
-        Cost Over Time
-      </h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="cost"
-            stroke="#4F46E5"
-            strokeWidth={2}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <Card className="w-full h-fit  border border-border !bg-none !mr-3">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold ">Cost Over Time</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <XAxis
+                dataKey="date"
+                stroke="currentColor"
+                className="text-sm fill-muted-foreground"
+              />
+              <YAxis
+                stroke="currentColor"
+                className="text-sm fill-muted-foreground"
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "0.5rem",
+                }}
+                labelStyle={{ color: "hsl(var(--foreground))" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="cost"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                dot={{ r: 3, fill: "hsl(var(--primary))" }}
+                activeDot={{ r: 5 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

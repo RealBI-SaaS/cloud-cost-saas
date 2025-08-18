@@ -50,7 +50,7 @@ const IntegrationSources: React.FC = () => {
       {/* <h1 className="text-2xl font-bold mb-4 text-primary"> */}
       {/*   Manage integrated sources and add new ones{" "} */}
       {/* </h1> */}
-      <div className="w-full flex justify-center border">
+      <div className="w-full flex justify-center ">
         {/* <Button */}
         {/*   onClick={() => { */}
         {/*     handleGoogleIntegration(); */}

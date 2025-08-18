@@ -86,7 +86,7 @@ const AskForPasswordReset = () => {
           navigate("/login");
         }}
         variant="link"
-        className="text-sm !text-gray-700"
+        className="text-sm text-foreground/70 underline decoration-primary"
       >
         Back to Login
       </Button>

@@ -1,12 +1,15 @@
+"use client";
+
 import React from "react";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 interface UsageRecord {
@@ -27,22 +30,14 @@ const COLORS = [
   "#D97706", // Amber
 ];
 
-const UsageByServiceChart: React.FC<Props> = ({ data }) => {
-  // Step 1: Convert flat data into a format where each day is a row,
-  // and each service is a key with total_usage value.
-  // Example:
-  // [
-  //   { day: "2025-04-07", "Amazon VPC": 24, "Amazon EC2": 20 },
-  //   { day: "2025-04-08", "Amazon VPC": 22, "Amazon EC2": 18 },
-  // ]
-
-  // Get unique days sorted ascending
+const UsageByServiceAreaChart: React.FC<Props> = ({ data }) => {
+  // Unique days sorted
   const days = Array.from(new Set(data.map((d) => d.day.slice(0, 10)))).sort();
 
-  // Get unique services
+  // Unique services
   const services = Array.from(new Set(data.map((d) => d.service_name)));
 
-  // Build data structure
+  // Transform data for chart
   const chartData = days.map((day) => {
     const dayData: Record<string, any> = { day };
     services.forEach((service) => {
@@ -55,33 +50,76 @@ const UsageByServiceChart: React.FC<Props> = ({ data }) => {
   });
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4 dark:text-foreground">
-        Cost By Service Per Day
+    <div className="rounded-lg p-6 shadow-md border border-border mx-3">
+      <h2 className="text-xl font-semibold text-foreground">
+        Cost By Service Over Time
       </h2>
       <ResponsiveContainer width="100%" height={400}>
-        <LineChart
+        <AreaChart
           data={chartData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
         >
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+          <defs>
+            {services.map((service, index) => (
+              <linearGradient
+                key={service}
+                id={`color${index}`}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop
+                  offset="5%"
+                  stopColor={COLORS[index % COLORS.length]}
+                  stopOpacity={0.4}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={COLORS[index % COLORS.length]}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            ))}
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis
+            dataKey="day"
+            // tick={{ fill: "currentColor" }}
+            tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
+            tickLine={false}
+            axisLine={{ stroke: "hsl(var(--border))" }}
+            // axisLine={{ stroke: "#d1d5db" }}
+          />
+          <YAxis
+            tick={{ fill: "currentColor" }}
+            tickLine={false}
+            axisLine={{ stroke: "#d1d5db" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#1f2937",
+              border: "none",
+              color: "#fff",
+            }}
+          />
+          <Legend verticalAlign="top" height={36} />
           {services.map((service, index) => (
-            <Line
+            <Area
               key={service}
               type="monotone"
               dataKey={service}
               stroke={COLORS[index % COLORS.length]}
+              fill={`url(#color${index})`}
+              stackId="1"
               strokeWidth={2}
               dot={false}
             />
           ))}
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default UsageByServiceChart;
+export default UsageByServiceAreaChart;

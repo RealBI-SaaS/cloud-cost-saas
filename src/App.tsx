@@ -67,8 +67,7 @@ import useUserStore from "@/stores/userStore";
 // import useOrgStore from "./stores/OrgStore";
 import NotFound from "./pages/misc/NotFound";
 import CompanyMembers from "@/pages/company/CompanyMembers";
-import { useThemeStore } from "@/stores/ThemeStore";
-// import { useThemeInitializer, useThemeStore } from "./stores/ThemeStore";
+import { setTheme } from "@/utils/misc/theme";
 import { useEffect, useState } from "react";
 import useCompany from "@/stores/CompanyStore";
 // Protected Route component
@@ -79,10 +78,8 @@ const ProtectedRoute = ({ children }) => {
   const userComp = useCompany((state) => state.userComp);
   //const currentOrg = useOrgStore((state) => state.currentOrg);
 
-  // const initializeTheme = useThemeStore((state) => state.initializeTheme);
   //
   // if (!userComp) {
-  //   await initializeTheme(userComp?.id);
   // }
 
   if (loading) {
@@ -108,7 +105,6 @@ const AuthRoute = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    // console.log("loading");
     return <Loading />;
   }
 
@@ -128,15 +124,13 @@ function App() {
 
   // const userComp = useOrgStore((state) => state.userComp);
   // const initializeOrg = useOrgStore((state) => state.initialize);
-  const initializeTheme = useThemeStore((state) => state.initializeTheme);
 
   const fetchAccounts = useCloudAccountsStore((state) => state.fetchAccounts);
 
   const userComp = useCompany((state) => state.userComp);
   const noUserComp = useCompany((state) => state.noUserComp);
   useEffect(() => {
-    if (noUserComp && !location.pathname.startsWith("/accept-invitation")) {
-      console.log("DFDDFDF");
+    if (noUserComp && location.pathname.startsWith("/dashboard")) {
       setOpen(true);
     }
   }, [noUserComp, location.pathname]);
@@ -144,32 +138,24 @@ function App() {
     navigate("/settings/company/details");
   };
   // const currentOrg = useOrgStore((state) => state.currentOrg);
-  // console.log("usercomp", userComp)
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
   useEffect(() => {
+    setTheme();
     if (user) {
-      // console.log("initializing org and theme");
       // initializeOrg(); // Always call the hook
       initializeCompany();
       // if (currentOrg) {
-      //   initializeTheme(currentOrg?.company);
-      // console.log("comp", userComp);
       // if (userComp) {
       // allow only dark and light
-      // console.log("theme initialized");
-      // initializeTheme(userComp.id);
       // }
     }
   }, []);
 
   useEffect(() => {
     if (user) {
-      // console.log("initializing org and theme");
       //initializeOrg(); // Always call the hook
       if (userComp) {
-        console.log("comp", userComp);
-        initializeTheme(userComp?.id);
         fetchAccounts(userComp?.id);
       }
     }
