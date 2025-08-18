@@ -32,8 +32,7 @@ const AcceptInvitation = () => {
     setNotification({ type: "info", text: "Processing..." });
 
     try {
-
-      setHasSentRequest(true)
+      setHasSentRequest(true);
       const response = await axiosInstance.post(
         `/company/invitations/accept/${token}/`,
       );
@@ -59,10 +58,12 @@ const AcceptInvitation = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full mx-auto p-8 rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center ">
+      <div className="max-w-md w-full mx-auto p-8 rounded-lg shadow-lg dark:bg-gray-700 border border-border">
         <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold">Organization Invitation</h1>
+          <h1 className="text-3xl font-bold dark:text-foreground">
+            Company Invitation
+          </h1>
           {notification.text && (
             <p
               className={`text-sm px-5 py-3 rounded-md ${
@@ -77,28 +78,23 @@ const AcceptInvitation = () => {
             </p>
           )}
 
-          {(
-            !hasSentRequest &&
-            notification.type !== "error"
-          ) && (
+          {!hasSentRequest && notification.type !== "error" && (
             <Button onClick={handleAcceptInvitation} variant="">
               Accept Invitation
-            </Button>,
+            </Button>
           )}
 
-         
-{hasSentRequest && (
-  <p className="text-sm text-gray-500">
-    You will be redirected shortly... or go to{" "}
-    <Link
-      to={notification.type === "error" ? "/logout" : "/"}
-      className="text-primary text-md underline"
-    >
-      {notification.type === "error" ? "Login" : "Home"}
-    </Link>
-  </p>
-)}
-
+          {hasSentRequest && (
+            <p className="text-sm text-gray-500">
+              You will be redirected shortly... or go to{" "}
+              <Link
+                to={notification.type === "error" ? "/logout" : "/"}
+                className="text-primary text-md underline"
+              >
+                {notification.type === "error" ? "Login" : "Home"}
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </div>
