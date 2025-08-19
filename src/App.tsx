@@ -133,7 +133,7 @@ function App() {
     if (noUserComp && location.pathname.startsWith("/dashboard")) {
       setOpen(true);
     }
-  }, []);
+  }, [userComp, location.pathname]);
 
   const onCreateCompany = () => {
     navigate("/settings/company/details");
@@ -172,7 +172,7 @@ function App() {
             <DialogHeader>
               <div className="flex items-center space-x-3">
                 <AlertTriangle className="h-6 w-6 text-yellow-500" />
-                <DialogTitle className="text-lg font-semibold">
+                <DialogTitle className="text-lg font-semibold dark:text-foreground">
                   No Company Found
                 </DialogTitle>
               </div>
