@@ -21,7 +21,7 @@ export default function CostSummaries({ data }) {
 
   return (
     <div className="flex gap-4  justify-center items-center align-middle pt-3  rounded-md w-full  max-h-fit">
-      <Card className=" w-full max-h-fit border-border">
+      <Card className=" w-full max-h-fit border-border bg-background">
         <CardHeader className="flex flex-row items-center space-x-2">
           <CalendarDays className="h-5 w-5 text-blue-500" />
           <CardTitle className="text-sm font-medium">This Month</CardTitle>
@@ -31,7 +31,7 @@ export default function CostSummaries({ data }) {
         </CardContent>
       </Card>
 
-      <Card className=" w-full max-h-fit border-border ">
+      <Card className=" w-full max-h-fit border-border bg-background ">
         <CardHeader className="flex flex-row items-center space-x-2">
           <DollarSign className="h-5 w-5 text-green-500" />
           <CardTitle className="text-sm font-medium">Today</CardTitle>

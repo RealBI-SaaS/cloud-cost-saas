@@ -100,6 +100,7 @@ const DataIntegration: React.FC = () => {
   //   );
   // }
 
+  console.log(userComp);
   return (
     <div className="flex flex-col h-full p-8 space-y-6">
       <div className="grid grid-cols-2">
@@ -157,39 +158,43 @@ const DataIntegration: React.FC = () => {
                   )}
                 </div>
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreVertical className="h-5 w-5 text-muted-foreground" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {editingId === acc.id ? (
-                      <>
-                        <DropdownMenuItem onClick={() => onEditSubmit(acc.id)}>
-                          Save
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={onCancelEdit}>
-                          Cancel
-                        </DropdownMenuItem>
-                      </>
-                    ) : (
-                      <>
-                        <DropdownMenuItem onClick={() => onEditClick(acc)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit Name
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-red-500 focus:text-red-500"
-                          onClick={() => onDelete(acc)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {userComp.membership.role != "member" && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {editingId === acc.id ? (
+                        <>
+                          <DropdownMenuItem
+                            onClick={() => onEditSubmit(acc.id)}
+                          >
+                            Save
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={onCancelEdit}>
+                            Cancel
+                          </DropdownMenuItem>
+                        </>
+                      ) : (
+                        <>
+                          <DropdownMenuItem onClick={() => onEditClick(acc)}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit Name
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-red-500 focus:text-red-500"
+                            onClick={() => onDelete(acc)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </CardHeader>
 
               <CardContent>

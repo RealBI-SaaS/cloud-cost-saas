@@ -15,6 +15,7 @@ import CostOverTime from "@/components/data/CostOverTime";
 import UsageByServiceChart from "@/components/data/DailyUsageByService";
 import CostByServicePieChart from "@/components/data/CostByService";
 import CostSummaries from "@/components/data/CostSummaries";
+import MonthlyServiceCostChart from "@/components/data/CostServiceMonths";
 
 import { Frown } from "lucide-react";
 
@@ -29,6 +30,7 @@ const HomeAuthenticated = () => {
     costByService,
     costByServicePerDay,
     costAccountSummary,
+    costByMonthService,
   } = useCloudAccountsStore();
   useEffect(() => {
     fetchCosts();
@@ -41,7 +43,9 @@ const HomeAuthenticated = () => {
     costByService.length === 0 ||
     !costOverTime ||
     costOverTime.length === 0 ||
-    !costAccountSummary
+    !costAccountSummary ||
+    !costByMonthService ||
+    costByMonthService.length == 0
   ) {
     return (
       <div className="flex  flex-col gap-5 items-center justify-center  p-4 h-full text-xl text-primary text-pretty ">
@@ -65,7 +69,10 @@ const HomeAuthenticated = () => {
           <CostByServicePieChart data={costByService} />
         </div>
       </div>
-      <CostOverTime data={costOverTime} />
+      {/* <CostOverTime data={costOverTime} /> */}
+      <div className="h-full">
+        <MonthlyServiceCostChart data={costByMonthService} />
+      </div>
 
       <div className="col-span-2 h-2/5 ">
         <UsageByServiceChart data={costByServicePerDay} />

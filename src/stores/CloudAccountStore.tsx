@@ -23,6 +23,7 @@ interface CloudAccountsState {
   costByService: CostData[];
   costByServicePerDay: CostData[];
   costAccountSummary: null;
+  costByMonthService: [];
   loading: boolean;
   error: string | null;
 
@@ -31,6 +32,7 @@ interface CloudAccountsState {
   fetchCostByService: () => Promise<void>;
   fetchCostByServicePerDay: () => Promise<void>;
   fetchCostSummaries: () => Promise<void>;
+  fetchCostByMonthService: () => Promise<void>;
 
   setCurrentAccount: (account: CloudAccount) => void;
 
@@ -141,6 +143,25 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
     }
   },
 
+  fetchCostByMonthService: async () => {
+    const currentAccount = get().currentAccount;
+    if (!currentAccount) return;
+
+    set({ loading: true, error: null });
+    try {
+      const res = await axiosInstance.get(
+        `${import.meta.env.VITE_BASE_URL}/data/cost-summary/monthly-service/${currentAccount.id}/`,
+      );
+      set({ costByMonthService: res.data || [], loading: false });
+    } catch (err: any) {
+      console.error("fetchCostByMonthService error", err);
+      set({
+        error: err.message || "Failed to fetch cost by service per day",
+        loading: false,
+      });
+    }
+  },
+
   setCurrentAccount: (account) => {
     set({ currentAccount: account });
   },
@@ -152,6 +173,7 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
       get().fetchCostByService(),
       get().fetchCostByServicePerDay(),
       get().fetchCostAccountSummary(),
+      get().fetchCostByMonthService(),
     ]);
   },
 }));
