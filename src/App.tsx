@@ -133,7 +133,8 @@ function App() {
     if (noUserComp && location.pathname.startsWith("/dashboard")) {
       setOpen(true);
     }
-  }, [noUserComp, location.pathname]);
+  }, []);
+
   const onCreateCompany = () => {
     navigate("/settings/company/details");
   };

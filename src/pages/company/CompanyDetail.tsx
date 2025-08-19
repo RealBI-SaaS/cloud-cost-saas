@@ -119,7 +119,7 @@ export default function CompanyDetails() {
   //};
   if (userComp) {
     return (
-      <div className="container mx-auto px-4 py-10  ml-5 dark:bg-green-500">
+      <div className="container mx-auto px-4 py-10  ml-5 ">
         <Card className="w-full shadow-none border-none w-3/4">
           <CardHeader>
             <div className="flex items-center gap-3 border-bottom mb-0">

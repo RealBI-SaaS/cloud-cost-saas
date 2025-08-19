@@ -117,6 +117,8 @@ const Login = () => {
       // console.log(error);
       toast.error(
         error?.response?.data?.detail ||
+          error?.response?.data?.email ||
+          error?.response?.data?.password ||
           "An error occurred, try again or another account",
       );
       if (error?.response?.data?.password?.[0]) {

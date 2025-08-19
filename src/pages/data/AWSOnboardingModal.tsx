@@ -278,6 +278,7 @@ export default function AWSOnboardingModal({
               <Input
                 placeholder="arn:aws:iam::123456789012:role/NumlockBillingAccessRole"
                 value={roleArn}
+                className="dark:text-foreground/85"
                 onChange={(e) => setRoleArn(e.target.value)}
               />
               <div className="flex gap-2">
