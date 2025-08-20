@@ -16,6 +16,7 @@ import UsageByServiceChart from "@/components/data/DailyUsageByService";
 import CostByServicePieChart from "@/components/data/CostByService";
 import CostSummaries from "@/components/data/CostSummaries";
 import MonthlyServiceCostChart from "@/components/data/CostServiceMonths";
+import ServiceCostBarChart from "@/components/data/CostByServiceMonthsBar";
 
 import { Frown } from "lucide-react";
 
@@ -57,24 +58,24 @@ const HomeAuthenticated = () => {
   // const userComp = useCompany((state) => state.userComp);
 
   return (
-    <div className="max-h-full  grid grid-cols-2  space-x-4 w-full   h-screen  ">
+    <div className="max-h-full  grid grid-cols-2  space-x-4 w-full   h-screen px-5 py-5 ">
       {/* <PowerBIEmbed /> */}
-      <div className=" h-3/5 flex flex-col gap-3 ml-3  ">
-        <div className="  ">
+      <div className=" flex flex-col gap-3 h-full   ">
+        <div className=" ">
           <CostSummaries data={costAccountSummary} />
         </div>
 
-        <div className="h-full ">
+        <div className="   ">
           <CostByServicePieChart data={costByService} />
         </div>
       </div>
       {/* <CostOverTime data={costOverTime} /> */}
-      <div className="h-full">
-        <MonthlyServiceCostChart data={costByMonthService} />
+      <div className="h-full   w-full">
+        {/* <UsageByServiceChart data={costByServicePerDay} /> */}
+        <ServiceCostBarChart data={costByMonthService} />
       </div>
-
-      <div className="col-span-2 h-2/5 ">
-        <UsageByServiceChart data={costByServicePerDay} />
+      <div className="col-span-2 h-full">
+        <MonthlyServiceCostChart data={costByMonthService} />
       </div>
     </div>
   );

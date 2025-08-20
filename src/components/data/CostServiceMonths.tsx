@@ -120,14 +120,14 @@ export default function MonthlyServiceCostChart({ data }) {
   });
 
   return (
-    <Card className="w-full  overflow-auto bg-none bg-background   border-border m-0 mt-3 !mr-3">
+    <Card className="w-full   overflow-auto bg-none bg-background   border-border m-0 mt-3 ">
       <CardHeader className="flex items-center gap-2 ">
         <DollarSign className="w-5 h-5 text-green-500" />
         <CardTitle className="text-lg">Monthly Service Costs</CardTitle>
       </CardHeader>
-      <CardContent className="px-3">
-        <table className="min-w-full table-auto border border-gray-200 text-sm">
-          <thead className=" sticky top-0">
+      <CardContent className="px-3 overflow-scroll border-border rounded-md ">
+        <table className="min-w-full table-auto border !border-border  rounded-md text-sm">
+          <thead className=" sticky top-0 bg-primary/70 ">
             <tr>
               <th className="border px-3 py-2 text-left">Service Name</th>
               {months.map((month) => (
@@ -158,7 +158,7 @@ export default function MonthlyServiceCostChart({ data }) {
               </tr>
             ))}
           </tbody>
-          <tfoot className=" font-semibold">
+          <tfoot className=" font-semibold bg-primary/60">
             <tr>
               <td className="border px-3 py-2">Total</td>
               {months.map((month) => (

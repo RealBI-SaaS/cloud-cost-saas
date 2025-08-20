@@ -102,7 +102,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [isSettingsPage]);
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} className="border-border ">
       {/* {state == "expanded" ? ( */}
       {/*   <img */}
       {/*     src={`${import.meta.env.VITE_BASE_URL}${userComp.company_logo}`} */}
@@ -112,8 +112,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* ) : ( */}
       {/*   <></> */}
       {/* )} */}
-      <SidebarContent>
-        <hr />
+      <SidebarContent className="">
         {/* navigations list */}
         <NavigationsList />
       </SidebarContent>
@@ -122,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
         {/* {userOrgs.length > 0 && <OrganizationSelector />} */}
 
-        <hr className="" />
+        <hr className="border-border" />
 
         <SideBarUser />
       </SidebarFooter>

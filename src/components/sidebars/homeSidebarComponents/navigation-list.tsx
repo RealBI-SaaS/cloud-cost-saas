@@ -80,7 +80,7 @@ export function NavigationsList() {
 
   // Sidebar Rendering
   return (
-    <SidebarGroup>
+    <SidebarGroup className="">
       <SidebarGroupLabel className="group-data-[collapsible=icon]:sr-only">
         Cloud Accounts
       </SidebarGroupLabel>
