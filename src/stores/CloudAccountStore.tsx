@@ -37,6 +37,7 @@ interface CloudAccountsState {
   setCurrentAccount: (account: CloudAccount) => void;
 
   fetchCosts: () => Promise<void>;
+  resetAccounts: () => Promise<void>;
 }
 
 export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
@@ -174,6 +175,19 @@ export const useCloudAccountsStore = create<CloudAccountsState>((set, get) => ({
       get().fetchCostByServicePerDay(),
       get().fetchCostAccountSummary(),
       get().fetchCostByMonthService(),
+    ]);
+  },
+  resetAccounts: async () => {
+    // Fetch all cost-related data for the current account
+    await Promise.all([
+      set({
+        accounts: [],
+        costOverTime: [],
+        costByService: [],
+        costByServicePerDay: [],
+        loading: false,
+        error: null,
+      }),
     ]);
   },
 }));

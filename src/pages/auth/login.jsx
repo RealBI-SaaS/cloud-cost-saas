@@ -86,7 +86,7 @@ const Login = () => {
         // });
       } else {
         const myUser = await login(formData.email, formData.password);
-        console.log("Login successful, user:", myUser);
+        // console.log("Login successful, user:", myUser);
         if (myUser.is_staff) {
           console.log("Admin user detected, redirecting to admin signin");
           navigate("/admin/signin", { replace: true });

@@ -91,14 +91,16 @@ export default function AWSOnboardingModal({
 
   const submitRoleArn = async () => {
     if (!roleArn || !userComp || !externalId || !connectionName)
-      return toast("missing values, enter them! ");
+      return toast.error("Missing values, enter them! ");
     setLoading(true);
+    const trimmedRoleArn = roleArn.trim();
+    console.log(trimmedRoleArn);
     setValidationStatus(null);
     try {
       // call your backend to register integration and validate by attempting assumerole/costexplorer
       const resp = await axiosInstance.post("/data/aws/register-role/", {
         company_id: userComp.id,
-        role_arn: roleArn,
+        role_arn: trimmedRoleArn,
         external_id: externalId,
         name: connectionName,
       });

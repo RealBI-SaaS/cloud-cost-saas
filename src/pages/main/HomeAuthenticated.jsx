@@ -35,7 +35,6 @@ const HomeAuthenticated = () => {
   useEffect(() => {
     fetchCosts();
   }, [currentAccount]);
-  console.log(costAccountSummary);
   if (
     !costByServicePerDay ||
     costByServicePerDay.length === 0 ||

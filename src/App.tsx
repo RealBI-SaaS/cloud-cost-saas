@@ -133,7 +133,7 @@ function App() {
     if (noUserComp && location.pathname.startsWith("/dashboard")) {
       setOpen(true);
     }
-  }, [userComp, location.pathname]);
+  }, [user, noUserComp, location.pathname]);
 
   const onCreateCompany = () => {
     navigate("/settings/company/details");
@@ -141,27 +141,19 @@ function App() {
   // const currentOrg = useOrgStore((state) => state.currentOrg);
   //const { loading } = useUser();
   //if (loading) return <Loading />; // or a full-screen spinner
+
   useEffect(() => {
     setTheme();
     if (user) {
-      // initializeOrg(); // Always call the hook
       initializeCompany();
-      // if (currentOrg) {
-      // if (userComp) {
-      // allow only dark and light
-      // }
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    if (user) {
-      //initializeOrg(); // Always call the hook
-      if (userComp) {
-        fetchAccounts(userComp?.id);
-      }
+    if (user && userComp) {
+      fetchAccounts(userComp.id);
     }
-  }, [userComp]);
-
+  }, [user, userComp]);
   return (
     <>
       <Toaster toastOptions={{ duration: 3000 }} position="top-center" />

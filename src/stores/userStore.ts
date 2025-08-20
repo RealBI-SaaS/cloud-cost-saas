@@ -1,4 +1,7 @@
 import { create } from "zustand";
+
+import useCloudAccountsStore from "@/stores/CloudAccountStore";
+import useCompanyStore from "@/stores/CompanyStore";
 import { persist } from "zustand/middleware";
 import axios from "axios";
 import axiosInstance from "@/config/axios/axiosInstance";
@@ -72,6 +75,9 @@ const userStore = (set, get) => ({
     //localStorage.removeItem("org-store");
     //reset()
     // useOrgStore.getState().reset();
+
+    useCloudAccountsStore.getState().resetAccounts();
+    useCompanyStore.getState().resetCompanyStore();
     set({ user: null });
   },
 

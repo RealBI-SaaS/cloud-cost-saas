@@ -1,5 +1,16 @@
 import useCompany from "@/stores/CompanyStore";
 
+import { toast } from "sonner";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 import useCloudAccountsStore from "@/stores/CloudAccountStore";
 import IntegrationSources from "./IntegrationSources.tsx";
 import {
@@ -26,81 +37,70 @@ import vendorMeta from "@/data/VendorMeta";
 
 const DataIntegration: React.FC = () => {
   const userComp = useCompany((state) => state.userComp);
-  const [integratedAccounts, setIntegratedAccounts] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [editedName, setEditedName] = useState("");
+  const [open, setOpen] = useState(false);
+  const [selectedAcc, setSelectedAcc] = useState<any>(null);
+
   const { accounts, currentAccount, setCurrentAccount, fetchAccounts } =
     useCloudAccountsStore();
 
-  // Start editing
+  // --- Edit Handlers ---
   const onEditClick = (acc) => {
-    setEditingId(acc.id);
+    setCurrentAccount(acc.id);
     setEditedName(acc.account_name);
   };
 
-  // Cancel editing
   const onCancelEdit = () => {
-    setEditingId(null);
+    setCurrentAccount(null);
     setEditedName("");
   };
 
-  // Submit edited name
   const onEditSubmit = async (accId) => {
     if (!editedName.trim()) {
-      alert("Account name cannot be empty");
+      toast.error("Account name cannot be empty");
       return;
     }
-
-    // setLoading(true);
     try {
       await axiosInstance.patch(
         `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/${accId}/`,
         { account_name: editedName },
       );
-      setEditingId(null);
+      setCurrentAccount(null);
       setEditedName("");
       fetchAccounts(userComp.id);
+      toast.success("Account name updated!");
     } catch (error) {
       console.error("Error updating account name", error);
-      alert("Failed to update account name");
+      toast.error("Failed to update account name");
     }
-    //   } finally {
-    //     setLoading(false);
-    //   }
   };
 
-  // Delete with confirmation
-  const onDelete = async (acc) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete account "${acc.account_name}"?`,
-    );
-    if (!confirmed) return;
+  // --- Delete Handlers ---
+  const handleDeleteClick = (acc) => {
+    setSelectedAcc(acc);
+    setOpen(true);
+  };
 
-    // setLoading(true);
+  const confirmDelete = async () => {
+    if (!selectedAcc) return;
     try {
       await axiosInstance.delete(
-        `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/${acc.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/${selectedAcc.id}/`,
       );
       fetchAccounts(userComp.id);
+      setOpen(false);
+      setSelectedAcc(null);
+      toast.success("Account deleted!");
     } catch (error) {
       console.error("Error deleting account", error);
-      alert("Failed to delete account");
+      toast.error("Failed to delete account!");
     }
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center h-full p-8 text-white">
-  //       <h1>Loading...</h1>
-  //     </div>
-  //   );
-  // }
+  const userHasPermission = (comp) => {
+    return comp?.membership.role !== "member";
+  };
 
-  console.log(userComp);
   return (
     <div className="flex flex-col h-full p-8 space-y-6">
       <div className="grid grid-cols-2">
@@ -112,12 +112,14 @@ const DataIntegration: React.FC = () => {
             Add and manage your connected cloud accounts
           </p>
         </div>
-
-        <div className="flex justify-end pr-10">
-          <IntegrationSources />
-        </div>
+        {userHasPermission(userComp) && (
+          <div className="flex justify-end pr-10">
+            <IntegrationSources />
+          </div>
+        )}
       </div>
 
+      {/* Accounts Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {accounts.map((acc) => {
           const meta = vendorMeta[acc.vendor] || vendorMeta.AWS;
@@ -136,9 +138,9 @@ const DataIntegration: React.FC = () => {
                     <Icon className="h-5 w-5" />
                   </div>
 
-                  {editingId === acc.id ? (
+                  {currentAccount === acc.id ? (
                     <input
-                      className="border rounded p-1 text-black w-3/4"
+                      className="border border-border rounded p-1 text-black w-3/4"
                       value={editedName}
                       onChange={(e) => setEditedName(e.target.value)}
                       onKeyDown={(e) => {
@@ -158,7 +160,7 @@ const DataIntegration: React.FC = () => {
                   )}
                 </div>
 
-                {userComp.membership.role != "member" && (
+                {userHasPermission(userComp) && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon">
@@ -166,7 +168,7 @@ const DataIntegration: React.FC = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      {editingId === acc.id ? (
+                      {currentAccount === acc.id ? (
                         <>
                           <DropdownMenuItem
                             onClick={() => onEditSubmit(acc.id)}
@@ -185,7 +187,7 @@ const DataIntegration: React.FC = () => {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="text-red-500 focus:text-red-500"
-                            onClick={() => onDelete(acc)}
+                            onClick={() => handleDeleteClick(acc)}
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
                             Delete
@@ -206,6 +208,28 @@ const DataIntegration: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Account</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">{selectedAcc?.account_name}</span>
+              ? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
