@@ -24,6 +24,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { BarChart3, Filter, Download } from "lucide-react";
+import { formatMonthLabel } from "@/utils/data/date_format";
 
 type MonthlyPoint = {
   month: string; // ISO date string, e.g. "2025-01-01T00:00:00Z"
@@ -43,14 +44,20 @@ type Props = {
   onExportCSV?: (csv: string) => void; // optional export handler
 };
 
-const formatMonthLabel = (isoDate: string) => {
-  const d = new Date(isoDate);
-  // Example: Jan ’25
-  return d
-    .toLocaleDateString(undefined, { month: "short", year: "2-digit" })
-    .replace(" ", " ");
-};
+// caused timezone issues (showing dec-jul for a data of jan-aug)
+// const formatMonthLabel = (isoDate: string) => {
+//   const d = new Date(isoDate);
+//   // Example: Jan ’25
+//   return d
+//     .toLocaleDateString(undefined, { month: "short", year: "2-digit" })
+//     .replace(" ", " ");
+// };
 
+// const formatMonthLabel = (isoDate: string) => {
+//   const [year, month] = isoDate.split("-");
+//   return `${month}-${year.slice(-2)}`; // e.g. "01-25"
+// };
+//
 const currencyFormatter = (currency = "USD") =>
   new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -120,22 +127,6 @@ const ServiceCostBarChart: React.FC<Props> = ({
 
   const fmt = React.useMemo(() => currencyFormatter(currency), [currency]);
 
-  // const handleExport = () => {
-  //   if (!chartData.length) return;
-  //   const header = "month,total_cost\n";
-  //   const rows = chartData.map((r) => `${r.month},${r.total_cost}`).join("\n");
-  //   const csv = header + rows;
-  //   if (onExportCSV) return onExportCSV(csv);
-  //
-  //   // fallback: download in-browser
-  //   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = `service_cost_${selectedService || "unknown"}.csv`;
-  //   a.click();
-  //   URL.revokeObjectURL(url);
-  // };
   function getCssVariable(name: string) {
     return getComputedStyle(document.documentElement)
       .getPropertyValue(name)
@@ -151,10 +142,6 @@ const ServiceCostBarChart: React.FC<Props> = ({
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <CardTitle>{title}</CardTitle>
-          {/* <CardDescription> */}
-          {/*   View monthly spend for a single AWS service. Switch services using */}
-          {/*   the selector. */}
-          {/* </CardDescription> */}
         </div>
 
         <div className="flex items-center gap-2">
