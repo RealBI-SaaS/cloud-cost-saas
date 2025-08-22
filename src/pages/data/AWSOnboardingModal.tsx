@@ -71,8 +71,7 @@ export default function AWSOnboardingModal({
   const launchCloudFormation = () => {
     // Build the CloudFormation console URL with templateURL encoded and prefill params
     const params = new URLSearchParams();
-    const templateUrl =
-      "https://numlock-public-bucket-1.s3.us-west-2.amazonaws.com/onboarding-cloudformation.yml";
+    const templateUrl = import.meta.env.VITE_AWS_CLOUDFRONT_URL;
     params.set("templateURL", templateUrl);
     // AWS console will open; customers must edit parameters inline.
     // We can't set parameter values via URL reliably across all accounts, so we show instructions.

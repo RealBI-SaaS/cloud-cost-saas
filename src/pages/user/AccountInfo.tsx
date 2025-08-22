@@ -18,11 +18,10 @@ import useUserStore from "@/stores/userStore";
 
 export default function AccountInfo() {
   // const { user, setUser, fetchUserData } = useUser();
-  const user = useUserStore((state)=>state.user)
-  const setUser = useUserStore((state)=>state.setUser)
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
-  const fetchUserData = useUserStore((state)=>state.fetchUserData)
-
+  const fetchUserData = useUserStore((state) => state.fetchUserData);
 
   const [profile, setProfile] = useState({
     firstName: user.first_name,
@@ -55,15 +54,7 @@ export default function AccountInfo() {
       toast.error("Failed to update profile");
     }
   };
-  //
-  //useEffect(() => {
-  //  const root = document.documentElement;
-  //  const mainColor = getComputedStyle(root).getPropertyValue(
-  //    "--primary-foreground",
-  //  );
-  //  console.log("Main color:", mainColor.trim());
-  //}, []);
-  //
+
   return (
     <Card className="m-10 p-5 w-2/3 shadow-none border-none">
       <CardHeader className=" ">
