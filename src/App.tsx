@@ -17,37 +17,21 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-//import AiChat from "./components/ai/ChatBot";
-//import { UserProvider } from "./context/UserContext";
 import Login from "./pages/auth/login";
 import Home from "./pages/main/Home";
-//import Nav from "./components/Nav";
-//import Account from "./components/Account";
 import Logout from "./pages/auth/logout";
-// import { useUser } from "./context/UserContext";
 import CreateCompanyForm from "./pages/company/CreateCompanyForm";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import AskEmailVerificatioin from "./pages/auth/AskEmailVerification";
 import AskForPasswordReset from "./pages/auth/AskForPasswordReset";
 import ResetPassword from "./pages/auth/ResetPassword";
-//import ManageAll from "./components/ManageAll";
-//import OrganizationDetails from "./components/org/OrganizationDetails";
 import AcceptInvitation from "./pages/org/AcceptInvitation";
 import { useLocation } from "react-router-dom";
-//import { OrganizationProvider } from "./context/OrganizationContext";
-// import NavigationManagement from "@/pages/org/NavigationsManagement";
-//import { MenuProvider } from "./context/MenuContext";
-// import OrganizationDetailsPage from "./pages/org/OrganizationDetail";
 import { Toaster } from "sonner";
 import SettingsLayout from "./layout/SettingsLayout";
 import MainLayout from "./layout/MainLayout";
 import AccountInfo from "./pages/user/AccountInfo";
 import AccountPassword from "./pages/user/AccountPassword";
-//import UserOrganization from "./components/org/UserOrganizations";
-//import Organizations from "./components/Organizations";
-//import OrganizationDetail from "./components/OrganizationDetail";
-// import OrganizationSettings from "./pages/org/OrganizationSettings";
-// import OrganizationMembers from "./pages/org/OrganizationMembers";
 import DataIntegration from "./pages/data/DataIntegration";
 import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { Loading } from "@/components/misc/loading";
@@ -62,25 +46,18 @@ import { CompanyStyles } from "./pages/company/CompanyStyles";
 import Welcome from "./pages/main/Welcome";
 import HomeAuthenticated from "./pages/main/HomeAuthenticated";
 import useUserStore from "@/stores/userStore";
-// import { useOrgInitializer } from "./stores/OrgStore";
-// import NavigationManagement from "./components/org/NavigationsManagement";
-// import useOrgStore from "./stores/OrgStore";
 import NotFound from "./pages/misc/NotFound";
 import CompanyMembers from "@/pages/company/CompanyMembers";
 import { setTheme } from "@/utils/misc/theme";
 import { useEffect, useState } from "react";
 import useCompany from "@/stores/CompanyStore";
+
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = useUserStore((state) => state.user);
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
   const userComp = useCompany((state) => state.userComp);
-  //const currentOrg = useOrgStore((state) => state.currentOrg);
-
-  //
-  // if (!userComp) {
-  // }
 
   if (loading) {
     return <Loading />;
@@ -120,10 +97,6 @@ function App() {
   const [open, setOpen] = useState(false);
   const user = useUserStore((state) => state.user);
   const initializeCompany = useCompany((state) => state.initializeCompany);
-  // const userComp = useUserStore((state)=> state.userComp)
-
-  // const userComp = useOrgStore((state) => state.userComp);
-  // const initializeOrg = useOrgStore((state) => state.initialize);
 
   const fetchAccounts = useCloudAccountsStore((state) => state.fetchAccounts);
 
@@ -138,9 +111,6 @@ function App() {
   const onCreateCompany = () => {
     navigate("/settings/company/details");
   };
-  // const currentOrg = useOrgStore((state) => state.currentOrg);
-  //const { loading } = useUser();
-  //if (loading) return <Loading />; // or a full-screen spinner
 
   useEffect(() => {
     setTheme();
