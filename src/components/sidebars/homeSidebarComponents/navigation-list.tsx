@@ -92,7 +92,9 @@ export function NavigationsList() {
               onClick={() => {}}
             >
               <Home />
-              <span className="group-data-[collapsible=icon]:hidden">Home</span>
+              <span className="group-data-[collapsible=icon]:hidden">
+                Dashboard
+              </span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>

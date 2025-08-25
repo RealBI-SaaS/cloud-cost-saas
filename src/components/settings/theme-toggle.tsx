@@ -43,7 +43,7 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
+        <Button variant="outline" size="icon" className=" rounded-full">
           {theme == "dark" ? (
             <Sun className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           ) : (

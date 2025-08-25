@@ -18,7 +18,11 @@ import CostSummaries from "@/components/data/CostSummaries";
 import MonthlyServiceCostChart from "@/components/data/CostServiceMonths";
 import ServiceCostBarChart from "@/components/data/CostByServiceMonthsBar";
 
-import { Frown } from "lucide-react";
+import { CircleUserRound, Frown } from "lucide-react";
+import { SideBarUser } from "@/components/sidebars/homeSidebarComponents/sidebar-footer-account";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/settings/theme-toggle";
+import Navbar from "@/components/navbar/Navbar";
 
 // import useCompany from "@/stores/CompanyStore";
 
@@ -58,26 +62,16 @@ const HomeAuthenticated = () => {
   // const userComp = useCompany((state) => state.userComp);
 
   return (
-    <div className="max-h-full  grid grid-cols-2  space-x-4 w-full   h-screen px-5 py-5 ">
-      {/* <PowerBIEmbed /> */}
-      <div className=" flex flex-col gap-3 h-full   ">
-        <div className=" ">
-          <CostSummaries data={costAccountSummary} />
-        </div>
 
-        <div className="   ">
-          <CostByServicePieChart data={costByService} />
-        </div>
-      </div>
-      {/* <CostOverTime data={costOverTime} /> */}
-      <div className="h-full   w-full">
-        {/* <UsageByServiceChart data={costByServicePerDay} /> */}
-        <ServiceCostBarChart data={costByMonthService} />
-      </div>
-      <div className="col-span-2 h-full">
-        <MonthlyServiceCostChart data={costByMonthService} />
-      </div>
+    <div className="px-5 bg-background text-foreground">
+      {/* nav bar */}
+      <Navbar />
+      {/* main section  */}
+
+
     </div>
+
+
   );
 };
 

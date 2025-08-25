@@ -48,6 +48,8 @@ import { SideBarUser } from "@/components/sidebars/homeSidebarComponents/sidebar
 import { Link } from "react-router-dom";
 import text_and_logo from "/text-and-logo.png";
 import useCompany from "@/stores/CompanyStore";
+import real_bi_logo from "/logo-only.png";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 // import { useOrg } from "@/context/OrganizationContext";
 // import useOrgStore from "@/stores/OrgStore";
 // Menu items.
@@ -112,6 +114,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* ) : ( */}
       {/*   <></> */}
       {/* )} */}
+
+      <SidebarHeader>
+        <SidebarMenuButton asChild variant="muted">
+          <Link to="/dashboard">
+            <Avatar>
+              <AvatarImage src={real_bi_logo} />
+              <AvatarFallback>RB</AvatarFallback>
+            </Avatar>
+            <span className="font-bold text-lg">RealBI </span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarHeader>
+      <SidebarSeparator />
       <SidebarContent className="">
         {/* navigations list */}
         <NavigationsList />
