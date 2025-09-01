@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import useUserStore from "@/stores/userStore";
 import useCompany from "@/stores/CompanyStore";
 import { Loading } from "@/components/misc/loading";
-import Login from "@/pages/auth/Login";
+import Login from "@/pages/auth/login";
 import AdminSignIn from "@/pages/admin/AdminSignIn";
 
 interface ProtectedWrapperProps {

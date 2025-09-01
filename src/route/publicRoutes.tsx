@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { PublicWrapper } from "./PublicWrapper";
 import Home from "@/pages/main/Home";
-import Login from "@/pages/auth/Login";
+import Login from "@/pages/auth/login";
 import Landing from "@/pages/main/Landing";
-import Logout from "@/pages/auth/Logout";
+import Logout from "@/pages/auth/logout";
 import VerifyEmail from "@/pages/auth/VerifyEmail";
 import AskEmailVerificatioin from "@/pages/auth/AskEmailVerification";
 import AskForPasswordReset from "@/pages/auth/AskForPasswordReset";
