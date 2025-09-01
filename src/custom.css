@@ -1,16 +1,16 @@
-.svgd {
-background: repeating-linear-gradient(90deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%), repeating-linear-gradient(180deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%);
-        background-size: 3em 3em;
-        background-color: #ffffff;
+/*.svgd {*/
+/*background: repeating-linear-gradient(90deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%), repeating-linear-gradient(180deg, #4f46e4 0, #4f46e4 5%, transparent 0, transparent 50%);*/
+/*        background-size: 3em 3em;*/
+/*        background-color: #ffffff;*/
 
-}
-
-
+/*}*/
 
 
-.svgd-dark{
-background-color: #262626;
-opacity: 0.8;
-background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #262626 10px ), repeating-linear-gradient( #00000055, #000000 );
-}
+
+
+/*.svgd-dark{*/
+/*background-color: #262626;*/
+/*opacity: 0.8;*/
+/*background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #262626 10px ), repeating-linear-gradient( #00000055, #000000 );*/
+/*}*/
 

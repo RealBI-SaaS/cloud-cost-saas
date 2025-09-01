@@ -40,7 +40,7 @@ const Navbar = () => {
     `}>
             {/* Left Section - Breadcrumb and Title */}
             <div className="flex items-center space-x-2 lg:space-x-3">
-                {/*<SidebarTrigger className="h-9 w-9 p-2 hover:bg-accent/50 transition-colors rounded-lg flex-shrink-0" />*/}
+                <SidebarTrigger className="h-9 w-9 p-2 hover:bg-accent/50 transition-colors rounded-lg flex-shrink-0" />
 
                 {/* Mobile menu button (alternative to sidebar trigger) */}
                 <Button
@@ -57,6 +57,7 @@ const Navbar = () => {
                     <ChevronRight className="h-4 w-4 mx-1 hidden sm:inline" />
                     <span className="text-sm font-medium text-foreground truncate">
             Analytics
+          </span>
                 </div>
 
                 <div className="h-6 w-px bg-border/60 mx-2 hidden lg:block" />

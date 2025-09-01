@@ -12,50 +12,44 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Building2, ChevronsUpDown, Plus, Search, Check } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const allOrganizations = [
     {
-      id: "all-organization",
       initial: "A",
       name: "All organization",
       color: "bg-primary/10 text-primary",
+      url: "org/all-organization",
     },
     {
-      id: "marketing-team",
       initial: "M",
       name: "Marketing team",
       color: "bg-primary/10 text-primary",
+      url: "org/marketing-team",
     },
     {
-      id: "product-team",
       initial: "P",
       name: "Production team",
       color: "bg-secondary/10 text-secondary-foreground",
+      url: "org/product-team",
     },
     {
-      id: "development-team",
       initial: "D",
       name: "Development team",
       color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+      url: "org/development-team",
     },
     {
-      id: "design-team",
       initial: "D",
       name: "Design team",
       color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+      url: "org/design-team",
     },
   ];
 
-  const navigate = useNavigate();
-  const { orgId } = useParams();
-
-  // Set initial selected organization based on URL params
-  const initialOrg =
-    allOrganizations.find((org) => org.id === orgId) || allOrganizations[0];
-  const [selectedOrg, setSelectedOrg] = useState(initialOrg);
   const [organizations, setOrganizations] = useState(allOrganizations);
+  const [selectedOrg, setSelectedOrg] = useState("All organization");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
@@ -64,18 +58,9 @@ const Header = () => {
     );
   };
 
-  const handleOrgSelect = (org) => {
-    setSelectedOrg(org);
-    // Navigate to the organization's dashboard
-    navigate(`/org/${org.id}/dashboard`);
+  const handleOrgSelect = (orgName: string) => {
+    setSelectedOrg(orgName);
   };
-
-  // Sort organizations with selected one first
-  const sortedOrganizations = [...organizations].sort((a, b) => {
-    if (a.id === selectedOrg.id) return -1;
-    if (b.id === selectedOrg.id) return 1;
-    return 0;
-  });
 
   return (
     <div className="py-2 border-b border-border/50 bg-gradient-to-r from-background to-background/95">
@@ -93,7 +78,7 @@ const Header = () => {
               >
                 <Building2 className="h-5 w-5 text-sidebar-primary transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
                 <span className="font-semibold text-sidebar-foreground truncate max-w-[120px] text-sm">
-                  {selectedOrg.name}
+                  {selectedOrg}
                 </span>
                 <ChevronsUpDown className="ml-auto h-4 w-4 text-sidebar-muted-foreground transition-all duration-200 group-hover:text-sidebar-foreground group-hover:rotate-180" />
               </SidebarMenuButton>
@@ -116,15 +101,19 @@ const Header = () => {
 
               {/* Organization List */}
               <div className="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
-                {sortedOrganizations.map((org) => (
+                {organizations.map((org) => (
                   <DropdownMenuItem
-                    key={org.id}
-                    onClick={() => handleOrgSelect(org)}
+                    key={org.name}
+                    onClick={() => handleOrgSelect(org.name)}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-200 hover:bg-accent/70 ${
-                      org.id === selectedOrg.id ? "bg-accent/50" : ""
+                      org.name === selectedOrg ? "bg-accent/50" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-3 w-full">
+                    <Link
+                      to={org.url}
+                      className="flex items-center gap-3 w-full"
+                      onClick={(e) => e.preventDefault()}
+                    >
                       <span
                         className={`flex items-center justify-center h-7 w-7 rounded-md font-bold text-xs shrink-0 ${org.color}`}
                       >
@@ -133,10 +122,10 @@ const Header = () => {
                       <span className="truncate text-sm font-medium flex-grow">
                         {org.name}
                       </span>
-                      {org.id === selectedOrg.id && (
+                      {org.name === selectedOrg && (
                         <Check className="h-4 w-4 text-primary flex-shrink-0" />
                       )}
-                    </div>
+                    </Link>
                   </DropdownMenuItem>
                 ))}
               </div>

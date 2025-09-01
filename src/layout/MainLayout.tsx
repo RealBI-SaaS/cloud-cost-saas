@@ -1,9 +1,14 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { Sidebar, SidebarProvider } from "../components/ui/sidebar";
-import Nav from "../components/sidebars/Nav";
+import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/sidebars/app-sidebar";
+import Navbar from "@/components/navbar/Navbar";
+import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 
 const MainLayout = () => {
+  // If you need async data, fetch it in useEffect
+  const defaultOpen = true;
+
   const location = useLocation();
   const isSettingsPage =
     location.pathname.includes("/manage-all") ||
@@ -11,27 +16,15 @@ const MainLayout = () => {
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
 
-  //return (
-  //  <SidebarProvider>
-  //    <div className="flex h-full bg-red-200">
-  //      <AppSidebar />
-  //      <div className="flex-1 bg-green-500">
-  //        <Outlet />
-  //      </div>
-  //    </div>
-  //  </SidebarProvider>
-  //);
-
   return (
-    <SidebarProvider>
-      <div className="flex h-screen min-w-full overflow-hidden">
-        <aside className="overflow-y-auto h-full">
-          <AppSidebar />
-        </aside>
-        <div className="flex-1 h-full overflow-y-auto ">
-          <Outlet />
-        </div>
-      </div>
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AppSidebar />
+
+      <main className="w-full ">
+        <Navbar />
+
+        <Outlet />
+      </main>
     </SidebarProvider>
   );
 };

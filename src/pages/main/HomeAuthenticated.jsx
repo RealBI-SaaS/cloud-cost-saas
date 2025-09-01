@@ -21,7 +21,6 @@ import ServiceCostBarChart from "@/components/data/CostByServiceMonthsBar";
 import { CircleUserRound, Frown } from "lucide-react";
 import { SideBarUser } from "@/components/sidebars/homeSidebarComponents/sidebar-footer-account";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ThemeToggle } from "@/components/settings/theme-toggle";
 import Navbar from "@/components/navbar/Navbar";
 
 // import useCompany from "@/stores/CompanyStore";
@@ -63,10 +62,11 @@ const HomeAuthenticated = () => {
 
   return (
 
-    <div className="px-5 bg-background text-foreground">
+    <div className="">
       {/* nav bar */}
-      <Navbar />
+      {/*<Navbar />*/}
       {/* main section  */}
+      Hallo jo
 
 
     </div>

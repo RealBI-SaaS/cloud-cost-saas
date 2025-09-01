@@ -1,15 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import {
-  Home,
-  ChevronDown,
-  Plus,
-  type LucideIcon,
-  Cloud,
-  DollarSign,
-} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Home, ChevronDown, Plus, type LucideIcon, Cloud } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -38,7 +31,6 @@ export function NavigationsList() {
   const { accounts, currentAccount, setCurrentAccount, loading } =
     useCloudAccountsStore();
   const location = useLocation();
-  const { orgId } = useParams();
 
   return (
     <div className="flex flex-col h-full pt-2">
@@ -49,10 +41,10 @@ export function NavigationsList() {
             <SidebarMenuButton
               asChild
               isActive={location.pathname === "/dashboard"}
-              className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
+              className="rounded-lg transition-all duration-200 hover:bg-accent"
             >
               <Link
-                to={"org/" + orgId + "/dashboard"}
+                to="/dashboard"
                 className="flex items-center gap-3 py-2.5 group"
               >
                 <div
@@ -64,33 +56,8 @@ export function NavigationsList() {
                 >
                   <Home className="h-4 w-4" />
                 </div>
-                <span className="font-medium group-data-[collapsible=icon]:hidden">
+                <span className="font-medium group-data-[collapsible=icon]:hidden p-2">
                   Dashboard
-                </span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={location.pathname === "/costa-analysis"}
-              className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
-            >
-              <Link
-                to={"org/" + orgId + "/cost-analysis"}
-                className="flex items-center gap-3 py-2.5 group"
-              >
-                <div
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    location.pathname === "/cost-analysis"
-                      ? "bg-primary/20 text-primary"
-                      : "bg-muted/50 text-muted-foreground group-hover:bg-accent"
-                  }`}
-                >
-                  <DollarSign className="h-4 w-4" />
-                </div>
-                <span className="font-medium group-data-[collapsible=icon]:hidden">
-                  Cost Analysis
                 </span>
               </Link>
             </SidebarMenuButton>

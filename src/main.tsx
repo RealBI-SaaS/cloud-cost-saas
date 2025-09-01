@@ -7,7 +7,7 @@ import App from "./App.jsx";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 // import { OrganizationProvider } from "@/context/OrganizationContext";
 import { AppSidebar } from "@/components/sidebars/app-sidebar";
-import { UserProvider, useUser } from "@/context/UserContext";
+// import { UserProvider, useUser } from "@/context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 // import { CompanyProvider } from "./stores/CompanyStore";
 import Landing from "./pages/main/Landing";
@@ -22,11 +22,7 @@ const options = {
 
 const AppWrapper = () => {
   return (
-    <main className="w-full h-full relative">
-      {/* <SidebarTrigger
-              className="m-5 fixed bottom-0"
-              style={{ display: "block" }}
-            /> */}
+    <main className="w-full h-full relative bg-background text-foreground ">
       <App />
     </main>
   );
@@ -34,13 +30,8 @@ const AppWrapper = () => {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/* <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}> */}
     <BrowserRouter>
-      {/* <UserProvider> */}
       <AppWrapper />
-      {/* </UserProvider> */}
     </BrowserRouter>
-
-    {/* </PostHogProvider> */}
-  </StrictMode>,
+  </StrictMode>
 );

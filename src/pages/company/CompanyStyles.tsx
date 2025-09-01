@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { ColorPicker } from "@/components/settings/ColorSelector";
 // import useOrgStore from "@/stores/OrgStore";
-import useCompanyStore from "@/stores/Companystore";
+// import useCompanyStore from "@/stores/Companystore";
 export function CompanyStyles() {
   const userComp = useOrgStore((state) => state.userComp);
   return (
