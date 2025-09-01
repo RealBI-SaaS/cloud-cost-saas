@@ -62,8 +62,10 @@ const DataIntegration: React.FC = () => {
     }
     try {
       await axiosInstance.patch(
-        `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/${accId}/`,
-        { account_name: editedName },
+        `${import.meta.env.VITE_BASE_URL}/data/companies/${
+          userComp.id
+        }/cloud-accounts/${accId}/`,
+        { account_name: editedName }
       );
       setCurrentAccount(null);
       setEditedName("");
@@ -85,7 +87,9 @@ const DataIntegration: React.FC = () => {
     if (!selectedAcc) return;
     try {
       await axiosInstance.delete(
-        `${import.meta.env.VITE_BASE_URL}/data/companies/${userComp.id}/cloud-accounts/${selectedAcc.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/data/companies/${
+          userComp.id
+        }/cloud-accounts/${selectedAcc.id}/`
       );
       fetchAccounts(userComp.id);
       setOpen(false);
@@ -114,7 +118,7 @@ const DataIntegration: React.FC = () => {
         </div>
         {userHasPermission(userComp) && (
           <div className="flex justify-end pr-10">
-            <IntegrationSources />
+            <IntegrationSources label="" />
           </div>
         )}
       </div>

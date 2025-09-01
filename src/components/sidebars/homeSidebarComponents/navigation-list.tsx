@@ -30,6 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useCloudAccountsStore from "@/stores/CloudAccountStore";
+import IntegrationSources from "@/pages/data/IntegrationSources";
 // import { vendorMeta, defaultIcon } from "@/data/iconMap";
 
 export function NavigationsList() {
@@ -151,20 +152,11 @@ export function NavigationsList() {
                   ))}
                 </div>
               ) : accounts.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
-                  <div className="h-8 w-8 bg-muted rounded-lg flex items-center justify-center mb-2">
-                    <Plus className="h-4 w-4 text-muted-foreground" />
-                  </div>
+                <div className="flex  gap-2.5 flex-col items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
+                  <IntegrationSources />
                   <p className="text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
                     No cloud accounts
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-2 h-7 text-xs"
-                  >
-                    Add Account
-                  </Button>
+                  </p>{" "}
                 </div>
               ) : (
                 accounts.map((acc) => {

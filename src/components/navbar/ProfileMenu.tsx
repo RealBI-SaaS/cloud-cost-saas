@@ -13,8 +13,6 @@ import { Link } from "react-router-dom";
 import Logout from "@/pages/auth/logout";
 
 const ProfileMenu = () => {
-  const logout = Logout;
-
   const handlLogout = () => {
     const logout = Logout();
   };
@@ -40,9 +38,11 @@ const ProfileMenu = () => {
           <Settings className=" mr-1 " />
           Setting
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handlLogout()} variant="destructive">
-          <LogOut className=" mr-1 " />
-          Logout
+        <DropdownMenuItem variant="destructive" asChild>
+          <Link to="/logout">
+            <LogOut className=" mr-1 " />
+            Logout
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

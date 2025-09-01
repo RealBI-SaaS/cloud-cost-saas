@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { Building2, Pencil, Upload } from "lucide-react";
 import axiosInstance from "@/config/axios/axiosInstance";
 import useCompanyStore from "@/stores/CompanyStore";
-import CreateCompanyForm from "./CreateCompanyForm";
+import CreateCompanyForm from "../company/CreateCompanyForm";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ export default function CompanyDetails() {
   // Render company details if company exists
   if (userComp) {
     return (
-      <div className="container mx-auto px-4 py-10 ml-5">
+      <div className="container mx-auto ">
         <Card className="w-3/4 shadow-none border-none">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">
@@ -168,7 +168,7 @@ export default function CompanyDetails() {
 
   // Render no company found message
   return (
-    <div className="container mx-auto px-4 py-10">
+    <div className="">
       <Card className="w-3/4 shadow-none border border-b border-l">
         <CardHeader>
           <div className="flex items-center gap-3 mb-1">

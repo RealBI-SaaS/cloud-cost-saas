@@ -33,7 +33,7 @@ import MainLayout from "./layout/MainLayout";
 import AccountInfo from "./pages/user/AccountInfo";
 import AccountPassword from "./pages/user/AccountPassword";
 import DataIntegration from "./pages/data/DataIntegration";
-import { GeneralSettings } from "./components/settings/GeneralSettings";
+import { GeneralSettings } from "./components/settings_deprecated/GeneralSettings";
 import { Loading } from "@/components/misc/loading";
 import CompanyDetails from "./pages/company/CompanyDetail";
 import AdminSignIn from "@/pages/admin/AdminSignIn";

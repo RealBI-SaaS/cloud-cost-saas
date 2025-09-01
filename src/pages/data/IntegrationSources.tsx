@@ -9,7 +9,10 @@ import VendorSelectModal from "./VendorSelectModal.tsx";
 
 import { toast } from "sonner";
 
-const IntegrationSources: React.FC = () => {
+interface props {
+  label?: boolean;
+}
+const IntegrationSources: React.FC = ({ label }: props) => {
   const userComp = useCompany((state) => state.userComp);
 
   // for aws
@@ -22,13 +25,17 @@ const IntegrationSources: React.FC = () => {
     const state = crypto.randomUUID();
     localStorage.setItem("latestCSRFToken", state);
 
-    const googleOauthURL = `${import.meta.env.VITE_BASE_URL}/data/google/oauth/start/${userComp.id}/${connectionName}`;
+    const googleOauthURL = `${
+      import.meta.env.VITE_BASE_URL
+    }/data/google/oauth/start/${userComp.id}/${connectionName}`;
 
     window.location.href = googleOauthURL;
   };
   // const handleAWSIntegration = () => {};
   const handleAzureIntegration = () => {
-    window.location.href = `${import.meta.env.VITE_BASE_URL}/data/azure/oauth/start/${userComp.id}/${connectionName}`;
+    window.location.href = `${
+      import.meta.env.VITE_BASE_URL
+    }/data/azure/oauth/start/${userComp.id}/${connectionName}`;
   };
 
   const onNext = ({ vendor, connectionName }) => {
@@ -81,6 +88,7 @@ const IntegrationSources: React.FC = () => {
           onNext={onNext}
           connectionName={connectionName}
           setConnectionName={setConnectionName}
+          label={label}
         />
         <AWSOnboardingModal
           open={awsOpen}

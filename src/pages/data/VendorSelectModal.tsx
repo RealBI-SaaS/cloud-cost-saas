@@ -20,6 +20,7 @@ export default function VendorSelectModal({
   onNext,
   connectionName,
   setConnectionName,
+  label = false,
 }) {
   const [vendor, setVendor] = useState("");
   // const [connectionName, setConnectionName] = useState("");
@@ -35,10 +36,16 @@ export default function VendorSelectModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus />
-          New Connection
-        </Button>
+        {label === false ? (
+          <Button className="bg-accent hover:bg-primary ">
+            <Plus className="hover:rotate-180" />
+          </Button>
+        ) : (
+          <Button>
+            <Plus />
+            New Connection
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

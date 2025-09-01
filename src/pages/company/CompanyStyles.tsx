@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/settings/theme-toggle";
+import { ThemeToggle } from "@/components/settings_deprecated/theme-toggle";
 import {
   Card,
   CardContent,
