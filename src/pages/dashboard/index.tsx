@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -26,18 +26,14 @@ import {
   Cpu,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import {
-  allOrganizations,
-  costBreakdown,
-  recentActivity,
-  usageStats,
-} from "./mockData";
+
+import SelectedOrgContext from "@/context/selectedOrgContext";
+import { costBreakdown, recentActivity, usageStats } from "./mockData";
 
 const Dashboard = () => {
-  const { orgId } = useParams();
-
-  const currentOrg =
-    allOrganizations.find((org) => org.id === orgId) || allOrganizations[0];
+  const { selectedOrg: currentOrg } = useContext(SelectedOrgContext);
+  // const currentOrg =
+  //   allOrganizations.find((org) => org.id === orgId) || allOrganizations[0];
 
   return (
     <div className="p-6 bg-background">

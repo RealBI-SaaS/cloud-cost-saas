@@ -1,10 +1,10 @@
-import React from "react";
+import SelectedOrgContext from "@/context/selectedOrgContext";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 const CostAnalysis = () => {
-  const { orgId } = useParams();
-
-  return <div>cost Analysis for {orgId}==</div>;
+  const { selectedOrg } = useContext(SelectedOrgContext);
+  return <div>cost Analysis for {selectedOrg.name}==</div>;
 };
 
 export default CostAnalysis;

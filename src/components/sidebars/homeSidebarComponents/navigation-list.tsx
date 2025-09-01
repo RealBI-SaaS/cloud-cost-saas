@@ -52,7 +52,7 @@ export function NavigationsList() {
               className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
             >
               <Link
-                to={"org/" + orgId + "/dashboard"}
+                to={"/dashboard"}
                 className="flex items-center gap-3 py-2.5 group"
               >
                 <div
@@ -73,11 +73,11 @@ export function NavigationsList() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              isActive={location.pathname === "/costa-analysis"}
+              isActive={location.pathname === "/cost-analysis"}
               className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
             >
               <Link
-                to={"org/" + orgId + "/cost-analysis"}
+                to={"/cost-analysis"}
                 className="flex items-center gap-3 py-2.5 group"
               >
                 <div

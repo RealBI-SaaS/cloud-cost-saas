@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -13,48 +13,21 @@ import {
 } from "@/components/ui/sidebar";
 import { Building2, ChevronsUpDown, Plus, Search, Check } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import SelectedOrgContext from "@/context/selectedOrgContext";
+import { allOrganizations } from "@/pages/dashboard/mockData";
 
 const Header = () => {
-  const allOrganizations = [
-    {
-      id: "all-organization",
-      initial: "A",
-      name: "All organization",
-      color: "bg-primary/10 text-primary",
-    },
-    {
-      id: "marketing-team",
-      initial: "M",
-      name: "Marketing team",
-      color: "bg-primary/10 text-primary",
-    },
-    {
-      id: "product-team",
-      initial: "P",
-      name: "Production team",
-      color: "bg-secondary/10 text-secondary-foreground",
-    },
-    {
-      id: "development-team",
-      initial: "D",
-      name: "Development team",
-      color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    },
-    {
-      id: "design-team",
-      initial: "D",
-      name: "Design team",
-      color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    },
+  const colors = [
+    "bg-primary/10 text-primary",
+    "bg-primary/10 text-primary",
+    "bg-secondary/10 text-secondary-foreground",
+    "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+    "bg-emerald-500/30 text-emerald-600 dark:text-emerald-400",
   ];
 
-  const navigate = useNavigate();
-  const { orgId } = useParams();
+  const { selectedOrg, setSelectedOrg } = useContext(SelectedOrgContext);
 
-  // Set initial selected organization based on URL params
-  const initialOrg =
-    allOrganizations.find((org) => org.id === orgId) || allOrganizations[0];
-  const [selectedOrg, setSelectedOrg] = useState(initialOrg);
   const [organizations, setOrganizations] = useState(allOrganizations);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,8 +39,6 @@ const Header = () => {
 
   const handleOrgSelect = (org) => {
     setSelectedOrg(org);
-    // Navigate to the organization's dashboard
-    navigate(`/org/${org.id}/dashboard`);
   };
 
   // Sort organizations with selected one first
@@ -126,9 +97,11 @@ const Header = () => {
                   >
                     <div className="flex items-center gap-3 w-full">
                       <span
-                        className={`flex items-center justify-center h-7 w-7 rounded-md font-bold text-xs shrink-0 ${org.color}`}
+                        className={`flex items-center justify-center h-7 w-7 rounded-md font-bold text-xs shrink-0 ${
+                          colors[Math.floor(Math.random() * 5)]
+                        }`}
                       >
-                        {org.initial}
+                        {org.name[0]}
                       </span>
                       <span className="truncate text-sm font-medium flex-grow">
                         {org.name}

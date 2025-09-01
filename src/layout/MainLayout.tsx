@@ -4,6 +4,9 @@ import { AppSidebar } from "../components/sidebars/app-sidebar";
 import Navbar from "@/components/navbar/Navbar";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { allOrganizations } from "@/pages/dashboard/mockData";
+import { useState } from "react";
+import SelectedOrgContext from "@/context/selectedOrgContext";
 
 const MainLayout = () => {
   // If you need async data, fetch it in useEffect
@@ -15,17 +18,21 @@ const MainLayout = () => {
     location.pathname.includes("/account") ||
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
-
+  const [selectedOrg, setSelectedOrg] = useState<OrganizationsType>(
+    allOrganizations[0]
+  );
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
+    <SelectedOrgContext.Provider value={{ selectedOrg, setSelectedOrg }}>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
 
-      <main className="w-full ">
-        <Navbar />
+        <main className="w-full ">
+          <Navbar />
 
-        <Outlet />
-      </main>
-    </SidebarProvider>
+          <Outlet />
+        </main>
+      </SidebarProvider>{" "}
+    </SelectedOrgContext.Provider>
   );
 };
 

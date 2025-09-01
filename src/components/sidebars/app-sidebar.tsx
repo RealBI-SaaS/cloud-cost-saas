@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Building2, Plus, ChevronsUpDown, Home, Search } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 
@@ -26,6 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import Header from "./homeSidebarComponents/header";
 import Footer from "./homeSidebarComponents/footer";
+import SelectedOrgContext from "@/context/selectedOrgContext";
+import { allOrganizations } from "@/pages/dashboard/mockData";
 
 // Menu items (extendable)
 const items = [
