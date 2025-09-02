@@ -1,5 +1,4 @@
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import numLockLogo from "/logo-only.svg";
 import React from "react";
 import { AvatarFallback, AvatarImage, Avatar } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
@@ -75,20 +74,6 @@ const Footer = () => {
           </span>
         </Link>
       </SidebarMenuButton>
-      <div className=" border-t mt-2 pt-2 border-border/40">
-        <SidebarMenuButton asChild variant="muted">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <Avatar className="rounded-none">
-              <AvatarImage src={numLockLogo} />
-              <AvatarFallback>RB</AvatarFallback>
-            </Avatar>
-            <p className="font-bold text-xl text-[#2387e9ff]">
-              Num
-              <span className="text-[#cd5a13ff]">Lock</span>
-            </p>
-          </Link>
-        </SidebarMenuButton>
-      </div>{" "}
     </div>
   );
 };

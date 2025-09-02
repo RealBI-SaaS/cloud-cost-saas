@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Building2, Plus, ChevronsUpDown, Home, Search } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
+import numLockLogo from "/logo-only.svg";
 
 import {
   Sidebar,
@@ -10,6 +11,7 @@ import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 import { NavigationsList } from "@/components/sidebars/homeSidebarComponents/navigation-list";
@@ -49,7 +51,21 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props} className="border-border">
       <SidebarHeader>
-        <Header />
+        <div className=" border-t mt-2 pt-2 border-border/40">
+          <SidebarMenuButton asChild variant="muted">
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <Avatar className="rounded-none">
+                <AvatarImage src={numLockLogo} />
+                <AvatarFallback>RB</AvatarFallback>
+              </Avatar>
+              <p className="font-bold text-xl text-[#2387e9ff]">
+                Num
+                <span className="text-[#cd5a13ff]">Lock</span>
+              </p>
+            </Link>
+          </SidebarMenuButton>
+        </div>{" "}
+        <SidebarSeparator />
       </SidebarHeader>
 
       {/* Sidebar content */}
@@ -59,6 +75,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarFooter>
         <Footer />
+        <Header />
       </SidebarFooter>
     </Sidebar>
   );

@@ -9,6 +9,7 @@ import {
   type LucideIcon,
   Cloud,
   DollarSign,
+  CloudOff,
 } from "lucide-react";
 
 import {
@@ -31,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useCloudAccountsStore from "@/stores/CloudAccountStore";
 import IntegrationSources from "@/pages/data/IntegrationSources";
+import { FcEmptyTrash } from "react-icons/fc";
 // import { vendorMeta, defaultIcon } from "@/data/iconMap";
 
 export function NavigationsList() {
@@ -118,7 +120,8 @@ export function NavigationsList() {
                 className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
                 title="Add Cloud Account"
               >
-                <Plus className="h-3.5 w-3.5" />
+                <IntegrationSources />
+                {/* <Plus className="h-3.5 w-3.5" /> */}
               </Button>
 
               <CollapsibleTrigger asChild>
@@ -153,7 +156,7 @@ export function NavigationsList() {
                 </div>
               ) : accounts.length === 0 ? (
                 <div className="flex  gap-2.5 flex-col items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
-                  <IntegrationSources />
+                  <CloudOff />
                   <p className="text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
                     No cloud accounts
                   </p>{" "}

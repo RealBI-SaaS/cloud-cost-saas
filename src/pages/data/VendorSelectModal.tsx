@@ -37,8 +37,8 @@ export default function VendorSelectModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {label === false ? (
-          <Button className="bg-accent hover:bg-primary ">
-            <Plus className="hover:rotate-180" />
+          <Button variant="ghost" className="size-1 ">
+            <Plus />
           </Button>
         ) : (
           <Button>

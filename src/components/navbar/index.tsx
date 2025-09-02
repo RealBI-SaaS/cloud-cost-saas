@@ -42,7 +42,7 @@ const Navbar = () => {
   );
   return (
     <nav
-      className={`sticky top-0 z-50 flex items-center justify-between px-4 py-2 bg-background border-b border-border/40 transition-all duration-300 ${
+      className={`sticky top-0 z-50 flex items-center justify-between px-4 py-3.5 bg-background border-b border-border/40 transition-all duration-300 ${
         isScrolled ? "shadow-md backdrop-blur-sm bg-background/95" : "shadow-sm"
       }`}
     >
