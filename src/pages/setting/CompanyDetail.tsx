@@ -77,7 +77,7 @@ export default function CompanyDetails() {
   // Render company details if company exists
   if (userComp) {
     return (
-      <div className="container mx-auto ">
+      <div className="container mx-auto border rounded-lg">
         <Card className="w-3/4 shadow-none border-none">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">

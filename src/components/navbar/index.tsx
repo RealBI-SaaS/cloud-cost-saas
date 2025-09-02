@@ -22,25 +22,18 @@ const Navbar = () => {
     {
       id: "dashboard",
       label: "Dashboard",
-      description: "Get a high-level overview of your cloud costs and usage.",
     },
     {
       id: "cost-analysis",
       label: "Cost Analysis",
-      description:
-        "Dive deeper into spending patterns and uncover cost-saving opportunities.",
     },
     {
       id: "settings",
       label: "Settings",
-      description:
-        "Configure organization settings, manage member roles, integrate cloud data sources, and set up alerts.",
     },
     {
       id: "account",
       label: "Personal Account",
-      description:
-        "Manage your profile details, preferences, and account settings.",
     },
   ];
 
@@ -63,9 +56,6 @@ const Navbar = () => {
             {curent_page?.label}
           </h1>
         </div>
-        <p className="text-sm text-muted-foreground ml-12">
-          {curent_page?.description}
-        </p>
       </div>
 
       {/* Right Section  Notifications, and Profile */}

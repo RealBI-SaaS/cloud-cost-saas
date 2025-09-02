@@ -85,9 +85,10 @@ const Settings = () => {
         <div className="border  bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md">
           <TabsContent
             value="general"
-            className="m-0 pt-2 data-[state=active]:animate-fadeIn"
+            className="m-0 pt-2 flex gap-10 p-10 data-[state=active]:animate-fadeIn"
           >
             <CompanyDetails />
+            <ThemeSwitcher />
           </TabsContent>
           <TabsContent
             value="members"
@@ -105,7 +106,7 @@ const Settings = () => {
             value="alert"
             className="m-0 pt-2 data-[state=active]:animate-fadeIn"
           >
-            <ThemeSwitcher />
+            Todo
           </TabsContent>
         </div>
       </Tabs>

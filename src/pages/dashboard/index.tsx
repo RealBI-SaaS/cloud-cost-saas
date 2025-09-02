@@ -32,17 +32,14 @@ import { costBreakdown, recentActivity, usageStats } from "./mockData";
 
 const Dashboard = () => {
   const { selectedOrg: currentOrg } = useContext(SelectedOrgContext);
-  // const currentOrg =
-  //   allOrganizations.find((org) => org.id === orgId) || allOrganizations[0];
 
   return (
     <div className="p-6 bg-background">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">
-          {currentOrg.name} Dashboard
+          Dashboard | {currentOrg.name}
         </h1>
-        <p className="text-muted-foreground mt-2">{currentOrg.description}</p>
       </div>
 
       {/* Stats Grid */}
