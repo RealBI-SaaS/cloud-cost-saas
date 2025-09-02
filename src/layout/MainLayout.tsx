@@ -1,12 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/sidebars/app-sidebar";
-import Navbar from "@/components/navbar/Navbar";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import { useState } from "react";
 import SelectedOrgContext from "@/context/selectedOrgContext";
+import Navbar from "@/components/navbar";
 
 const MainLayout = () => {
   // If you need async data, fetch it in useEffect

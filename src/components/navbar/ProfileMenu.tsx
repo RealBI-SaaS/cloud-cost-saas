@@ -24,7 +24,11 @@ const ProfileMenu = () => {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={12} className="me-3">
+      <DropdownMenuContent
+        align="end"
+        className="w-40 p-0 rounded-lg border-border/60"
+        sideOffset={8}
+      >
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

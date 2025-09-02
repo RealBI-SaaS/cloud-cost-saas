@@ -12,7 +12,7 @@ export const allOrganizations = [
   {
     id: "all-organization",
     name: "All organization",
-    description: "Overview of all teams and projects",
+    description: "Overview of all teams and cloud accounts",
     monthlyCost: 1245.5,
     costChange: 125.6,
     activeAccounts: 42,
