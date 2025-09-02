@@ -16,7 +16,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import SelectedOrgContext from "@/context/selectedOrgContext";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 
-const Header = () => {
+const OrgMenu = () => {
   const colors = [
     "bg-primary/10 text-primary",
     "bg-primary/10 text-primary",
@@ -49,7 +49,7 @@ const Header = () => {
   });
 
   return (
-    <div className="py-2 border-b border-border/50 bg-gradient-to-r from-background to-background/95">
+    <div className="border bg-accent border-border">
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
@@ -130,4 +130,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default OrgMenu;

@@ -26,10 +26,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import Header from "./homeSidebarComponents/header";
+import Header from "./homeSidebarComponents/OrgMenu";
 import Footer from "./homeSidebarComponents/footer";
 import SelectedOrgContext from "@/context/selectedOrgContext";
 import { allOrganizations } from "@/pages/dashboard/mockData";
+import OrgMenu from "./homeSidebarComponents/OrgMenu";
 
 // Menu items (extendable)
 const items = [
@@ -75,7 +76,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarFooter>
         <Footer />
-        <Header />
+        <OrgMenu />
       </SidebarFooter>
     </Sidebar>
   );
