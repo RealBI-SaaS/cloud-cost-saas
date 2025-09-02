@@ -6,6 +6,7 @@ import { useState } from "react";
 
 // Import icons (you can use Lucide, Heroicons, or any other icon library)
 import { Building2, Users, Database, ChevronDown, Bell } from "lucide-react";
+import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("general");
@@ -99,6 +100,12 @@ const Settings = () => {
             className="m-0 pt-2 data-[state=active]:animate-fadeIn"
           >
             <DataIntegration />
+          </TabsContent>
+          <TabsContent
+            value="alert"
+            className="m-0 pt-2 data-[state=active]:animate-fadeIn"
+          >
+            <ThemeSwitcher />
           </TabsContent>
         </div>
       </Tabs>

@@ -1,73 +1,97 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-type Theme = "dark" | "light" | "system"
+// ----- Types -----
+
+type Mode = "light" | "dark" | "system";
+type BrandTheme = "default" | "theme-ocean" | "theme-sunset" | "theme-forest";
+
+type Theme = Mode | BrandTheme;
 
 type ThemeProviderProps = {
-    children: React.ReactNode
-    defaultTheme?: Theme
-    storageKey?: string
-}
+  children: React.ReactNode;
+  defaultTheme?: Theme;
+  storageKey?: string;
+};
 
-type ThemeProviderState = {
-    theme: Theme
-    setTheme: (theme: Theme) => void
-}
+type ThemeContextType = {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+};
 
-const initialState: ThemeProviderState = {
-    theme: "system",
-    setTheme: () => null,
-}
+// ----- Theme List -----
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ALL_THEMES: Theme[] = [
+  "light",
+  "dark",
+  "system",
+  "default",
+  "theme-ocean",
+  "theme-sunset",
+  "theme-forest",
+];
+
+// ----- Initial State -----
+
+const initialState: ThemeContextType = {
+  theme: "system",
+  setTheme: () => null,
+};
+
+const ThemeContext = createContext<ThemeContextType>(initialState);
+
+// ----- ThemeProvider Component -----
 
 export function ThemeProvider({
-                                  children,
-                                  defaultTheme = "system",
-                                  storageKey = "vite-ui-theme",
-                                  ...props
-                              }: ThemeProviderProps) {
-    const [theme, setTheme] = useState<Theme>(
-        () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-    )
+  children,
+  defaultTheme = "system",
+  storageKey = "vite-ui-theme",
+}: ThemeProviderProps) {
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    }
+    return defaultTheme;
+  });
 
-    useEffect(() => {
-        const root = window.document.documentElement
+  // Apply theme class to <html>
+  useEffect(() => {
+    const root = window.document.documentElement;
 
-        root.classList.remove("light", "dark")
+    // Remove all theme classes
+    ALL_THEMES.forEach((t) => root.classList.remove(t));
 
-        if (theme === "system") {
-            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-                .matches
-                ? "dark"
-                : "light"
+    let activeTheme = theme;
 
-            root.classList.add(systemTheme)
-            return
-        }
-
-        root.classList.add(theme)
-    }, [theme])
-
-    const value = {
-        theme,
-        setTheme: (theme: Theme) => {
-            localStorage.setItem(storageKey, theme)
-            setTheme(theme)
-        },
+    if (theme === "system") {
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      activeTheme = systemPrefersDark ? "dark" : "light";
     }
 
-    return (
-        <ThemeProviderContext.Provider {...props} value={value}>
-            {children}
-        </ThemeProviderContext.Provider>
-    )
+    root.classList.add(activeTheme);
+  }, [theme]);
+
+  const setTheme = (newTheme: Theme) => {
+    localStorage.setItem(storageKey, newTheme);
+    setThemeState(newTheme);
+  };
+
+  const value = useMemo(() => ({ theme, setTheme }), [theme]);
+
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 }
 
-export const useTheme = () => {
-    const context = useContext(ThemeProviderContext)
+// ----- Hook -----
 
-    if (context === undefined)
-        throw new Error("useTheme must be used within a ThemeProvider")
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
 
-    return context
-}
+  if (!context) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+
+  return context;
+};
