@@ -51,7 +51,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props} className="border-border">
       <SidebarHeader>
-        <div className=" border-t mt-2 pt-2 border-border/40">
+        <div className=" mt-2 pt-2 ">
           <SidebarMenuButton asChild variant="muted">
             <Link to="/dashboard" className="flex items-center gap-2">
               <Avatar className="rounded-none">

@@ -35,16 +35,6 @@ const Settings = () => {
 
   return (
     <div className="p-6 px-10  space-y-8 mx-auto ">
-      <div className="mb-8 text-center md:text-left">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-          Company Settings
-        </h1>
-        <p className="text-muted-foreground mt-2 text-base md:text-lg max-w-2xl mx-auto md:mx-0">
-          Manage your company profile, members, and data integrations in one
-          place
-        </p>
-      </div>
-
       <Tabs
         defaultValue="general"
         value={activeTab}
