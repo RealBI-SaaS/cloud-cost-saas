@@ -118,9 +118,9 @@ const Header = () => {
               <div className="my-3 h-px bg-border/40" />
 
               {/* Create New Organization */}
-              <DropdownMenuItem className="flex items-center px-3 py-2 rounded-lg cursor-pointer border border-dashed border-border/40 text-sm text-muted-foreground hover:bg-accent/70 hover:text-foreground transition-all">
-                <Plus className="h-4 w-4 mr-2" />
-                Create new organization
+              <DropdownMenuItem className="flex group  items-center px-3 py-2 rounded-lg cursor-pointer border border-dashed border-border/40 text-sm text-muted-foreground hover:bg-accent/70 hover:text-foreground transition-all">
+                <Plus className="h-4 w-4 mr-2 group-hover:rotate-180 transition-all " />
+                New organization
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -84,7 +84,7 @@ export default function CompanyMembers() {
   const fetchInvitations = async () => {
     try {
       const response = await axiosInstance.get(
-        `/company/${userComp.id}/invitations`,
+        `/company/${userComp.id}/invitations`
       );
       setInvitations(response.data);
     } catch (error) {
@@ -97,7 +97,7 @@ export default function CompanyMembers() {
   const fetchMembers = async () => {
     try {
       const response = await axiosInstance.get(
-        `/company/${userComp.id}/members/`,
+        `/company/${userComp.id}/members/`
       );
       setMembers(response.data);
     } catch (error) {
@@ -119,7 +119,7 @@ export default function CompanyMembers() {
       setLoading(true);
       const response = await axiosInstance.patch(
         `company/${userComp.id}/members/${memberId}/role/`,
-        { role: newRole },
+        { role: newRole }
       );
 
       fetchMembers();
@@ -142,7 +142,7 @@ export default function CompanyMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.delete(
-        `company/${userComp.id}/members/${memberId}/`,
+        `company/${userComp.id}/members/${memberId}/`
       );
 
       fetchMembers();
@@ -166,7 +166,7 @@ export default function CompanyMembers() {
     try {
       setLoading(true);
       const response = await axiosInstance.delete(
-        `/company/invitations/revoke/${id}/`,
+        `/company/invitations/revoke/${id}/`
       );
 
       fetchInvitations();
@@ -192,7 +192,7 @@ export default function CompanyMembers() {
     try {
       const response = await axiosInstance.post(
         `/company/${userComp.id}/invite/`,
-        { email: newInvite.email, role: newInvite.role },
+        { email: newInvite.email, role: newInvite.role }
       );
 
       fetchInvitations();
@@ -221,8 +221,8 @@ export default function CompanyMembers() {
   const hasPriviledges = () => {
     return (
       user.is_staff ||
-      userComp.membership.role === "admin" ||
-      userComp.membership.role === "owner"
+      userComp.membership?.role === "admin" ||
+      userComp.membership?.role === "owner"
     );
   };
 
@@ -375,9 +375,7 @@ export default function CompanyMembers() {
                                 onClick={() =>
                                   handleRoleChange(
                                     member.id,
-                                    member.role === "admin"
-                                      ? "member"
-                                      : "admin",
+                                    member.role === "admin" ? "member" : "admin"
                                   )
                                 }
                               >

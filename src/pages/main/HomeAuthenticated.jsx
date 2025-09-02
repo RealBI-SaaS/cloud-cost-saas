@@ -67,6 +67,28 @@ const HomeAuthenticated = () => {
       {/*<Navbar />*/}
       {/* main section  */}
       Hallo jo
+      <div className=" bg-blue-950  grid grid-cols-2  ">
+
+
+        {/* <PowerBIEmbed /> */}
+        <div className=" flex flex-col gap-3 h-full   ">
+          <div className=" ">
+            <CostSummaries data={costAccountSummary} />
+          </div>
+
+          <div className="   ">
+            <CostByServicePieChart data={costByService} />
+          </div>
+        </div>
+        {/* <CostOverTime data={costOverTime} /> */}
+        <div className="h-full   w-full">
+          {/* <UsageByServiceChart data={costByServicePerDay} /> */}
+          <ServiceCostBarChart data={costByMonthService} />
+        </div>
+        <div className="col-span-2 h-full">
+          <MonthlyServiceCostChart data={costByMonthService} />
+        </div>
+      </div>
 
 
     </div>

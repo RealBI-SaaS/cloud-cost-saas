@@ -102,7 +102,7 @@ const DataIntegration: React.FC = () => {
   };
 
   const userHasPermission = (comp) => {
-    return comp?.membership.role !== "member";
+    return comp?.membership?.role !== "member";
   };
 
   return (
