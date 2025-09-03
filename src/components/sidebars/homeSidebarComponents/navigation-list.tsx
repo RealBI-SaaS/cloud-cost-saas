@@ -1,24 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   ChevronDown,
-  Plus,
-  type LucideIcon,
-  Cloud,
   DollarSign,
+  Cloud,
   CloudOff,
+  BookOpen,
+  Users,
+  MessageCircle,
 } from "lucide-react";
 
 import {
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
   useSidebar,
@@ -32,72 +31,26 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useCloudAccountsStore from "@/stores/CloudAccountStore";
 import IntegrationSources from "@/pages/data/IntegrationSources";
-import { FcEmptyTrash } from "react-icons/fc";
-// import { vendorMeta, defaultIcon } from "@/data/iconMap";
+import MenuItem from "./menuItem";
 
 export function NavigationsList() {
-  const { isMobile } = useSidebar();
-  const [isAccountsOpen, setIsAccountsOpen] = useState(true);
+  const { isMobile } = useSidebar(); // not used currently, maybe for future conditional rendering
+  const [isAccountsOpen, setIsAccountsOpen] = useState(false);
   const { accounts, currentAccount, setCurrentAccount, loading } =
     useCloudAccountsStore();
   const location = useLocation();
-  const { orgId } = useParams();
 
   return (
     <div className="flex flex-col h-full pt-2">
       {/* Dashboard Navigation */}
       <SidebarGroup>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={location.pathname === "/dashboard"}
-              className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
-            >
-              <Link
-                to={"/dashboard"}
-                className="flex items-center gap-3 py-2.5 group"
-              >
-                <div
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    location.pathname === "/dashboard"
-                      ? "bg-primary/20 text-primary"
-                      : "bg-muted/50 text-muted-foreground group-hover:bg-accent"
-                  }`}
-                >
-                  <Home className="h-4 w-4" />
-                </div>
-                <span className="font-medium group-data-[collapsible=icon]:hidden">
-                  Dashboard
-                </span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={location.pathname === "/cost-analysis"}
-              className="rounded-lg transition-all duration-200 hover:bg-accent py-5 "
-            >
-              <Link
-                to={"/cost-analysis"}
-                className="flex items-center gap-3 py-2.5 group"
-              >
-                <div
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    location.pathname === "/cost-analysis"
-                      ? "bg-primary/20 text-primary"
-                      : "bg-muted/50 text-muted-foreground group-hover:bg-accent"
-                  }`}
-                >
-                  <DollarSign className="h-4 w-4" />
-                </div>
-                <span className="font-medium group-data-[collapsible=icon]:hidden">
-                  Cost Analysis
-                </span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <MenuItem name="Dashboard" path="/dashboard" icon={Home} />
+          <MenuItem
+            name="Cost Analysis"
+            path="/cost-analysis"
+            icon={DollarSign}
+          />
         </SidebarMenu>
       </SidebarGroup>
 
@@ -109,7 +62,7 @@ export function NavigationsList() {
           className="space-y-2"
         >
           <div className="flex items-center justify-between px-1 mb-2">
-            <SidebarGroupLabel className=" uppercase  gap-2  group-data-[collapsible=icon]:sr-only">
+            <SidebarGroupLabel className="uppercase gap-2 group-data-[collapsible=icon]:sr-only">
               <Cloud /> Cloud Accounts
             </SidebarGroupLabel>
 
@@ -121,14 +74,13 @@ export function NavigationsList() {
                 title="Add Cloud Account"
               >
                 <IntegrationSources />
-                {/* <Plus className="h-3.5 w-3.5" /> */}
               </Button>
 
               <CollapsibleTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 rounded-md group-data-[collapsible=icon]:hidden text-muted-foreground hover:text-foreground hover:bg-accent"
+                  className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
                 >
                   <ChevronDown
                     className={`h-3.5 w-3.5 transition-transform duration-200 ${
@@ -155,20 +107,18 @@ export function NavigationsList() {
                   ))}
                 </div>
               ) : accounts.length === 0 ? (
-                <div className="flex  gap-2.5 flex-col items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
+                <div className="flex flex-col gap-2.5 items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
                   <CloudOff />
                   <p className="text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
                     No cloud accounts
-                  </p>{" "}
+                  </p>
                 </div>
               ) : (
                 accounts.map((acc) => {
-                  // const Icon = vendorMeta[acc.vendor]?.icon || defaultIcon;
                   const isActive = currentAccount?.id === acc.id;
 
                   return (
-                    <SidebarMenuSub>
-                      <SidebarMenuSub key={acc.id}></SidebarMenuSub>
+                    <SidebarMenuSub key={acc.id}>
                       <SidebarMenuSubItem>
                         <SidebarMenuButton
                           asChild
@@ -188,7 +138,7 @@ export function NavigationsList() {
                                 isActive ? "bg-primary/20" : "bg-muted"
                               }`}
                             >
-                              {/* <Icon className="h-4 w-4" /> */}
+                              {/* You can add dynamic icons here if available */}
                             </div>
 
                             <span className="font-medium group-data-[collapsible=icon]:hidden truncate">
@@ -210,6 +160,20 @@ export function NavigationsList() {
             </SidebarMenu>
           </CollapsibleContent>
         </Collapsible>
+      </SidebarGroup>
+
+      {/* Other Navigation */}
+      <SidebarGroup>
+        <SidebarMenu>
+          <MenuItem name="Catalog" path="/catalog" icon={BookOpen} />
+          <MenuItem name="Statistics" path="/statistics" icon={Users} />
+          <MenuItem name="Campaign" path="/campaign" icon={Users} />
+          <MenuItem
+            name="Conversation"
+            path="/conversation"
+            icon={MessageCircle}
+          />
+        </SidebarMenu>
       </SidebarGroup>
     </div>
   );

@@ -42,15 +42,9 @@ const items = [
 ];
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
-  const location = useLocation();
-
-  const isSettingsPage =
-    location.pathname.includes("/settings") ||
-    location.pathname.includes("/manage-all") ||
-    location.pathname.includes("/create-company");
-
   return (
     <Sidebar collapsible="icon" {...props} className="border-border">
+      {/* header */}
       <SidebarHeader>
         <div className=" mt-2 pt-2 ">
           <SidebarMenuButton asChild variant="muted">
@@ -74,6 +68,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <NavigationsList />
       </SidebarContent>
 
+      {/* Footer */}
       <SidebarFooter>
         <Footer />
         <OrgMenu />
