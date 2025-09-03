@@ -1,5 +1,7 @@
 export const brandThemes = [
   { label: "Default", value: "default" },
+  { label: "Simple", value: "simple" },
+
   { label: "Classic", value: "classic" },
 
   { label: "Amber Minimal", value: "amber-minimal" },
@@ -9,6 +11,7 @@ export const brandThemes = [
 ];
 export type BrandTheme =
   | "default"
+  | "simple"
   | "classic"
   | "amber-minimal"
   | "bold-tech"

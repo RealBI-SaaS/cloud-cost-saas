@@ -18,19 +18,19 @@ const MenuItem = ({ name, path, icon }: Props) => {
     <SidebarMenuButton
       asChild
       isActive={isActive}
-      className="rounded-lg transition-all duration-200 hover:bg-accent py-5"
+      className={` transition-all duration-200  py-6  hover:bg-primary/20 `}
     >
-      <Link to={path} className="flex items-center gap-3 py-2.5 group">
+      <Link to={path} className="flex   items-center gap-3 py-2.5 group">
         <div
-          className={`p-1.5 rounded-lg transition-colors ${
+          className={`p-1.5  rounded-lg transition-colors ${
             isActive
-              ? "bg-primary/20 text-primary"
+              ? "bg-muted/40"
               : "bg-muted/50 text-muted-foreground group-hover:bg-accent"
           }`}
         >
           <Icon className="h-4 w-4" />
         </div>
-        <span className="font-medium group-data-[collapsible=icon]:hidden">
+        <span className=" font-semibold  group-data-[collapsible=icon]:hidden">
           {name}
         </span>
       </Link>
