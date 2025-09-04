@@ -16,7 +16,7 @@ import { Plus, Pencil, Trash2, Check, X, Search } from "lucide-react";
 import organization_service, {
   Organization,
 } from "@/services/organization_service";
-import AddOrganization from "./organization/AddOrganization";
+import AddOrganization from "./AddOrganization";
 import useOrganizations from "@/hooks/useOrganization";
 import { OrganizationSelector } from "@/components/sidebars/homeSidebarComponents/organization-selector";
 import { toast } from "sonner";

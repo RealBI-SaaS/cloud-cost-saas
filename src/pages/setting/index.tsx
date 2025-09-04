@@ -15,7 +15,7 @@ import {
   LayoutPanelTop,
 } from "lucide-react";
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
-import CompanyOrganization from "./CompanyOrganization";
+import CompanyOrganization from "./organization";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("general");
