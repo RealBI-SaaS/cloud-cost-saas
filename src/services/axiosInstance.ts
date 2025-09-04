@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { CanceledError  } from "axios";
+
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -66,4 +67,5 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+export { CanceledError };
 export default axiosInstance;

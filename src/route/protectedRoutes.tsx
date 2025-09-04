@@ -5,7 +5,7 @@ import Dashboard from "@/pages/dashboard";
 import CostAnalysis from "@/pages/costAnalysis";
 
 export const protectedRoutes: AppRoute[] = [
-  // { path: "/dashboard/default", element: <HomeAuthenticated /> },
+  { path: "/dashboard/default", element: <HomeAuthenticated /> },
   // { path: "/dashboard/:parentId", element: <HomeAuthenticated /> },
   // { path: "/dashboard/:parentId/:subId", element: <HomeAuthenticated /> },
   { path: "/welcome", element: <Welcome /> },
