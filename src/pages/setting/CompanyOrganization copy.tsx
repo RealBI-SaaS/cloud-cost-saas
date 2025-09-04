@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Loading } from "@/components/misc/loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,18 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Check, X, Search } from "lucide-react";
-import organization_service, {
-  Organization,
-} from "@/services/organization_service";
+import { Organization } from "@/services/organization_service";
 import AddOrganization from "./organization/AddOrganization";
 import useOrganizations from "@/hooks/useOrganization";
-import { OrganizationSelector } from "@/components/sidebars/homeSidebarComponents/organization-selector";
-import { toast } from "sonner";
-import { LoadingButton } from "@/components/ui/loading-buton";
-import { WarningAlert } from "@/components/WarningAlert";
 
 const CompanyOrganization = () => {
-  const { organizations, isLoading, setOrganizations } = useOrganizations();
+  const { organizations, isLoading, setReload } = useOrganizations();
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<Organization>>({});
@@ -34,36 +28,11 @@ const CompanyOrganization = () => {
     setEditingId(org.id);
     setForm(org);
   };
-  const [isLoadingSave, setIsLoadingSave] = useState(false);
 
-  /*************  ✨ Windsurf Command 🌟  *************/
-  const handleSave = (updated_org) => {
-    setIsLoadingSave(true);
-    organization_service
-      .updateOrganization(updated_org.id, updated_org)
-      .then((res) => {
-        setOrganizations(
-          organizations.map((org) =>
-            org.id === updated_org.id
-              ? {
-                  ...res.data,
-                  role: updated_org?.role,
-                  company: updated_org?.company,
-                }
-              : org
-          )
-        );
-        setIsLoadingSave(false);
-        setEditingId(null);
-        toast.success("Organization updated successfully");
-      })
-      .catch((e) => {
-        setIsLoadingSave(false);
-
-        toast.error(e.message || "Failed to update organization");
-
-        console.error("Error updating org:", e);
-      });
+  const handleSave = () => {
+    console.log("Saving:", form);
+    // Call API -> optimistic update here
+    setEditingId(null);
   };
 
   const handleCancel = () => {
@@ -72,19 +41,8 @@ const CompanyOrganization = () => {
   };
 
   const handleDelete = (id: string) => {
-    setIsLoadingSave(true);
-    organization_service
-      .deleteOrganization(id)
-      .then((res) => {
-        setOrganizations(organizations.filter((org) => org.id !== id));
-        setIsLoadingSave(false);
-        toast.success("Organization deleted successfully");
-      })
-      .catch((e) => {
-        setIsLoadingSave(false);
-        toast.error(e.message || "Failed to delete organization");
-        console.error("Error deleting org:", e);
-      });
+    console.log("Deleting:", id);
+    // Call API -> optimistic delete here
   };
 
   const filteredOrgs = organizations?.filter((org: Organization) =>
@@ -108,10 +66,7 @@ const CompanyOrganization = () => {
                 className="pl-8"
               />
             </div>
-            <AddOrganization
-              onCreate={setOrganizations}
-              organizations={organizations}
-            />
+            <AddOrganization onCreate={setReload()} />
           </div>
         </CardHeader>
 
@@ -124,9 +79,7 @@ const CompanyOrganization = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>
-                    <div>Name</div>
-                  </TableHead>
+                  <TableHead>Name</TableHead>
                   <TableHead>Company</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Created</TableHead>
@@ -152,9 +105,29 @@ const CompanyOrganization = () => {
                         org.name
                       )}
                     </TableCell>
-                    <TableCell>{org.company_name}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary">{org.role}</Badge>
+                      {editingId === org.id ? (
+                        <Input
+                          value={form.company_name || ""}
+                          onChange={(e) =>
+                            setForm({ ...form, company_name: e.target.value })
+                          }
+                        />
+                      ) : (
+                        org.company_name
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {editingId === org.id ? (
+                        <Input
+                          value={form.role || ""}
+                          onChange={(e) =>
+                            setForm({ ...form, role: e.target.value })
+                          }
+                        />
+                      ) : (
+                        <Badge variant="secondary">{org.role}</Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(org.created_at).toLocaleDateString()}
@@ -172,23 +145,9 @@ const CompanyOrganization = () => {
                           >
                             <X className="h-4 w-4 mr-1" /> Cancel
                           </Button>
-
-                          <LoadingButton
-                            loading={isLoadingSave}
-                            size="sm"
-                            onClick={() => {
-                              const updated_org = {
-                                id: org.id,
-                                name: form.name,
-                                company: org.company,
-                                role: org.role,
-                              };
-
-                              handleSave(updated_org);
-                            }}
-                          >
+                          <Button size="sm" onClick={handleSave}>
                             <Check className="h-4 w-4 mr-1" /> Save
-                          </LoadingButton>
+                          </Button>
                         </>
                       ) : (
                         <>
@@ -199,16 +158,13 @@ const CompanyOrganization = () => {
                           >
                             <Pencil className="h-4 w-4 mr-1" /> Edit
                           </Button>
-
-                          <WarningAlert
-                            message={`This will permanently delete organization ${org.name} and its data. This action cannot be undone.`}
-                            onConfirm={() => handleDelete(org.id)}
-                            triggerBtn={
-                              <Button size="sm" variant="destructive">
-                                <Trash2 className="h-4 w-4 mr-1" /> Delete
-                              </Button>
-                            }
-                          />
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDelete(org.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" /> Delete
+                          </Button>
                         </>
                       )}
                     </TableCell>

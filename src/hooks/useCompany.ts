@@ -4,7 +4,7 @@ import {CanceledError} from "@/services/axiosInstance";
 import { useEffect, useState } from 'react'
 
 const useCompany = () => {
-    const [company, setCompany] = useState([])  
+    const [companies, setCompany] = useState([])  
     const [error, setError] = useState("")    
     const [isLoading, setIsLoading] = useState(false)   
 
@@ -24,7 +24,7 @@ const useCompany = () => {
 
         return () => cancel()
     }, [])
-    return {companys, error, isLoading}
+    return {companies, error, isLoading}
 }
 
 export default useCompany

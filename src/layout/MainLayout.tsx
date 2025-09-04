@@ -8,7 +8,9 @@ import { useState } from "react";
 import SelectedOrgContext from "@/context/selectedOrgContext";
 import Navbar from "@/components/navbar";
 import { Organization } from "@/services/organization_service";
-import useOrganizations from "@/hooks/useOrganizations copy";
+import useOrganizations from "@/hooks/useOrganization";
+import CompanyContext from "@/context/companyContext";
+import useCompany from "@/hooks/useCompany";
 
 const MainLayout = () => {
   // If you need async data, fetch it in useEffect
@@ -20,10 +22,11 @@ const MainLayout = () => {
     location.pathname.includes("/account") ||
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
-  const { organizations } = useOrganizations();
+  // const [rganizations] = useOrganizations()
   const [selectedOrg, setSelectedOrg] = useState<Organization>(
-    organizations[0]
+    allOrganizations[0]
   );
+  const { companies, isLoading, error } = useCompany();
   return (
     <SelectedOrgContext.Provider value={{ selectedOrg, setSelectedOrg }}>
       <SidebarProvider defaultOpen={defaultOpen}>

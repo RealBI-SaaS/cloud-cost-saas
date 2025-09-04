@@ -1,5 +1,4 @@
-import axios, { CanceledError  } from "axios";
-
+import axios, { CanceledError } from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -20,12 +19,13 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add a response interceptor to refresh token on 401 errors
+// Add a response interceptor
 axiosInstance.interceptors.response.use(
-  (response) => response, // If the response is OK, return it as is
+  (response) => response, // ✅ If the response is OK, return it
   async (error) => {
     const originalRequest = error.config;
 
+    // 🔐 Handle 401 → refresh token flow
     if (
       error.response &&
       error.response.status === 401 &&
@@ -35,16 +35,13 @@ axiosInstance.interceptors.response.use(
 
       if (!refreshToken) {
         console.warn("No refresh token available, logging out...");
-        //localStorage.removeItem("access_token");
-        //localStorage.removeItem("refresh_token");
         window.location.href = "/logout";
-
         return Promise.reject(error);
       }
-      originalRequest._retry = true; // Prevent infinite loops
+
+      originalRequest._retry = true;
 
       try {
-        // Request a new access token
         const { data } = await axios.post(`${BASE_URL}/auth/jwt/refresh/`, {
           refresh: refreshToken,
         });
@@ -52,18 +49,55 @@ axiosInstance.interceptors.response.use(
         const newAccessToken = data.access;
         localStorage.setItem("access_token", newAccessToken);
 
-        // Update the header and retry the failed request
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        //window.location.href = "/login"; // Redirect to login if refresh fails
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
       }
     }
 
-    return Promise.reject(error);
+    // ⚠️ Handle other errors → extract readable message
+    if (error.response) {
+      const serverError = error.response.data;
+
+      let errorMessage =
+        serverError?.message ||
+        serverError?.detail ||
+        "";
+
+      // If validation errors: { field: ["msg"] }
+      if (!errorMessage && typeof serverError === "object") {
+        errorMessage = Object.entries(serverError)
+          .map(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              // return `${field}: ${messages.join(", ")}`;
+              return messages;
+            }
+            return `${field}: ${messages}`;
+          })
+          .join(" | ");
+      }
+
+      if (!errorMessage) {
+        errorMessage = error.message || "Something went wrong";
+      }
+
+      return Promise.reject({
+        status: error.response.status,
+        message: errorMessage,
+        data: serverError,
+      });
+    }
+
+    // Fallback for network/unknown errors
+    return Promise.reject({
+      status: error.status || 500,
+      message: error.message || "Something went wrong",
+    });
   }
 );
 

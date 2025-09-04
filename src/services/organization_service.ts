@@ -1,3 +1,4 @@
+import { use, useState } from "react";
 import axiosInstance from "./axiosInstance";
 
 
@@ -6,8 +7,8 @@ interface ApiData {
     previous: string;	
     results: Organization[];
     count: number;
-    
 }
+
 export interface Organization {
     id: string;
     role: string;
@@ -15,8 +16,9 @@ export interface Organization {
     created_at: string;
     updated_at: string;
     company_id: string;
-    company_name: string;
+    company: string;
     // Add other properties as needed
+    company_name:string
     description: string;
     monthlyCost?: number;
     costChange?: number;
@@ -26,6 +28,10 @@ export interface Organization {
     accountsChange?: number;
 }
 
+export interface CreateOrgType{
+    name: string,
+    company: string
+}
 
 class OrganizationService{
     getAllOrganizations() {
@@ -39,8 +45,11 @@ class OrganizationService{
     deleteOrganization(id: string) {
         return axiosInstance.delete(`/organization/${id}/`)
     }
-    CreateOrganization(newOrg: Organization) {
-        return  axiosInstance.post('/organizations', newOrg)
+    updateOrganization(id: string,updated_data:CreateOrgType) {
+        return axiosInstance.put(`/organization/${id}/`, updated_data)
+    }
+    createOrganization(newOrg: CreateOrgType) {
+        return  axiosInstance.post('/organization/', newOrg)
     }
 }
 

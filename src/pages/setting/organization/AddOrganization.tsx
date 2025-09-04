@@ -1,78 +1,132 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useCompany from "@/hooks/useCompany";
+import OrganizationService, {
+  CreateOrgType,
+  Organization,
+} from "@/services/organization_service";
+import { toast } from "sonner";
+import { LoadingButton } from "@/components/ui/loading-buton";
 
-const AddOrganization = ({
-  onCreate,
-}: {
-  onCreate?: (name: string) => void;
-}) => {
-  const [orgName, setOrgName] = useState("");
+interface Props {
+  onCreate: (orgs: Organization[]) => void;
+  organizations: Organization[];
+}
+
+const AddOrganization = ({ onCreate, organizations }: Props) => {
+  const [newOrg, setNewOrg] = useState<CreateOrgType>({
+    name: "",
+    company: "",
+  });
   const [open, setOpen] = useState(false);
+  const { companies } = useCompany();
+  const [isLoading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!orgName.trim()) return;
-    onCreate?.(orgName.trim());
-    setOrgName("");
-    setOpen(false);
+  const handleSubmit = async () => {
+    if (!newOrg.name || !newOrg.company) {
+      toast.error("Please provide both organization name and company.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await OrganizationService.createOrganization(newOrg);
+
+      // Find company name to attach
+      const selectedCompany = companies.find((c) => c.id === newOrg.company);
+
+      onCreate([
+        ...organizations,
+        { ...res.data, company_name: selectedCompany?.name || "" },
+      ]);
+
+      toast.success("Organization created successfully ✅");
+      setOpen(false); // close only on success
+      setNewOrg({ name: "", company: "" });
+    } catch (e) {
+      console.error("Error creating org:", e);
+      toast.error(e.message + " ❌");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
           Create Organization
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-primary">
+      </AlertDialogTrigger>
+      <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-primary">
             Create a new Organization
-          </DialogTitle>
-          <DialogDescription>
-            Give your organization a name. You can manage members, roles, and
-            integrations later.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid gap-2">
-            <Input
-              className="text-primary"
-              id="orgName"
-              placeholder="Organization Name."
-              value={orgName}
-              onChange={(e) => setOrgName(e.target.value)}
-              autoFocus
-            />
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Create</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            You can manage members, roles, and integrations later.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <div className="space-y-4 py-2">
+          <Input
+            id="orgName"
+            placeholder="Organization Name"
+            value={newOrg.name}
+            onChange={(e) => setNewOrg({ ...newOrg, name: e.target.value })}
+            autoFocus
+          />
+
+          <Select
+            value={newOrg.company}
+            onValueChange={(value) => setNewOrg({ ...newOrg, company: value })}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select company" />
+            </SelectTrigger>
+            <SelectContent>
+              {companies.map((company) => (
+                <SelectItem key={company.id} value={company.id}>
+                  {company.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <LoadingButton
+            loading={isLoading}
+            onClick={handleSubmit}
+            disabled={isLoading}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isLoading ? "Creating..." : "Create"}
+          </LoadingButton>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

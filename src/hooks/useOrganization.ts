@@ -24,7 +24,7 @@ const useOrganizations = () => {
 
         return () => cancel()
     }, [])
-    return {organizations, error, isLoading}
+    return {organizations, error, isLoading,setOrganizations}
 }
 
 export default useOrganizations
