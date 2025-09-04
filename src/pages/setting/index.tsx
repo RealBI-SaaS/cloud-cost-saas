@@ -15,23 +15,24 @@ import {
   LayoutPanelTop,
 } from "lucide-react";
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
+import CompanyOrganization from "./CompanyOrganization";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("general");
   const settingList = [
     {
       key: "general",
-      name: "general",
+      name: "General",
       icon: Building2,
     },
     {
-      key: "Organizations",
-      name: "organization",
+      key: "organization",
+      name: "Organization",
       icon: LayoutPanelTop,
     },
     {
       key: "members",
-      name: "members",
+      name: "Members",
       icon: Users,
     },
     {
@@ -91,6 +92,12 @@ const Settings = () => {
           >
             <CompanyDetails />
             <ThemeSwitcher />
+          </TabsContent>
+          <TabsContent
+            value="organization"
+            className="m-0 pt-2 flex gap-10 p-10 data-[state=active]:animate-fadeIn"
+          >
+            <CompanyOrganization />
           </TabsContent>
           <TabsContent
             value="members"

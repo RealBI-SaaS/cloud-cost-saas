@@ -7,6 +7,8 @@ import { allOrganizations } from "@/pages/dashboard/mockData";
 import { useState } from "react";
 import SelectedOrgContext from "@/context/selectedOrgContext";
 import Navbar from "@/components/navbar";
+import { Organization } from "@/services/organization_service";
+import useOrganizations from "@/hooks/useOrganizations copy";
 
 const MainLayout = () => {
   // If you need async data, fetch it in useEffect
@@ -18,8 +20,9 @@ const MainLayout = () => {
     location.pathname.includes("/account") ||
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
-  const [selectedOrg, setSelectedOrg] = useState<OrganizationsType>(
-    allOrganizations[0]
+  const { organizations } = useOrganizations();
+  const [selectedOrg, setSelectedOrg] = useState<Organization>(
+    organizations[0]
   );
   return (
     <SelectedOrgContext.Provider value={{ selectedOrg, setSelectedOrg }}>

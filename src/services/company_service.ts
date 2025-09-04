@@ -4,18 +4,17 @@ import axiosInstance from "./axiosInstance";
 interface ApiData {
     next: string;
     previous: string;	
-    results: Organization[];
+    results: Company[];
     count: number;
     
 }
-export interface Organization {
+export interface Company {
     id: string;
     role: string;
     name: string;
     created_at: string;
     updated_at: string;
-    company_id: string;
-    company_name: string;
+    owner: string;
     // Add other properties as needed
     description: string;
     monthlyCost?: number;
@@ -27,22 +26,22 @@ export interface Organization {
 }
 
 
-class OrganizationService{
-    getAllOrganizations() {
+class CompanyService{
+    getAllCompany() {
         const controller = new AbortController();
         const response = axiosInstance
-            .get<ApiData>("/organization", {
+            .get<ApiData>("/company", {
                 signal: controller.signal
             })
         return {response, cancel:()=>controller.abort()}
     }
-    deleteOrganization(id: string) {
-        return axiosInstance.delete(`/organization/${id}/`)
+    deleteCompany(id: string) {
+        return axiosInstance.delete(`/company/${id}/`)
     }
-    CreateOrganization(newOrg: Organization) {
-        return  axiosInstance.post('/organizations', newOrg)
+    CreateCompany(newOrg: Company) {
+        return  axiosInstance.post('/company', newOrg)
     }
 }
 
 
-export default new OrganizationService()
+export default new CompanyService()

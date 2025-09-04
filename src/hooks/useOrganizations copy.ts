@@ -13,7 +13,7 @@ const useOrganizations = () => {
         const {response, cancel} = OrganizationService.getAllOrganizations()
         response
             .then(res => {
-                setOrganizations(res.data)
+                setOrganizations(res.data?.results || [])
                 setIsLoading(false)
             })
             .catch(err => {

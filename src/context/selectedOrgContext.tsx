@@ -1,7 +1,8 @@
+import { Organization } from "@/services/organization_service";
 import React, { createContext } from "react";
 interface selectedOrgType {
-  selectedOrg: OrganizationsType;
-  setSelectedOrg: React.Dispatch<React.SetStateAction<OrganizationsType>>;
+  selectedOrg: Organization;
+  setSelectedOrg: React.Dispatch<React.SetStateAction<Organization>>;
 }
 
 const SelectedOrgContext = createContext<selectedOrgType>(null);
