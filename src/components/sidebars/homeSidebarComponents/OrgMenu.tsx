@@ -56,8 +56,8 @@ const OrgMenu = () => {
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 className="
-                  h-12 px-3 w-full rounded-lg border border-border/30
-                  bg-sidebar-accent/50 hover:bg-sidebar-accent/70
+                  h-12 px-3 w-full rounded-sm border border-border/30
+                  bg-primary/5 hover:bg-sidebar-accent hover:border-primary
                   transition-all duration-200 
                   data-[state=open]:bg-sidebar-accent/80
                 "
