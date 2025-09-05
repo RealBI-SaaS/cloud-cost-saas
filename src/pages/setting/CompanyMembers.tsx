@@ -1,4 +1,3 @@
-"usC client";
 import useCompany from "@/stores/CompanyStore";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";

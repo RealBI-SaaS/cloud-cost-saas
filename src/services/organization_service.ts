@@ -42,15 +42,31 @@ class OrganizationService{
             })
         return {response, cancel:()=>controller.abort()}
     }
+    getOrganization(id: string) {
+        return axiosInstance.get(`/organization/${id}/`)
+    }
     deleteOrganization(id: string) {
         return axiosInstance.delete(`/organization/${id}/`)
     }
     updateOrganization(id: string,updated_data:CreateOrgType) {
         return axiosInstance.put(`/organization/${id}/`, updated_data)
     }
+    
     createOrganization(newOrg: CreateOrgType) {
         return  axiosInstance.post('/organization/', newOrg)
     }
+
+
+
+    // member related api
+    
+     getOrganizationMembers(id: string) {
+        return axiosInstance.get(`/organization/${id}/members/`)
+    }
+     getOrganizationMemberInvitations(id: string) {
+        return axiosInstance.get(`/organization/${id}/invitations/`)
+    }
+
 }
 
 

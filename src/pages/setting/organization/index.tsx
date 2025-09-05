@@ -12,7 +12,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Check, X, Search, Forward } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Check,
+  X,
+  Search,
+  Forward,
+  ExternalLink,
+} from "lucide-react";
 import organization_service, {
   Organization,
 } from "@/services/organization_service";
@@ -23,6 +32,7 @@ import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
 import { WarningAlert } from "@/components/WarningAlert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router-dom";
 
 const CompanyOrganization = () => {
   const { organizations, isLoading, setOrganizations } = useOrganizations();
@@ -201,9 +211,13 @@ const CompanyOrganization = () => {
                         </>
                       ) : (
                         <>
-                          <Button size="sm" variant="link">
-                            <Forward className="h-4 w-4 mr-1" /> Detail
-                          </Button>
+                          <Link
+                            className="flex items-center gap-1"
+                            to={`/settings/org/details/${org.id}`}
+                          >
+                            Detail
+                            <ExternalLink />
+                          </Link>
                           <Button
                             size="sm"
                             variant="outline"

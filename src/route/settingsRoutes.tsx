@@ -8,6 +8,7 @@ import { AppRoute } from "./types";
 import Profile from "@/pages/user/profile";
 import ProfilePage from "@/pages/user/ProfilePage";
 import Settings from "@/pages/setting";
+import OrganizationDetail from "@/pages/setting/organization/OrganizationDetail";
 
 export const settingsRoutes: AppRoute[] = [
   { path: "/settings/organization/members", element: <CompanyMembers /> },
@@ -15,8 +16,12 @@ export const settingsRoutes: AppRoute[] = [
   // { path: "/settings/account/password", element: <AccountPassword /> },
   // { path: "/settings/general/preferences", element: <GeneralSettings /> },
   { path: "/settings/company/details", element: <CompanyDetails /> },
-  { path: "/settings/organization/data", element: <DataIntegration /> },
+
+  { path: "/settings/company/details", element: <CompanyDetails /> },
+
+  // { path: "/settings/organization/data", element: <DataIntegration /> },
   // personal account
   { path: "/account/me", element: <ProfilePage /> },
   { path: "/settings", element: <Settings /> },
+  { path: "/settings/org/details/:org_id", element: <OrganizationDetail /> },
 ];
