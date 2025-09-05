@@ -32,15 +32,6 @@ import SelectedOrgContext from "@/context/selectedOrgContext";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import OrgMenu from "./homeSidebarComponents/OrgMenu";
 
-// Menu items (extendable)
-const items = [
-  {
-    title: "Home",
-    url: "/home",
-    icon: Home,
-  },
-];
-
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props} className="border-border">

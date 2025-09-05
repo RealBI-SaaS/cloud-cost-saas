@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Check, X, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, X, Search, Forward } from "lucide-react";
 import organization_service, {
   Organization,
 } from "@/services/organization_service";
@@ -22,6 +22,7 @@ import { OrganizationSelector } from "@/components/sidebars/homeSidebarComponent
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
 import { WarningAlert } from "@/components/WarningAlert";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CompanyOrganization = () => {
   const { organizations, isLoading, setOrganizations } = useOrganizations();
@@ -36,7 +37,6 @@ const CompanyOrganization = () => {
   };
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
-  /*************  ✨ Windsurf Command 🌟  *************/
   const handleSave = (updated_org) => {
     setIsLoadingSave(true);
     organization_service
@@ -117,8 +117,17 @@ const CompanyOrganization = () => {
 
         <CardContent>
           {isLoading ? (
-            <div className="flex justify-center py-6">
-              <Loading />
+            <div className="flex flex-col gap-4">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div className="flex w-full gap-4">
+                  <Skeleton className="h-4 w-5/6 " />
+                  <Skeleton className="h-4 w-1/6" />
+                </div>
+              ))}
+              <div className="flex w-full gap-4 justify-end">
+                <Skeleton className="h-4 w-1/6 " />
+                <Skeleton className="h-4 w-1/6" />
+              </div>
             </div>
           ) : filteredOrgs?.length ? (
             <Table>
@@ -192,6 +201,9 @@ const CompanyOrganization = () => {
                         </>
                       ) : (
                         <>
+                          <Button size="sm" variant="link">
+                            <Forward className="h-4 w-4 mr-1" /> Detail
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"

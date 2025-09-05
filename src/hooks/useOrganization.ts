@@ -1,7 +1,9 @@
 import OrganizationService from '@/services/organization_service'
-import {CanceledError} from "@/services/axiosInstance";
+import { CanceledError } from 'axios';
+// import {CanceledError} from "@/services/axiosInstance";
 
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner';
 
 const useOrganizations = () => {
     const [organizations, setOrganizations] = useState([])  
@@ -17,12 +19,16 @@ const useOrganizations = () => {
                 setIsLoading(false)
             })
             .catch(err => {
-                if( err instanceof CanceledError) return;
+                if (err instanceof CanceledError)  return;
                 setError(err.message)
+                toast.error(err.message)
                 setIsLoading(false)
+                console.log(err)
+           
             })
-
         return () => cancel()
+
+
     }, [])
     return {organizations, error, isLoading,setOrganizations}
 }

@@ -11,7 +11,8 @@ interface Props {
 
 const MenuItem = ({ name, path, icon }: Props) => {
   const location = useLocation(); // Make sure you're using the hook to access the path
-  const isActive = location.pathname === path;
+  const isActive = location.pathname.includes(path);
+
   const Icon = icon;
 
   return (

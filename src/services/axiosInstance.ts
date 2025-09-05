@@ -94,10 +94,12 @@ axiosInstance.interceptors.response.use(
     }
 
     // Fallback for network/unknown errors
-    return Promise.reject({
-      status: error.status || 500,
-      message: error.message || "Something went wrong",
-    });
+    // return Promise.reject({
+    //   status: error.status || 500,
+    //   message: error.message || "Something went wrong",
+    // });
+      return Promise.reject(error);
+
   }
 );
 
