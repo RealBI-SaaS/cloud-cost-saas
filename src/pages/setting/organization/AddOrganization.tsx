@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -26,13 +26,11 @@ import OrganizationService, {
 } from "@/services/organization_service";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
+import OrganizationContext from "@/context/organizationContext";
 
-interface Props {
-  onCreate: (orgs: Organization[]) => void;
-  organizations: Organization[];
-}
+const AddOrganization = () => {
+  const { setOrganizations, organizations } = useContext(OrganizationContext);
 
-const AddOrganization = ({ onCreate, organizations }: Props) => {
   const [newOrg, setNewOrg] = useState<CreateOrgType>({
     name: "",
     company: "",
@@ -54,9 +52,9 @@ const AddOrganization = ({ onCreate, organizations }: Props) => {
       // Find company name to attach
       const selectedCompany = companies.find((c) => c.id === newOrg.company);
 
-      onCreate([
-        ...organizations,
-        { ...res.data, company_name: selectedCompany?.name || "" },
+      setOrganizations((prev) => [
+        ...prev,
+        { ...res.data, company_name: selectedCompany?.name },
       ]);
 
       toast.success("Organization created successfully ✅");

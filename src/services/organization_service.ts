@@ -17,12 +17,13 @@ export interface Organization {
     updated_at: string;
     company_id: string;
     company: string;
-    // Add other properties as needed
-    company_name:string
+    // Add a defualt value for the below fields
+    company_name: string;
     description: string;
     monthlyCost?: number;
     costChange?: number;
     activeAccounts?: number;
+    active_cloud_accounts:5
     members?: number;
     membersChange?: number;
     accountsChange?: number;

@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Building2, ChevronsUpDown, Plus, Search, Check } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import SelectedOrgContext from "@/context/selectedOrgContext";
-import { allOrganizations } from "@/pages/dashboard/mockData";
+import OrganizationContext from "@/context/organizationContext";
+// import { allOrganizations } from "@/pages/dashboard/mockData";
 
 const OrgMenu = () => {
   const colors = [
@@ -26,9 +26,14 @@ const OrgMenu = () => {
     "bg-emerald-500/30 text-emerald-600 dark:text-emerald-400",
   ];
 
-  const { selectedOrg, setSelectedOrg } = useContext(SelectedOrgContext);
+  const {
+    organizations: allOrganizations,
+    setOrganizations,
+    selectedOrg,
+    setSelectedOrg,
+  } = useContext(OrganizationContext);
 
-  const [organizations, setOrganizations] = useState(allOrganizations);
+  // const [organizations, setOrganizations] = useState(allOrganizations);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
@@ -42,7 +47,7 @@ const OrgMenu = () => {
   };
 
   // Sort organizations with selected one first
-  const sortedOrganizations = [...organizations].sort((a, b) => {
+  const sortedOrganizations = [...allOrganizations].sort((a, b) => {
     if (a.id === selectedOrg.id) return -1;
     if (b.id === selectedOrg.id) return 1;
     return 0;
