@@ -107,129 +107,135 @@ const OrganizationCardView: React.FC<OrganizationCardViewProps> = ({
           {filteredOrgs.map((org: Organization) => (
             <Card
               key={org.id}
-              className="p-4 border-border/50 hover:shadow-md transition-shadow group"
+              className="bg-sidebar/50 p-3 border-primary/50 hover:shadow-md transition-shadow group rounded-lg"
             >
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex justify-between items-center mb-2">
                 {editingId === org.id ? (
                   <Input
                     value={form.name || ""}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="h-8 text-sm font-medium"
+                    className="h-8 text-sm font-medium flex-1"
                     autoFocus
                   />
                 ) : (
-                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-lg text-muted-foreground group-hover:text-primary transition-colors flex-1">
                     {org.name}
                   </h3>
                 )}
-                <Badge
-                  variant="outline"
-                  className={`flex items-center gap-1 px-2 py-1 ${getRoleColor(
-                    org.role
-                  )}`}
-                >
-                  {getRoleIcon(org.role)}
-                  {org.role}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  {editingId === org.id ? (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleCancel}
+                        className="h-6 w-6 p-0"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <LoadingButton
+                        loading={isLoadingSave}
+                        size="sm"
+                        onClick={() => {
+                          const updated_org = {
+                            id: org.id,
+                            name: form.name,
+                            company: org.company,
+                            role: org.role,
+                          };
+                          handleSave(updated_org);
+                        }}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Check className="h-4 w-4" />
+                      </LoadingButton>
+                    </>
+                  ) : (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="end"
+                        className="border-border/100"
+                      >
+                        <DropdownMenuItem
+                          onClick={() => handleEdit(org)}
+                          className="flex items-center gap-2"
+                        >
+                          <Pencil className="h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to={`/settings/org/details/${org.id}`}
+                            className="flex items-center gap-2"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            View Details
+                          </Link>
+                        </DropdownMenuItem>
+                        <WarningAlert
+                          message={`This will permanently delete organization "${org.name}" and all its data. This action cannot be undone.`}
+                          onConfirm={() => handleDelete(org.id)}
+                          triggerBtn={
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onSelect={(e) => e.preventDefault()}
+                              className="flex items-center gap-2 text-destructive focus:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          }
+                        />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
               </div>
 
-              <div className="mb-3">
-                <p className="text-sm text-muted-foreground flex items-center gap-1">
-                  <Building className="h-3 w-3" />
-                  Company: {org.company_name}
-                </p>
+              <Badge
+                variant="outline"
+                className={`px-2 py-1 text-xs ${getRoleColor(org.role)}`}
+              >
+                {getRoleIcon(org.role)} {org.role}
+              </Badge>
+
+              <div className="mb-2 text-sm text-muted-foreground flex items-center gap-1">
+                <Building className="h-3 w-3" />
+                <span>Company: {org.company_name}</span>
               </div>
 
-              <div className="flex items-center gap-4 mb-4 text-xs text-muted-foreground">
+              <div className="flex gap-4 text-xs text-muted-foreground mb-2">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   Created: {new Date(org.created_at).toLocaleDateString()}
                 </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Link
-                    to={`/settings/org/details/${org.id}`}
-                    className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-                  >
-                    View Details
-                    <ExternalLink className="h-3 w-3" />
-                  </Link>
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  Updated: {new Date(org.updated_at).toLocaleDateString()}
                 </div>
-
-                {editingId === org.id ? (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={handleCancel}
-                      className="h-8 w-8 p-0"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                    <LoadingButton
-                      loading={isLoadingSave}
-                      size="sm"
-                      onClick={() => {
-                        const updated_org = {
-                          id: org.id,
-                          name: form.name,
-                          company: org.company,
-                          role: org.role,
-                        };
-                        handleSave(updated_org);
-                      }}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Check className="h-4 w-4" />
-                    </LoadingButton>
-                  </div>
-                ) : (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={() => handleEdit(org)}
-                        className="flex items-center gap-2"
-                      >
-                        <Pencil className="h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link
-                          to={`/settings/org/details/${org.id}`}
-                          className="flex items-center gap-2"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          View Details
-                        </Link>
-                      </DropdownMenuItem>
-                      <WarningAlert
-                        message={`This will permanently delete organization "${org.name}" and all its data. This action cannot be undone.`}
-                        onConfirm={() => handleDelete(org.id)}
-                        triggerBtn={
-                          <DropdownMenuItem
-                            onSelect={(e) => e.preventDefault()}
-                            className="flex items-center gap-2 text-destructive focus:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        }
-                      />
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
               </div>
+
+              <Button
+                className="bg-primary/20 text-primary border shadow-sm group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground"
+                asChild
+              >
+                <Link
+                  to={`/settings/org/details/${org.id}`}
+                  className="text-xs flex items-center gap-1"
+                >
+                  View Details
+                  <ExternalLink className="h-3 w-3" />
+                </Link>
+              </Button>
             </Card>
           ))}
         </div>

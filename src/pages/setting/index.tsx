@@ -95,7 +95,7 @@ const Settings = () => {
           </TabsContent>
           <TabsContent
             value="organization"
-            className="m-0 pt-2 flex gap-10 p-10 data-[state=active]:animate-fadeIn"
+            className="m-0 flex gap-10 data-[state=active]:animate-fadeIn"
           >
             <CompanyOrganization />
           </TabsContent>

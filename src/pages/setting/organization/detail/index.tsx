@@ -64,12 +64,14 @@ import {
   MailIcon,
   UserCheck,
   UserX,
+  X,
 } from "lucide-react";
 import organization_service, {
   Organization,
 } from "@/services/organization_service";
 import { LoadingButton } from "@/components/ui/loading-buton";
 import { ErrorBar } from "recharts";
+import OrganizationInfo from "./OrganizationInfo";
 
 interface Member {
   id: string;
@@ -97,9 +99,7 @@ const OrganizationDetail = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState<Partial<Organization>>({});
-  const [isSaving, setIsSaving] = useState(false);
+
   const [isInviting, setIsInviting] = useState(false);
   const [inviteForm, setInviteForm] = useState({
     email: "",
@@ -122,28 +122,10 @@ const OrganizationDetail = () => {
       setOrganization(orgRes.data);
       setMembers(membersRes.data);
       setInvitations(invitationsRes.data);
-      setEditForm(orgRes.data);
     } catch (err: any) {
       toast.error(err.message || "Failed to load organization data");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleSaveOrganization = async () => {
-    try {
-      setIsSaving(true);
-      const res = await organization_service.updateOrganization(
-        organization!.id,
-        editForm
-      );
-      setOrganization(res.data);
-      setIsEditing(false);
-      toast.success("Organization updated successfully");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to update organization");
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -225,165 +207,14 @@ const OrganizationDetail = () => {
           </div>
           <div>
             <h1 className="text-3xl font-bold">{organization?.name}</h1>
-            <p className="text-muted-foreground">
-              Organization ID: {organization?.id}
-            </p>
           </div>
         </div>
-        <Button
-          variant={isEditing ? "outline" : "default"}
-          onClick={() => setIsEditing(!isEditing)}
-          className="gap-2"
-        >
-          {isEditing ? (
-            <>
-              <Save className="h-4 w-4" />
-              Cancel
-            </>
-          ) : (
-            <>
-              <Edit className="h-4 w-4" />
-              Edit Organization
-            </>
-          )}
-        </Button>
       </div>
-
       {/* Organization Details Card */}
-      <Card className="shadow-lg border-border/50">
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Settings className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle className="text-2xl">Organization Details</CardTitle>
-              <CardDescription>
-                Manage your organization's information and settings
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-6">
-          {isEditing ? (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <Label htmlFor="name" className="text-sm font-medium">
-                    Organization Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value={editForm.name || ""}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, name: e.target.value })
-                    }
-                    className="h-11"
-                    placeholder="Enter organization name"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="description" className="text-sm font-medium">
-                    Description
-                  </Label>
-                  <Input
-                    id="description"
-                    value={editForm.description || ""}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, description: e.target.value })
-                    }
-                    className="h-11"
-                    placeholder="Enter organization description"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">
-                    Created
-                  </Label>
-                  <p className="px-3 py-2 bg-muted/20 rounded-lg text-sm">
-                    {new Date(organization?.created_at!).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">
-                    Last Updated
-                  </Label>
-                  <p className="px-3 py-2 bg-muted/20 rounded-lg text-sm">
-                    {new Date(organization?.updated_at!).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-3 justify-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setIsEditing(false);
-                    setEditForm(organization || {});
-                  }}
-                  className="gap-2"
-                >
-                  <LeafyGreen className="h-4 w-4" />
-                  Cancel
-                </Button>
-                <LoadingButton
-                  loading={isSaving}
-                  onClick={handleSaveOrganization}
-                  className="gap-2"
-                >
-                  <SaveAll className="h-4 w-4" />
-                  Save Changes
-                </LoadingButton>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Name</Label>
-                  <p className="text-lg font-medium px-3 py-2 bg-muted/20 rounded-lg">
-                    {organization?.name}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">
-                    Description
-                  </Label>
-                  <p className="text-lg font-medium px-3 py-2 bg-muted/20 rounded-lg">
-                    {organization?.description || "No description"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    Created
-                  </Label>
-                  <p className="px-3 py-2 bg-muted/20 rounded-lg">
-                    {new Date(organization?.created_at!).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">
-                    Last Updated
-                  </Label>
-                  <p className="px-3 py-2 bg-muted/20 rounded-lg">
-                    {new Date(organization?.updated_at!).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
+      <OrganizationInfo
+        organization={organization}
+        onUpdate={setOrganization}
+      />
       {/* Tabs for Members and Invitations */}
       <Tabs defaultValue="members" className="space-y-4">
         <TabsList className="w-full justify-start bg-muted/50 p-1 rounded-lg">

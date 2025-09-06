@@ -8,7 +8,7 @@ import { AppRoute } from "./types";
 import Profile from "@/pages/user/profile";
 import ProfilePage from "@/pages/user/ProfilePage";
 import Settings from "@/pages/setting";
-import OrganizationDetail from "@/pages/setting/organization/OrganizationDetail";
+import OrganizationDetail from "@/pages/setting/organization/detail";
 
 export const settingsRoutes: AppRoute[] = [
   { path: "/settings/organization/members", element: <CompanyMembers /> },

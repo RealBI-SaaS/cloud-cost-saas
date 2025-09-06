@@ -78,8 +78,8 @@ const CompanyOrganization = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
-      <Card className="shadow-sm border-border/50">
+    <div className="w-full ">
+      <Card className="border-none  shadow-none">
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
