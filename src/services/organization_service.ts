@@ -49,6 +49,11 @@ export interface CreateOrgType{
     name: string,
     company: string
 }
+interface MemberType{
+    org_id: string,
+    email: string,
+    role: string
+}
 
 class OrganizationService{
     getAllOrganizations() {
@@ -77,11 +82,18 @@ class OrganizationService{
 
     // member related api
     
-     getOrganizationMembers(id: string) {
+     getMembers(id: string) {
         return axiosInstance.get(`/organization/${id}/members/`)
     }
-     getOrganizationMemberInvitations(id: string) {
+     getMemberInvitations(id: string) {
         return axiosInstance.get(`/organization/${id}/invitations/`)
+    }
+     inviteMember(newMember:MemberType)  {
+        return axiosInstance.post(`/organization/${newMember.org_id}/invite/`,newMember )
+    }
+    
+    revokeInvitation(id: string) {
+        return axiosInstance.delete(`/organization/invitations/revoke/${id}/`)
     }
 
 }

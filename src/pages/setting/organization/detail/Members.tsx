@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import organization_service from "@/services/organization_service";
 
 interface Member {
   id: string;
@@ -77,7 +78,7 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
   const handleSendInvitation = async () => {
     try {
       setIsInviting(true);
-      // await organization_service.inviteMember(orgId, inviteForm);
+      await organization_service.inviteMember({ ...inviteForm, org_id: orgId });
       setInviteForm({ email: "", role: "member" });
       toast.success("Invitation sent successfully");
       onUpdateMember();
@@ -173,13 +174,12 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
                       setInviteForm({ ...inviteForm, role: value })
                     }
                   >
-                    <SelectTrigger className="h-11">
+                    <SelectTrigger className="h-11 w-full">
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="admin">Admin</SelectItem>
                       <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="viewer">Viewer</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

@@ -7,9 +7,9 @@ import organization_service, {
   Organization,
 } from "@/services/organization_service";
 import OrganizationInfo from "./OrganizationInfo";
-import MembersTab from "./Members";
-import PendingInvitationsTab from "./PendingInvitations";
+import Members from "./Members";
 import CustomTab from "@/components/CustomTab";
+import PendingInvitations from "./PendingInvitations";
 
 interface Member {
   id: string;
@@ -47,8 +47,8 @@ const OrganizationDetail = () => {
       setIsLoading(true);
       const [orgRes, membersRes, invitationsRes] = await Promise.all([
         organization_service.getOrganization(org_id!),
-        organization_service.getOrganizationMembers(org_id!),
-        organization_service.getOrganizationMemberInvitations(org_id!),
+        organization_service.getMembers(org_id!),
+        organization_service.getMemberInvitations(org_id!),
       ]);
 
       setOrganization(orgRes.data);
@@ -84,10 +84,10 @@ const OrganizationDetail = () => {
     },
     {
       key: "members",
-      name: "Members|" + members.length,
+      name: "Members | " + members.length,
       icon: Users,
       content: (
-        <MembersTab
+        <Members
           members={members}
           orgId={org_id!}
           onUpdateMember={loadOrganizationData}
@@ -96,12 +96,12 @@ const OrganizationDetail = () => {
     },
     {
       key: "pending",
-      name: "Pending Invites" + invitations.length,
+      name: "Pending Invites | " + invitations.length,
       icon: MailIcon,
       content: (
-        <PendingInvitationsTab
+        <PendingInvitations
           invitations={invitations}
-          orgId={org_id!}
+          orgId={org_id}
           onUpdateInvitations={loadOrganizationData}
         />
       ),

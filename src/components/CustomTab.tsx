@@ -65,6 +65,7 @@ const CustomTab = ({ settingList }: Props) => {
         </TabsContent> */}
         {settingList.map((setting) => (
           <TabsContent
+            key={setting.key}
             value={setting.key}
             className="m-0 pt-2 data-[state=active]:animate-fadeIn"
           >

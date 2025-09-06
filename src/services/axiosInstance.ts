@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    // ⚠️ Handle other errors → extract readable message
+    //  Handle other errors → extract readable message
     if (error.response) {
       const serverError = error.response.data;
 
