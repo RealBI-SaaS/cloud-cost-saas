@@ -9,6 +9,6 @@ interface OrganizationContextType {
   isLoading: boolean;
 }
 
-const OrganizationContext = createContext<OrganizationContextType | null>(null);
+const OrganizationContext = createContext<OrganizationContextType>(null);
 
 export default OrganizationContext;

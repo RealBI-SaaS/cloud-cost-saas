@@ -138,7 +138,7 @@ export default function Navigation({
       activationConstraint: {
         distance: 1,
       },
-    }),
+    })
   );
 
   const handleNavigationEdit = (e) => {
@@ -330,7 +330,7 @@ export default function Navigation({
               e,
               navigation.id,
               setSortedNavigations,
-              setReordering,
+              setReordering
             )
           }
           modifiers={[

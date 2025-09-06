@@ -26,9 +26,9 @@ import OrganizationService, {
 } from "@/services/organization_service";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
-import OrganizationContext from "@/context/organizationContext";
+import OrganizationContext from "@/context/OrganizationContext";
 
-const AddOrganization = () => {
+const AddOrganization = ({ variant }: { variant?: string }) => {
   const { setOrganizations, organizations } = useContext(OrganizationContext);
 
   const [newOrg, setNewOrg] = useState<CreateOrgType>({
@@ -71,10 +71,17 @@ const AddOrganization = () => {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Create Organization
-        </Button>
+        {variant === "muted" ? (
+          <div className="flex group items-center px-3 py-2 rounded-lg cursor-pointer border border-dashed border-border/40 text-sm text-muted-foreground hover:bg-accent/70 hover:text-foreground transition-all">
+            <Plus className="h-4 w-4 mr-2 group-hover:rotate-180 transition-all" />
+            New organization
+          </div>
+        ) : (
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Create Organization
+          </Button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent className="sm:max-w-md">
         <AlertDialogHeader>

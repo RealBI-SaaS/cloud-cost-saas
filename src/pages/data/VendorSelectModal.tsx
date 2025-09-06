@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   Dialog,
@@ -36,9 +34,9 @@ export default function VendorSelectModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {label === false ? (
-          <Button variant="ghost" className="size-1 ">
-            <Plus />
+        {label == false ? (
+          <Button variant="ghost" className="p-0 w-fit">
+            <Plus className=" " />
           </Button>
         ) : (
           <Button>

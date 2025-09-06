@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 
 // TODO: mock data will be expected from API
-export const allOrganizations = [
+export const allOrganizations = 
+
   {
-    id: "all-organization",
+    id: "4b505e7a-3c0e-43e2-aa2b-108d3a7b243a",
     name: "All organization",
-    description: "Overview of all teams and cloud accounts",
     monthlyCost: 1245.5,
     costChange: 125.6,
     activeAccounts: 42,
@@ -24,72 +24,8 @@ export const allOrganizations = [
     updated_at: "",
     company_id: "",
     company_name: "",
-  },
-  {
-    id: "marketing-team",
-    name: "Marketing team",
-    description: "Marketing campaigns and analytics",
-    monthlyCost: 845.25,
-    costChange: -45.3,
-    activeAccounts: 18,
-    accountsChange: 2,
-    members: 24,
-    membersChange: 1,
-    role: " ",
-    created_at: "",
-    updated_at: "",
-    company_id: "",
-    company_name: "",
-  },
-  {
-    id: "product-team",
-    name: "Production team",
-    description: "Product development and manufacturing",
-    monthlyCost: 2150.75,
-    costChange: 325.8,
-    activeAccounts: 28,
-    accountsChange: 5,
-    members: 45,
-    membersChange: 3,
-    role: " ",
-    created_at: "",
-    updated_at: "",
-    company_id: "",
-    company_name: "",
-  },
-  {
-    id: "development-team",
-    name: "Development team",
-    description: "Software development and engineering",
-    monthlyCost: 3850.9,
-    costChange: 210.45,
-    activeAccounts: 35,
-    accountsChange: 4,
-    members: 38,
-    membersChange: 2,
-    role: " ",
-    created_at: "",
-    updated_at: "",
-    company_id: "",
-    company_name: "",
-  },
-  {
-    id: "design-team",
-    name: "Design team",
-    description: "UI/UX design and creative work",
-    monthlyCost: 975.3,
-    costChange: 75.25,
-    activeAccounts: 12,
-    accountsChange: 1,
-    members: 15,
-    membersChange: 0,
-    role: " ",
-    created_at: "",
-    updated_at: "",
-    company_id: "",
-    company_name: "",
-  },
-];
+  }
+
 
 export const recentActivity = [
   {

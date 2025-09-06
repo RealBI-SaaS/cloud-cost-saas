@@ -9,7 +9,6 @@ import OrganizationContext from "@/context/organizationContext";
 import Navbar from "@/components/navbar";
 import { Organization } from "@/services/organization_service";
 import useOrganizations from "@/hooks/useOrganization";
-import CompanyContext from "@/context/companyContext";
 import useCompany from "@/hooks/useCompany";
 
 const MainLayout = () => {
@@ -23,11 +22,11 @@ const MainLayout = () => {
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
   // const [rganizations] = useOrganizations()
-  const [selectedOrg, setSelectedOrg] = useState<Organization>(
-    allOrganizations[0]
-  );
-  const { organizations, isLoading, setOrganizations } = useOrganizations();
 
+  const { organizations, isLoading, setOrganizations } = useOrganizations();
+  const [selectedOrg, setSelectedOrg] = useState<Organization>(
+    organizations[0]
+  );
   return (
     <OrganizationContext.Provider
       value={{
