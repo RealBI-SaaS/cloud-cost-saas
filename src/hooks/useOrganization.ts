@@ -3,6 +3,7 @@ import {CanceledError} from "@/services/axiosInstance";
 
 import { useEffect, useState } from 'react'
 
+
 const useOrganizations = () => {
     const [organizations, setOrganizations] = useState([])  
     const [error, setError] = useState("")    
