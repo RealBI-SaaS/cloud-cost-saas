@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { Loading } from "@/components/misc/loading";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -23,8 +17,6 @@ import {
   Users,
   Shield,
   MoreHorizontal,
-  TableOfContents,
-  LayoutDashboard,
 } from "lucide-react";
 import organization_service, {
   Organization,
@@ -136,6 +128,9 @@ const CompanyOrganization = () => {
     }
   };
 
+
+
+  
   return (
     <div className="w-full space-y-6">
       <Card className="shadow-sm border-border/50">
@@ -146,6 +141,9 @@ const CompanyOrganization = () => {
             </div>
             <div>
               <CardTitle className="text-2xl">Organizations</CardTitle>
+              <CardDescription>
+                Manage your organizations and access settings
+              </CardDescription>
             </div>
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -161,9 +159,7 @@ const CompanyOrganization = () => {
             <AddOrganization
               onCreate={setOrganizations}
               organizations={organizations}
-            />{" "}
-            <TableOfContents />
-            <LayoutDashboard strokeWidth={1} />
+            />
           </div>
         </CardHeader>
 
