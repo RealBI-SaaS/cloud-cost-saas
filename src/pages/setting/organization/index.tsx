@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Loading } from "@/components/misc/loading";
 import {
   Card,
@@ -30,10 +30,10 @@ import organization_service, {
   Organization,
 } from "@/services/organization_service";
 import AddOrganization from "./AddOrganization";
-import useOrganizations from "@/hooks/useOrganization";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
 import { WarningAlert } from "@/components/WarningAlert";
+import OrganizationContext from "@/context/organizationContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import {
@@ -51,7 +51,9 @@ import {
 } from "@/components/ui/select";
 
 const CompanyOrganization = () => {
-  const { organizations, isLoading, setOrganizations } = useOrganizations();
+  const { organizations, isLoading, setOrganizations } =
+    useContext(OrganizationContext);
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<Organization>>({});
   const [search, setSearch] = useState("");

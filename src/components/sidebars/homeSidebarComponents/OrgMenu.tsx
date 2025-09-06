@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,9 +12,12 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Building2, ChevronsUpDown, Plus, Search, Check } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import SelectedOrgContext from "@/context/selectedOrgContext";
-import { allOrganizations } from "@/pages/dashboard/mockData";
+import {
+  allOrganizations,
+  Organization,
+} from "@/services/organization_service";
+import OrganizationContext from "@/context/OrganizationContext";
+import AddOrganization from "@/pages/setting/organization/AddOrganization";
 
 const OrgMenu = () => {
   const colors = [
@@ -26,27 +29,41 @@ const OrgMenu = () => {
     "bg-emerald-500/30 text-emerald-600 dark:text-emerald-400",
   ];
 
-  const { selectedOrg, setSelectedOrg } = useContext(SelectedOrgContext);
+  const { organizations, selectedOrg, setSelectedOrg } =
+    useContext(OrganizationContext);
 
-  const [organizations, setOrganizations] = useState(allOrganizations);
+  const [sortedOrganizations, setSortedOrganizations] =
+    useState<Organization[]>(organizations);
+  const [search, setSearch] = useState("");
+
+  // Initialize sortedOrganizations when organizations change
+  useEffect(() => {
+    setSortedOrganizations(organizations);
+  }, [organizations]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.toLowerCase();
-    setOrganizations(
-      allOrganizations.filter((org) => org.name.toLowerCase().includes(query))
+    const search_text = e.target.value.toLowerCase();
+    setSearch(search_text);
+
+    setSortedOrganizations(
+      organizations.filter((org) =>
+        org.name.toLowerCase().includes(search_text)
+      )
     );
   };
 
-  const handleOrgSelect = (org) => {
+  const handleOrgSelect = (org: Organization) => {
     setSelectedOrg(org);
-  };
 
-  // Sort organizations with selected one first
-  const sortedOrganizations = [...organizations].sort((a, b) => {
-    if (a.id === selectedOrg.id) return -1;
-    if (b.id === selectedOrg.id) return 1;
-    return 0;
-  });
+    // Sort organizations with selected org at the top
+    const sorted = [...organizations].sort((a, b) => {
+      if (a.id === org.id) return -1;
+      if (b.id === org.id) return 1;
+      return 0;
+    });
+
+    setSortedOrganizations(sorted);
+  };
 
   return (
     <div className="border bg-accent border-border">
@@ -64,7 +81,7 @@ const OrgMenu = () => {
               >
                 <Building2 className="h-5 w-5 text-sidebar-primary transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
                 <span className="font-semibold text-sidebar-foreground truncate max-w-[120px] text-sm">
-                  {selectedOrg.name}
+                  {selectedOrg?.name || "Select Organization"}
                 </span>
                 <ChevronsUpDown className="ml-auto h-4 w-4 text-sidebar-muted-foreground transition-all duration-200 group-hover:text-sidebar-foreground group-hover:rotate-180" />
               </SidebarMenuButton>
@@ -81,24 +98,25 @@ const OrgMenu = () => {
                 <Input
                   placeholder="Search organizations..."
                   onChange={handleSearch}
+                  value={search}
                   className="pl-9 pr-3 h-10 rounded-lg border-border/50 focus-visible:ring-2 focus-visible:ring-primary/25 text-sm"
                 />
               </div>
 
               {/* Organization List */}
               <div className="space-y-1 max-h-64 overflow-y-auto scrollbar-thin">
-                {sortedOrganizations.map((org) => (
+                {[allOrganizations, ...sortedOrganizations].map((org) => (
                   <DropdownMenuItem
                     key={org.id}
                     onClick={() => handleOrgSelect(org)}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-200 hover:bg-accent/70 ${
-                      org.id === selectedOrg.id ? "bg-accent/50" : ""
+                      org.id === selectedOrg?.id ? "bg-accent/50" : ""
                     }`}
                   >
                     <div className="flex items-center gap-3 w-full">
                       <span
                         className={`flex items-center justify-center h-7 w-7 rounded-md font-bold text-xs shrink-0 ${
-                          colors[Math.floor(Math.random() * 5)]
+                          colors[Math.floor(Math.random() * colors.length)]
                         }`}
                       >
                         {org.name[0]}
@@ -106,7 +124,7 @@ const OrgMenu = () => {
                       <span className="truncate text-sm font-medium flex-grow">
                         {org.name}
                       </span>
-                      {org.id === selectedOrg.id && (
+                      {org.id === selectedOrg?.id && (
                         <Check className="h-4 w-4 text-primary flex-shrink-0" />
                       )}
                     </div>
@@ -118,10 +136,8 @@ const OrgMenu = () => {
               <div className="my-3 h-px bg-border/40" />
 
               {/* Create New Organization */}
-              <DropdownMenuItem className="flex group  items-center px-3 py-2 rounded-lg cursor-pointer border border-dashed border-border/40 text-sm text-muted-foreground hover:bg-accent/70 hover:text-foreground transition-all">
-                <Plus className="h-4 w-4 mr-2 group-hover:rotate-180 transition-all " />
-                New organization
-              </DropdownMenuItem>
+
+              <AddOrganization variant="muted" />
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

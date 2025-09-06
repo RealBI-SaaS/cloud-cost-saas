@@ -1,12 +1,12 @@
-import OrganizationService from '@/services/organization_service'
-import { CanceledError } from 'axios';
-// import {CanceledError} from "@/services/axiosInstance";
+import OrganizationService, { allOrganizations, Organization } from '@/services/organization_service'
+import {CanceledError} from "@/services/axiosInstance";
 
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 
 const useOrganizations = () => {
-    const [organizations, setOrganizations] = useState([])  
+    
+    const [organizations, setOrganizations] = useState<Organization[]>([allOrganizations])  
     const [error, setError] = useState("")    
     const [isLoading, setIsLoading] = useState(false)   
 
@@ -15,7 +15,13 @@ const useOrganizations = () => {
         const {response, cancel} = OrganizationService.getAllOrganizations()
         response
             .then(res => {
-                setOrganizations(res.data?.results || [])
+               
+                setOrganizations(
+                    ()=>[
+                      
+                        ...res.data?.results|| []
+                    ]
+                    )
                 setIsLoading(false)
             })
             .catch(err => {

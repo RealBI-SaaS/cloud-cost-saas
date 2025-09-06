@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
-import SelectedOrgContext from "@/context/selectedOrgContext";
+import SelectedOrgContext from "@/context/organizationContext";
 import { costBreakdown, recentActivity, usageStats } from "./mockData";
 
 const Dashboard = () => {

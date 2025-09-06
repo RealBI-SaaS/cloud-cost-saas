@@ -1,7 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useContext, useState } from "react";
 import {
   Home,
   ChevronDown,
@@ -29,16 +26,21 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import useCloudAccountsStore from "@/stores/CloudAccountStore";
+// import useCloudAccountsStore from "@/stores/CloudAccountStore";
 import IntegrationSources from "@/pages/data/IntegrationSources";
 import MenuItem from "./menuItem";
+import useCloudAccounts from "@/hooks/useCloudAccounts";
+import OrganizationContext from "@/context/organizationContext";
+import { allOrganizations } from "@/pages/dashboard/mockData";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar(); // not used currently, maybe for future conditional rendering
   const [isAccountsOpen, setIsAccountsOpen] = useState(false);
-  const { accounts, currentAccount, setCurrentAccount, loading } =
-    useCloudAccountsStore();
-  const location = useLocation();
+  // const { accounts, currentAccount, setCurrentAccount, loading } =
+  //   useCloudAccountsStore();
+  const { selectedOrg } = useContext(OrganizationContext);
+
+  const { cloudAccounts, isLoading, error } = useCloudAccounts(selectedOrg.id);
 
   return (
     <div className="flex flex-col h-full pt-2">
@@ -68,6 +70,7 @@ export function NavigationsList() {
 
             <div className="flex items-center gap-1">
               <Button
+                asChild
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
@@ -94,7 +97,7 @@ export function NavigationsList() {
 
           <CollapsibleContent>
             <SidebarMenu>
-              {loading ? (
+              {isLoading ? (
                 <div className="space-y-1 px-2">
                   {[1, 2, 3].map((i) => (
                     <div
@@ -106,7 +109,7 @@ export function NavigationsList() {
                     </div>
                   ))}
                 </div>
-              ) : accounts.length === 0 ? (
+              ) : cloudAccounts.length === 0 ? (
                 <div className="flex flex-col gap-2.5 items-center justify-center p-4 text-center rounded-lg bg-muted/30 mx-2">
                   <CloudOff />
                   <p className="text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
@@ -114,7 +117,7 @@ export function NavigationsList() {
                   </p>
                 </div>
               ) : (
-                accounts.map((acc) => {
+                cloudAccounts.map((acc) => {
                   const isActive = currentAccount?.id === acc.id;
 
                   return (

@@ -5,11 +5,10 @@ import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import { useState } from "react";
-import SelectedOrgContext from "@/context/selectedOrgContext";
+import OrganizationContext from "@/context/organizationContext";
 import Navbar from "@/components/navbar";
 import { Organization } from "@/services/organization_service";
 import useOrganizations from "@/hooks/useOrganization";
-import CompanyContext from "@/context/companyContext";
 import useCompany from "@/hooks/useCompany";
 
 const MainLayout = () => {
@@ -23,12 +22,21 @@ const MainLayout = () => {
     location.pathname.includes("/create-company") ||
     location.pathname.includes("/organization");
   // const [rganizations] = useOrganizations()
+
+  const { organizations, isLoading, setOrganizations } = useOrganizations();
   const [selectedOrg, setSelectedOrg] = useState<Organization>(
-    allOrganizations[0]
+    organizations[0]
   );
-  const { companies, isLoading, error } = useCompany();
   return (
-    <SelectedOrgContext.Provider value={{ selectedOrg, setSelectedOrg }}>
+    <OrganizationContext.Provider
+      value={{
+        selectedOrg,
+        setSelectedOrg,
+        organizations,
+        isLoading,
+        setOrganizations,
+      }}
+    >
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
 
@@ -38,7 +46,7 @@ const MainLayout = () => {
           <Outlet />
         </main>
       </SidebarProvider>{" "}
-    </SelectedOrgContext.Provider>
+    </OrganizationContext.Provider>
   );
 };
 
