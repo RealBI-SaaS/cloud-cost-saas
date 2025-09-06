@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 import CompanyOrganization from "./organization";
+import CustomTab from "@/components/CustomTab";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("general");
@@ -24,32 +25,43 @@ const Settings = () => {
       key: "general",
       name: "General",
       icon: Building2,
+      content: (
+        <div className=" flex gap-10">
+          <CompanyDetails />
+          <ThemeSwitcher />
+        </div>
+      ),
     },
     {
       key: "organization",
       name: "Organization",
       icon: LayoutPanelTop,
+      content: <CompanyOrganization />,
     },
     {
       key: "members",
       name: "Members",
       icon: Users,
+      content: <CompanyMembers />,
     },
     {
       key: "data-integration",
       name: "Data Integration",
       icon: Database,
+      content: <DataIntegration />,
     },
     {
       key: "alert",
       name: "Alert",
       icon: Bell,
+      content: "todo",
     },
   ];
 
   return (
     <div className="p-6 px-10  space-y-8 mx-auto ">
-      <Tabs
+      <CustomTab settingList={settingList} />
+      {/* <Tabs
         defaultValue="general"
         value={activeTab}
         onValueChange={setActiveTab}
@@ -118,7 +130,7 @@ const Settings = () => {
             Todo
           </TabsContent>
         </div>
-      </Tabs>
+      </Tabs> */}
     </div>
   );
 };

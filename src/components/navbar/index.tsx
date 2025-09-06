@@ -32,14 +32,26 @@ const Navbar = () => {
       label: "Settings",
     },
     {
+      id: "settingsorg",
+      label: "Settings | Organization",
+    },
+    {
       id: "account",
       label: "Personal Account",
     },
   ];
 
-  const curent_page = page_header.find(
-    (item) => item.id === pathname.pathname.split("/")[1]
-  );
+  const curent_page = page_header.find((page) => {
+    const path = pathname.pathname.split("/");
+    if (path.length > 2) {
+      return (
+        page.id ===
+        pathname.pathname.split("/")[1] + pathname.pathname.split("/")[2]
+      );
+    }
+    return page.id === pathname.pathname.split("/")[1];
+  });
+
   return (
     <nav
       className={`sticky top-0 z-50 flex items-center justify-between px-4 py-3.5 bg-sidebar border-b border-border/40 transition-all duration-300 ${
