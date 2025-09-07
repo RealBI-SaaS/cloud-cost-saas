@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building, Users, MailIcon, Building2 } from "lucide-react";
+import { Building, Users, MailIcon, Building2, Cloud } from "lucide-react";
 import organization_service, {
   Organization,
 } from "@/services/organization_service";
@@ -105,6 +105,12 @@ const OrganizationDetail = () => {
           onUpdateInvitations={loadOrganizationData}
         />
       ),
+    },
+    {
+      key: "cloud-accounts",
+      name: "Data Integration",
+      icon: Cloud,
+      content: "coming soon",
     },
   ];
 

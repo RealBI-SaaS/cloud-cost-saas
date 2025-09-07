@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import organization_service from "@/services/organization_service";
 import InviteMemberDialog from "./InviteMemberDialog";
+import { WarningAlert } from "@/components/WarningAlert";
 
 interface Invitation {
   id: string;
@@ -59,7 +60,11 @@ const PendingInvitations = ({
   };
 
   const pendingInvitations = invitations || [];
-
+  const copyInviteLink = async (token = "invalid_token") => {
+    const inviteLink = `${window.location.origin}/accept-invitation/${token}`;
+    await navigator.clipboard.writeText(inviteLink);
+    toast.success("Invite link copied to clipboard");
+  };
   return (
     <Card className="shadow-lg border-border/50">
       <CardHeader className="pb-4">
@@ -121,7 +126,22 @@ const PendingInvitations = ({
                         <Copy className="h-4 w-4" />
                         Copy Link
                       </Button>
-                      <Button
+
+                      <WarningAlert
+                        message="Are you sure you want to revoke this invitation?"
+                        onConfirm={() => handleRevokeInvitation(invitation.id)}
+                        triggerBtn={
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="gap-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Revoke
+                          </Button>
+                        }
+                      />
+                      {/* <Button
                         variant="destructive"
                         size="sm"
                         onClick={() => handleRevokeInvitation(invitation.id)}
@@ -129,7 +149,7 @@ const PendingInvitations = ({
                       >
                         <Trash2 className="h-4 w-4" />
                         Revoke
-                      </Button>
+                      </Button> */}
                     </div>
                   </TableCell>
                 </TableRow>
