@@ -18,11 +18,11 @@ const CustomTab = ({ settingList }: Props) => {
 
   return (
     <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="flex gap-2 py-0  w-full  mx-auto border  border-primary/50 bg-sidebar rounded-none">
+      <TabsList className="flex  w-full  mx-auto border  border-primary/50 bg-sidebar rounded-none">
         {settingList.map((setting) => (
           <TabsTrigger
             value={setting.key}
-            className={`relative px-4 py-2 text-sm font-medium    transition-all duration-300 flex items-center gap-2 flex-1 group ${
+            className={`relative px-4 py-2  text-sm font-medium    transition-all duration-300 flex items-center gap-2 flex-1 group ${
               activeTab === setting.key
                 ? "text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -50,19 +50,6 @@ const CustomTab = ({ settingList }: Props) => {
       </TabsList>
 
       <div className="border border-accent  bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md">
-        {/* <TabsContent
-          value="general"
-          className="m-0 pt-2 flex gap-10 p-10 data-[state=active]:animate-fadeIn"
-        >
-          <CompanyDetails />
-          <ThemeSwitcher />
-        </TabsContent>
-        <TabsContent
-          value="organization"
-          className="m-0 flex gap-10 data-[state=active]:animate-fadeIn"
-        >
-          <CompanyOrganization />
-        </TabsContent> */}
         {settingList.map((setting) => (
           <TabsContent
             key={setting.key}
@@ -72,24 +59,6 @@ const CustomTab = ({ settingList }: Props) => {
             {setting.content}
           </TabsContent>
         ))}
-        {/* <TabsContent
-          value="members"
-          className="m-0 pt-2 data-[state=active]:animate-fadeIn"
-        >
-          <CompanyMembers />
-        </TabsContent> */}
-        {/* <TabsContent
-          value="data-integration"
-          className="m-0 pt-2 data-[state=active]:animate-fadeIn"
-        >
-          <DataIntegration />
-        </TabsContent>
-        <TabsContent
-          value="alert"
-          className="m-0 pt-2 data-[state=active]:animate-fadeIn"
-        >
-          Todo
-        </TabsContent> */}
       </div>
     </Tabs>
   );

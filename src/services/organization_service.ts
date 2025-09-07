@@ -95,7 +95,13 @@ class OrganizationService{
     revokeInvitation(id: string) {
         return axiosInstance.delete(`/organization/invitations/revoke/${id}/`)
     }
+    updateMemberRole(orgId: string, memberId: string, newRole: string) {
+        return axiosInstance.patch(`/organization/${orgId}/members/${memberId}/role/`, { role: newRole });
+    }
 
+    // removeMember(orgId: string, memberId: string) {
+    //     return axiosInstance.delete(`/organization/${orgId}/members/${memberId}/`);
+    // }
 }
 
 

@@ -14,52 +14,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { LoadingButton } from "@/components/ui/loading-buton";
-import {
-  UserCheck,
-  UserPlus,
-  Mail,
-  MoreHorizontal,
-  Shield,
-  Calendar,
-  UserX,
-} from "lucide-react";
-import { useState } from "react";
+import { UserCheck, Shield, UserX } from "lucide-react";
 import { toast } from "sonner";
 import organization_service from "@/services/organization_service";
+import { WarningAlert } from "@/components/WarningAlert";
+import InviteMemberDialog from "./InviteMemberDialog";
 
 interface Member {
   id: string;
   role: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  created_at: string;
-  updated_at: string;
-  avatar?: string;
 }
 
 interface MembersTabProps {
@@ -69,29 +44,9 @@ interface MembersTabProps {
 }
 
 const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
-  const [isInviting, setIsInviting] = useState(false);
-  const [inviteForm, setInviteForm] = useState({
-    email: "",
-    role: "member",
-  });
-
-  const handleSendInvitation = async () => {
-    try {
-      setIsInviting(true);
-      await organization_service.inviteMember({ ...inviteForm, org_id: orgId });
-      setInviteForm({ email: "", role: "member" });
-      toast.success("Invitation sent successfully");
-      onUpdateMember();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to send invitation");
-    } finally {
-      setIsInviting(false);
-    }
-  };
-
   const handleUpdateMemberRole = async (memberId: string, newRole: string) => {
     try {
-      // await organization_service.updateMemberRole(orgId, memberId, newRole);
+      await organization_service.updateMemberRole(orgId, memberId, newRole);
       toast.success("Member role updated successfully");
       onUpdateMember();
     } catch (err: any) {
@@ -124,75 +79,7 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
               </CardDescription>
             </div>
           </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <UserPlus className="h-4 w-4" />
-                Invite Member
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <div className="flex items-center gap-3 pb-2">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <DialogTitle>Invite Member</DialogTitle>
-                    <DialogDescription>
-                      Send an invitation to join your organization
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  <Label htmlFor="email" className="text-sm font-medium">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter email address"
-                    value={inviteForm.email}
-                    onChange={(e) =>
-                      setInviteForm({
-                        ...inviteForm,
-                        email: e.target.value,
-                      })
-                    }
-                    className="h-11"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="role" className="text-sm font-medium">
-                    Role
-                  </Label>
-                  <Select
-                    value={inviteForm.role}
-                    onValueChange={(value) =>
-                      setInviteForm({ ...inviteForm, role: value })
-                    }
-                  >
-                    <SelectTrigger className="h-11 w-full">
-                      <SelectValue placeholder="Select role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="member">Member</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <LoadingButton
-                  loading={isInviting}
-                  onClick={handleSendInvitation}
-                  className="w-full h-11"
-                >
-                  Send Invitation
-                </LoadingButton>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <InviteMemberDialog orgId={orgId} onInviteSent={onUpdateMember} />
         </div>
       </CardHeader>
 
@@ -202,7 +89,6 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
             <TableRow>
               <TableHead>Member</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>Joined</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -212,13 +98,14 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
                 <TableCell>
                   <div className="flex items-center space-x-3">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src={member.avatar} />
                       <AvatarFallback className="bg-primary/10 text-primary">
-                        {member.name?.[0]?.toUpperCase() || "U"}
+                        {member.first_name?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{member.name}</p>
+                      <p className="font-medium">
+                        {member.first_name + " " + member.last_name}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         {member.email}
                       </p>
@@ -227,6 +114,7 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
                 </TableCell>
                 <TableCell>
                   <Select
+                    disabled={member.role === "owner"}
                     value={member.role}
                     onValueChange={(value) =>
                       handleUpdateMemberRole(member.id, value)
@@ -243,33 +131,26 @@ const Members = ({ members, orgId, onUpdateMember }: MembersTabProps) => {
                         </div>
                       </SelectItem>
                       <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="viewer">Viewer</SelectItem>
+                      <SelectItem value="owner">Owner</SelectItem>
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(member.created_at).toLocaleDateString()}
-                  </div>
-                </TableCell>
+
                 <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={() => handleRemoveMember(member.id)}
-                        className="text-destructive flex items-center gap-2"
+                  <WarningAlert
+                    message="Are you sure you want to remove this member?"
+                    onConfirm={() => handleRemoveMember(member.id)}
+                    triggerBtn={
+                      <Button
+                        disabled={member.role === "owner"}
+                        variant="destructive"
+                        size="sm"
                       >
                         <UserX className="h-4 w-4" />
-                        Remove Member
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                        Remove
+                      </Button>
+                    }
+                  />
                 </TableCell>
               </TableRow>
             ))}
