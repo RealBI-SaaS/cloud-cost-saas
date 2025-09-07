@@ -12,7 +12,7 @@ import { toast } from "sonner";
 interface props {
   label?: boolean;
 }
-const IntegrationSources: React.FC = ({ label }: props) => {
+const IntegrationSources = ({ label }: props) => {
   const userComp = useCompany((state) => state.userComp);
 
   // for aws

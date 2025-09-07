@@ -64,7 +64,7 @@ const PendingInvitations = ({
     const inviteLink = `${window.location.origin}/accept-invitation/${token}`;
     await navigator.clipboard.writeText(inviteLink);
     toast.success("Invite link copied to clipboard");
-  };
+  };Card
   return (
     <Card className="shadow-lg border-border/50">
       <CardHeader className="pb-4">

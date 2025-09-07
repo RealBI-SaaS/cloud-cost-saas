@@ -22,7 +22,7 @@ export default function ThemeSwitcher() {
   const { brandTheme, setBrandTheme } = useTheme();
 
   return (
-    <Card className="w-full">
+    <Card className="shadow-lg border-border/50 w-full">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <Paintbrush className="h-5 w-5 text-primary" />

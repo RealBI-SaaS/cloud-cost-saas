@@ -17,6 +17,7 @@ import { Building2, Pencil, Upload } from "lucide-react";
 import axiosInstance from "@/config/axios/axiosInstance";
 import useCompanyStore from "@/stores/CompanyStore";
 import CreateCompanyForm from "../company/CreateCompanyForm";
+import { Separator } from "@/components/ui/separator";
 
 export default function CompanyDetails() {
   const navigate = useNavigate();
@@ -77,87 +78,86 @@ export default function CompanyDetails() {
   // Render company details if company exists
   if (userComp) {
     return (
-      <div className="container mx-auto border rounded-lg">
-        <Card className="w-3/4 shadow-none border-none">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              {logoPreview ? (
-                <img
-                  src={logoPreview}
-                  alt="Company Logo"
-                  className="h-12 w-12 object-contain rounded-md"
+      // <div className="container mx-auto border rounded-lg">
+      <Card className="w-3/4 shadow-lg border-border/50">
+        <CardHeader>
+          <div className="flex items-center gap-3 mb-2">
+            {logoPreview ? (
+              <img
+                src={logoPreview}
+                alt="Company Logo"
+                className="h-12 w-12 object-contain rounded-md"
+              />
+            ) : (
+              <Building2 className="h-6 w-6" />
+            )}
+            <h1 className="text-lg font-bold">{userComp.name}</h1>
+          </div>
+          <CardDescription>
+            View and manage your organization details.
+          </CardDescription>
+        </CardHeader>
+
+        <Separator />
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs text-muted-foreground">Name</Label>
+              {!isEditingOrg && canEdit && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditingOrg(true)}
+                >
+                  <Pencil className="h-4 w-4 mr-1" />
+                  Edit
+                </Button>
+              )}
+            </div>
+
+            {isEditingOrg ? (
+              <div className="flex items-center gap-2">
+                <Input
+                  value={compName}
+                  onChange={(e) => setCompName(e.target.value)}
                 />
-              ) : (
-                <Building2 className="h-6 w-6" />
-              )}
-              <h1 className="text-lg font-bold">{userComp.name}</h1>
-            </div>
-            <CardDescription>
-              View and manage your organization details.
-            </CardDescription>
-          </CardHeader>
-
-          <hr />
-
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs text-muted-foreground">Name</Label>
-                {!isEditingOrg && canEdit && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsEditingOrg(true)}
-                  >
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
-                  </Button>
-                )}
+                <Button
+                  size="sm"
+                  className="text-white"
+                  onClick={handleCompanyUpdate}
+                  disabled={compName === userComp.name && !logoFile}
+                >
+                  Save
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setCompName(userComp.name);
+                    setLogoFile(null);
+                    setLogoPreview(userComp.logo);
+                    setIsEditingOrg(false);
+                  }}
+                >
+                  Cancel
+                </Button>
               </div>
+            ) : (
+              <div className="text-lg font-medium">{userComp.name}</div>
+            )}
+          </div>
 
-              {isEditingOrg ? (
-                <div className="flex items-center gap-2">
-                  <Input
-                    value={compName}
-                    onChange={(e) => setCompName(e.target.value)}
-                  />
-                  <Button
-                    size="sm"
-                    className="text-white"
-                    onClick={handleCompanyUpdate}
-                    disabled={compName === userComp.name && !logoFile}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setCompName(userComp.name);
-                      setLogoFile(null);
-                      setLogoPreview(userComp.logo);
-                      setIsEditingOrg(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              ) : (
-                <div className="text-lg font-medium">{userComp.name}</div>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-muted-foreground">
-                Created on{" "}
-                {userComp.created_at
-                  ? format(new Date(userComp.created_at), "MMM d, yyyy")
-                  : "Invalid date"}
-              </Label>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">
+              Created on{" "}
+              {userComp.created_at
+                ? format(new Date(userComp.created_at), "MMM d, yyyy")
+                : "Invalid date"}
+            </Label>
+          </div>
+        </CardContent>
+      </Card>
+      // </div>
     );
   }
 
@@ -168,25 +168,23 @@ export default function CompanyDetails() {
 
   // Render no company found message
   return (
-    <div className="">
-      <Card className="w-3/4 shadow-none border border-b border-l">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-1">
-            <Building2 className="h-6 w-6" />
-            <CardTitle>No Company Found</CardTitle>
-          </div>
-          <hr />
-          <CardDescription>
-            You don't have a company yet. Start by creating one to manage your
-            organization.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button onClick={() => setCreatingCompany(true)}>
-            Create a Company
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="w-3/4  shadow-lg border-border/50">
+      <CardHeader>
+        <div className="flex items-center gap-3 mb-1">
+          <Building2 className="h-6 w-6" />
+          <CardTitle>No Company Found</CardTitle>
+        </div>
+        <hr />
+        <CardDescription>
+          You don't have a company yet. Start by creating one to manage your
+          organization.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Button onClick={() => setCreatingCompany(true)}>
+          Create a Company
+        </Button>
+      </CardContent>
+    </Card>
   );
 }

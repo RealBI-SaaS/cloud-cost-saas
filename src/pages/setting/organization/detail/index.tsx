@@ -10,6 +10,7 @@ import OrganizationInfo from "./OrganizationInfo";
 import Members from "./Members";
 import CustomTab from "@/components/CustomTab";
 import PendingInvitations from "./PendingInvitations";
+import CloudAccount from "./CloudAccount";
 
 interface Member {
   id: string;
@@ -110,7 +111,7 @@ const OrganizationDetail = () => {
       key: "cloud-accounts",
       name: "Data Integration",
       icon: Cloud,
-      content: "coming soon",
+      content: <CloudAccount organization_id={org_id} />,
     },
   ];
 
