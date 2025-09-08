@@ -13,16 +13,6 @@ import CustomTab from "@/components/CustomTab";
 import PendingInvitations from "./PendingInvitations";
 import CloudAccount from "./CloudAccount";
 
-interface Member {
-  id: string;
-  role: string;
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-  avatar?: string;
-}
-
 interface Invitation {
   id: string;
   email: string;
@@ -36,7 +26,7 @@ interface Invitation {
 const OrganizationDetail = () => {
   const { org_id } = useParams();
   const [organization, setOrganization] = useState<Organization | null>(null);
-  const [members, setMembers] = useState<MemberType>();
+  const [members, setMembers] = useState<MemberType[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -61,6 +51,47 @@ const OrganizationDetail = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Only reload members, not all data
+  const loadMembersOnly = async () => {
+    try {
+      const membersRes = await organization_service.getMembers(org_id!);
+      setMembers(membersRes.data);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to load members");
+    }
+  };
+
+  // Only reload invitations, not all data
+  const loadInvitationsOnly = async () => {
+    try {
+      const invitationsRes = await organization_service.getMemberInvitations(
+        org_id!
+      );
+      setInvitations(invitationsRes.data);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to load invitations");
+    }
+  };
+
+  // Update only the members state when a member is removed
+  const handleMemberRemoved = (memberId: string) => {
+    setMembers((prev) => prev.filter((member) => member.id !== memberId));
+  };
+
+  // Update only the member role when a member's role is changed
+  const handleMemberRoleUpdated = (memberId: string, newRole: string) => {
+    setMembers((prev) =>
+      prev.map((member) =>
+        member.id === memberId ? { ...member, role: newRole } : member
+      )
+    );
+  };
+
+  // Update only the invitations state when an invitation is removed
+  const handleInvitationRemoved = (invitationId: string) => {
+    setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
   };
 
   if (isLoading) {
@@ -91,8 +122,11 @@ const OrganizationDetail = () => {
       content: (
         <Members
           members={members}
+          onInviteMember={loadInvitationsOnly}
           organization={organization}
-          onUpdateMember={loadOrganizationData}
+          onUpdateMember={loadMembersOnly}
+          onMemberRemoved={handleMemberRemoved}
+          onMemberRoleUpdated={handleMemberRoleUpdated}
         />
       ),
     },
@@ -103,8 +137,9 @@ const OrganizationDetail = () => {
       content: (
         <PendingInvitations
           invitations={invitations}
-          orgId={org_id}
-          onUpdateInvitations={loadOrganizationData}
+          orgId={org_id!}
+          onUpdateInvitations={loadInvitationsOnly}
+          onInvitationRemoved={handleInvitationRemoved}
         />
       ),
     },
@@ -118,10 +153,6 @@ const OrganizationDetail = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* <h1 className="text-3xl text-foreground/50 font-bold">
-        Settings | {organization?.name}
-      </h1> */}
-
       <CustomTab settingList={settingList} />
     </div>
   );

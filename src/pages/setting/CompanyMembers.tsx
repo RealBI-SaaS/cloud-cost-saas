@@ -376,10 +376,6 @@ const CompanyMembers = () => {
                     <CardTitle className="text-2xl">
                       All Organization Members
                     </CardTitle>
-                    <CardDescription>
-                      Manage members across all your organizations (
-                      {uniqueMembers.length} unique members)
-                    </CardDescription>
                   </div>
                 </div>
                 {organizations.length > 0 && (
@@ -427,9 +423,6 @@ const CompanyMembers = () => {
                     <CardTitle className="text-2xl">
                       Pending Invitations
                     </CardTitle>
-                    <CardDescription>
-                      Manage invitations sent across all your organizations
-                    </CardDescription>
                   </div>
                 </div>
                 {organizations.length > 0 && (

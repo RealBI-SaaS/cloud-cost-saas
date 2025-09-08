@@ -25,7 +25,9 @@ import {
   UserPlus,
 } from "lucide-react";
 import { toast } from "sonner";
-import organization_service from "@/services/organization_service";
+import organization_service, {
+  NewMemberType,
+} from "@/services/organization_service";
 import InviteMemberDialog from "./InviteMemberDialog";
 import { WarningAlert } from "@/components/WarningAlert";
 import UserTableView, {
@@ -37,17 +39,17 @@ import UserTableView, {
   UserTableColumn,
 } from "./UserTableView";
 
-interface Invitation {
-  id: string;
-  invitee_email: string;
-  organization: string;
-  role: string;
-  expires_at: string;
-  token: string;
-}
+// interface Invitation {
+//   id: string;
+//   invitee_email: string;
+//   organization: string;
+//   role: string;
+//   expires_at: string;
+//   token: string;
+// }
 
 interface PendingInvitationsTabProps {
-  invitations: Invitation[];
+  invitations: NewMemberType[];
   orgId: string;
   onUpdateInvitations: () => void;
 }

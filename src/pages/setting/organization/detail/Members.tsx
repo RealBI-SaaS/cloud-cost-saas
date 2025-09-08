@@ -5,31 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LoadingButton } from "@/components/ui/loading-buton";
-import { UserCheck, Shield, UserX, UserPlus } from "lucide-react";
+import { UserCheck, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import organization_service, {
   MemberType,
   Organization,
 } from "@/services/organization_service";
-import { WarningAlert } from "@/components/WarningAlert";
 import InviteMemberDialog from "./InviteMemberDialog";
 import UserTableView, {
   MemberCell,
@@ -38,15 +20,23 @@ import UserTableView, {
   RoleSelectCell,
   UserTableColumn,
 } from "./UserTableView";
+
 interface MembersTabProps {
   members: MemberType[];
   organization: Organization;
   onUpdateMember: () => void;
+  onMemberRemoved?: (memberId: string) => void;
+  onMemberRoleUpdated?: (memberId: string, newRole: string) => void;
+  onInviteMember: () => void;
 }
+
 const Members = ({
   members,
   organization,
   onUpdateMember,
+  onMemberRemoved,
+  onMemberRoleUpdated,
+  onInviteMember,
 }: MembersTabProps) => {
   const handleUpdateMemberRole = async (memberId: string, newRole: string) => {
     try {
@@ -56,7 +46,13 @@ const Members = ({
         newRole
       );
       toast.success("Member role updated successfully");
-      onUpdateMember();
+
+      // Use the new callback if available, otherwise fall back to the old behavior
+      if (onMemberRoleUpdated) {
+        onMemberRoleUpdated(memberId, newRole);
+      } else {
+        onUpdateMember();
+      }
     } catch (err: any) {
       toast.error(err.message || "Failed to update member role");
     }
@@ -64,9 +60,15 @@ const Members = ({
 
   const handleRemoveMember = async (memberId: string) => {
     try {
-      // await organization_service.removeMember(orgId, memberId);
+      await organization_service.removeMember(organization.id, memberId);
       toast.success("Member removed successfully");
-      onUpdateMember();
+
+      // Use the new callback if available, otherwise fall back to the old behavior
+      if (onMemberRemoved) {
+        onMemberRemoved(memberId);
+      } else {
+        onUpdateMember();
+      }
     } catch (err: any) {
       toast.error(err.message || "Failed to remove member");
     }
@@ -120,7 +122,7 @@ const Members = ({
           </div>
           <InviteMemberDialog
             orgId={organization.id}
-            onInviteSent={onUpdateMember}
+            onInviteSent={onInviteMember}
           />
         </div>
       </CardHeader>
