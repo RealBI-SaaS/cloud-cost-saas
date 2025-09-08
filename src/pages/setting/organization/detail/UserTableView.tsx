@@ -25,6 +25,8 @@ import {
   Mail,
   UserPlus,
   Clock,
+  Group,
+  User2,
 } from "lucide-react";
 import { WarningAlert } from "@/components/WarningAlert";
 import { toast } from "sonner";
@@ -139,8 +141,10 @@ export const RoleSelectCell = ({
             Admin
           </div>
         </SelectItem>
-        <SelectItem value="member">Member</SelectItem>
-        <SelectItem value="owner">Owner</SelectItem>
+        <SelectItem value="member">
+          <User2 className="h-4 w-4 mr-2"  />
+          Member
+        </SelectItem>
       </SelectContent>
     </Select>
   );
@@ -196,25 +200,9 @@ export const InvitationActionsCell = ({
   invitation: any;
   onRevokeInvitation: (invitationId: string) => void;
 }) => {
-  const copyInviteLink = async (token = "invalid_token") => {
-    const inviteLink = `${window.location.origin}/accept-invitation/${token}`;
-    await navigator.clipboard.writeText(inviteLink);
-    toast.success("Invite link copied to clipboard");
-  };
-
   return (
     <div className="text-right">
       <div className="flex justify-end space-x-2">
-        <Button
-          variant="outline"
-          onClick={() => copyInviteLink(invitation.token)}
-          className="gap-2"
-          size="sm"
-        >
-          <Copy className="h-4 w-4" />
-          Copy Link
-        </Button>
-
         <WarningAlert
           message="Are you sure you want to revoke this invitation?"
           onConfirm={() => onRevokeInvitation(invitation.id)}

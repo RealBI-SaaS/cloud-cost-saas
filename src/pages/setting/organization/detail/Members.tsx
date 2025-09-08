@@ -103,7 +103,7 @@ const Members = ({
   if (userCanEdit) {
     columns.push({
       key: "actions",
-      header: "Actions",
+      header: <p className="text-end">Actions</p>,
       render: (member) => (
         <RemoveMemberCell member={member} onRemoveMember={handleRemoveMember} />
       ),

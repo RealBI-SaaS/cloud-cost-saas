@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building, Users, MailIcon, Building2, Cloud } from "lucide-react";
+import {
+  Building,
+  Users,
+  MailIcon,
+  Building2,
+  Cloud,
+  ArrowLeft,
+} from "lucide-react";
 import organization_service, {
   MemberType,
   Organization,
@@ -12,9 +19,12 @@ import Members from "./Members";
 import CustomTab from "@/components/CustomTab";
 import PendingInvitations from "./PendingInvitations";
 import CloudAccount from "./CloudAccount";
+import { Button } from "@/components/ui/button"; // Import Button component
+import { FcRight } from "react-icons/fc";
 
 const OrganizationDetail = () => {
   const { org_id } = useParams();
+  const navigate = useNavigate(); // Add useNavigate hook
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
   const [invitations, setInvitations] = useState<MemberType[]>([]);
@@ -79,10 +89,10 @@ const OrganizationDetail = () => {
     );
   };
 
-  // Update only the invitations state when an invitation is removed
-  // const handleInvitationRemoved = (invitationId: string) => {
-  //   setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
-  // };
+  // Handle back navigation
+  const handleBack = () => {
+    navigate(-1); // Go back to previous page
+  };
 
   if (isLoading) {
     return (
@@ -141,7 +151,22 @@ const OrganizationDetail = () => {
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto px-6 py-4 space-y-3">
+      {/* Back Button */}
+      <div className="flex items-center gap-0 ">
+        <Link to="/settings">
+          <Button
+            variant="ghost"
+            className="flex items-center text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Settings
+          </Button>
+        </Link>
+        <span className="text-muted-foreground">/ {organization.name}</span>
+      </div>
+
+      {/* Tabs Component */}
       <CustomTab settingList={settingList} />
     </div>
   );
