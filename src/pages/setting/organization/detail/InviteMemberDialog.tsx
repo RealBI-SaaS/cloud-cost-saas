@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingButton } from "@/components/ui/loading-buton";
 import { Mail, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { ReactEventHandler, useState } from "react";
 import { toast } from "sonner";
 import organization_service from "@/services/organization_service";
 
@@ -39,10 +39,15 @@ const InviteMemberDialog = ({
     email: "",
     role: "member",
   });
+  const handleSendInvitation = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const handleSendInvitation = async () => {
-    if (!inviteForm.email.trim()) {
-      toast.error("Please enter an email address");
+    // check if email is valid domain
+    if (
+      inviteForm.email.trim().lastIndexOf(".") <=
+      inviteForm.email.trim().lastIndexOf("@")
+    ) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -78,7 +83,7 @@ const InviteMemberDialog = ({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="text-primary">
         <DialogHeader>
           <div className="flex items-center gap-3 pb-2">
             <div className="p-2 bg-primary/10 rounded-lg">
@@ -92,52 +97,57 @@ const InviteMemberDialog = ({
             </div>
           </div>
         </DialogHeader>
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <Label htmlFor="email" className="text-sm font-medium">
-              Email Address *
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter email address"
-              value={inviteForm.email}
-              onChange={(e) =>
-                setInviteForm({
-                  ...inviteForm,
-                  email: e.target.value,
-                })
-              }
-              className="h-11"
-            />
-          </div>
-          <div className="space-y-3">
-            <Label htmlFor="role" className="text-sm font-medium">
-              Role
-            </Label>
-            <Select
-              value={inviteForm.role}
-              onValueChange={(value) =>
-                setInviteForm({ ...inviteForm, role: value })
-              }
+        <form onSubmit={handleSendInvitation}>
+          <div className="space-y-4">
+            {" "}
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email Address *
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                required
+                placeholder="Enter email address"
+                value={inviteForm.email}
+                onChange={(e) =>
+                  setInviteForm({
+                    ...inviteForm,
+                    email: e.target.value,
+                  })
+                }
+                className="h-11"
+              />
+            </div>
+            <div className="space-y-3">
+              <Label htmlFor="role" className="text-sm font-medium">
+                Role
+              </Label>
+              <Select
+                value={inviteForm.role}
+                required
+                onValueChange={(value) =>
+                  setInviteForm({ ...inviteForm, role: value })
+                }
+              >
+                <SelectTrigger className="h-11 w-full">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="member">Member</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <LoadingButton
+              loading={isInviting}
+              type="submit"
+              className="w-full h-11"
             >
-              <SelectTrigger className="h-11 w-full">
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="member">Member</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <LoadingButton
-            loading={isInviting}
-            onClick={handleSendInvitation}
-            className="w-full h-11"
-          >
-            Send Invitation
-          </LoadingButton>
-        </div>
+              Send Invitation
+            </LoadingButton>
+          </div>{" "}
+        </form>
       </DialogContent>
     </Dialog>
   );

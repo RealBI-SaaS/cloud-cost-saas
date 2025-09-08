@@ -28,6 +28,14 @@ import { toast } from "sonner";
 import organization_service from "@/services/organization_service";
 import InviteMemberDialog from "./InviteMemberDialog";
 import { WarningAlert } from "@/components/WarningAlert";
+import UserTableView, {
+  EmailCell,
+  ExpiryDateCell,
+  InvitationActionsCell,
+  InvitationsEmptyState,
+  RoleBadgeCell,
+  UserTableColumn,
+} from "./UserTableView";
 
 interface Invitation {
   id: string;
@@ -60,11 +68,35 @@ const PendingInvitations = ({
   };
 
   const pendingInvitations = invitations || [];
-  const copyInviteLink = async (token = "invalid_token") => {
-    const inviteLink = `${window.location.origin}/accept-invitation/${token}`;
-    await navigator.clipboard.writeText(inviteLink);
-    toast.success("Invite link copied to clipboard");
-  };Card
+
+  const columns: UserTableColumn[] = [
+    {
+      key: "email",
+      header: "Email",
+      render: (invitation) => <EmailCell invitation={invitation} />,
+    },
+    {
+      key: "role",
+      header: "Role",
+      render: (invitation) => <RoleBadgeCell invitation={invitation} />,
+    },
+    {
+      key: "expires",
+      header: "Expires",
+      render: (invitation) => <ExpiryDateCell invitation={invitation} />,
+    },
+    {
+      key: "actions",
+      header: <p className="text-end">Actions</p>,
+      render: (invitation) => (
+        <InvitationActionsCell
+          invitation={invitation}
+          onRevokeInvitation={handleRevokeInvitation}
+        />
+      ),
+    },
+  ];
+
   return (
     <Card className="shadow-lg border-border/50">
       <CardHeader className="pb-4">
@@ -88,89 +120,11 @@ const PendingInvitations = ({
       </CardHeader>
 
       <CardContent>
-        {pendingInvitations.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Expires</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {pendingInvitations.map((invitation) => (
-                <TableRow key={invitation.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">
-                    {invitation.invitee_email}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="font-normal">
-                      {invitation.role}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      {new Date(invitation.expires_at).toLocaleDateString()}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => copyInviteLink(invitation.token)}
-                        className="gap-2"
-                        size="sm"
-                      >
-                        <Copy className="h-4 w-4" />
-                        Copy Link
-                      </Button>
-
-                      <WarningAlert
-                        message="Are you sure you want to revoke this invitation?"
-                        onConfirm={() => handleRevokeInvitation(invitation.id)}
-                        triggerBtn={
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="gap-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Revoke
-                          </Button>
-                        }
-                      />
-                      {/* <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleRevokeInvitation(invitation.id)}
-                        className="gap-2"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Revoke
-                      </Button> */}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-12 space-y-6 border border-dashed border-border rounded-lg">
-            <div className="flex justify-center">
-              <div className="p-4 bg-muted/30 rounded-full">
-                <Mail className="h-12 w-12 text-muted-foreground opacity-60" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">No pending invitations</h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                You haven't sent any invitations yet. Invite members to join
-                your organization.
-              </p>
-            </div>
-            <div className="flex justify-center gap-3 pt-4">
+        <UserTableView
+          data={pendingInvitations}
+          columns={columns}
+          emptyState={InvitationsEmptyState({
+            action: (
               <InviteMemberDialog
                 orgId={orgId}
                 onInviteSent={onUpdateInvitations}
@@ -181,9 +135,9 @@ const PendingInvitations = ({
                   </Button>
                 }
               />
-            </div>
-          </div>
-        )}
+            ),
+          })}
+        />
       </CardContent>
     </Card>
   );

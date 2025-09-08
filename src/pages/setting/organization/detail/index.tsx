@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Building, Users, MailIcon, Building2, Cloud } from "lucide-react";
 import organization_service, {
+  MemberType,
   Organization,
 } from "@/services/organization_service";
 import OrganizationInfo from "./OrganizationInfo";
@@ -35,7 +36,7 @@ interface Invitation {
 const OrganizationDetail = () => {
   const { org_id } = useParams();
   const [organization, setOrganization] = useState<Organization | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
+  const [members, setMembers] = useState<MemberType>();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -90,7 +91,7 @@ const OrganizationDetail = () => {
       content: (
         <Members
           members={members}
-          orgId={org_id!}
+          organization={organization}
           onUpdateMember={loadOrganizationData}
         />
       ),
