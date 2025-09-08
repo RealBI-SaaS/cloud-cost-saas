@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import OrganizationTableView from "./OrganizationTableView";
 import OrganizationCardView from "./OrganizationCardView";
 import LayoutSwitcher from "./LayoutSwitcher";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 
 const CompanyOrganization = () => {
   const { organizations, isLoading, setOrganizations } =
