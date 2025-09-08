@@ -60,11 +60,21 @@ export interface MemberType {
     organization?: string;
     expires_at?: string
 }
+interface InvitationType {
+  id: string;
+  email: string;
+  role: string;
+  expires_at: string;
+}
+
 export interface NewMemberType{
     email: string,
     role: string,
     org_id: string
 }
+
+
+
 
 class OrganizationService{
     getAllOrganizations() {

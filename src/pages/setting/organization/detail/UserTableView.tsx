@@ -120,33 +120,37 @@ export const RoleSelectCell = ({
   member: any;
   organization: any;
   onUpdateMemberRole: (memberId: string, newRole: string) => void;
-}) => (
-  <Select
-    disabled={member.role === "owner"}
-    value={member.role}
-    onValueChange={(value) => onUpdateMemberRole(member.id, value)}
-  >
-    <SelectTrigger className="w-28 h-8">
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem value="admin">
-        <div className="flex items-center">
-          <Shield className="h-4 w-4 mr-2" />
-          Admin
-        </div>
-      </SelectItem>
-      <SelectItem value="member">Member</SelectItem>
-      <SelectItem value="owner">Owner</SelectItem>
-    </SelectContent>
-  </Select>
-);
+}) =>
+  organization.role === "member" ? (
+    member.role
+  ) : (
+    <Select
+      disabled={member.role === "owner"}
+      value={member.role}
+      onValueChange={(value) => onUpdateMemberRole(member.id, value)}
+    >
+      <SelectTrigger className="w-28 h-8">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="admin">
+          <div className="flex items-center">
+            <Shield className="h-4 w-4 mr-2" />
+            Admin
+          </div>
+        </SelectItem>
+        <SelectItem value="member">Member</SelectItem>
+        <SelectItem value="owner">Owner</SelectItem>
+      </SelectContent>
+    </Select>
+  );
 
 export const RemoveMemberCell = ({
   member,
   onRemoveMember,
 }: {
   member: any;
+
   onRemoveMember: (memberId: string) => void;
 }) => (
   <div className="text-right">

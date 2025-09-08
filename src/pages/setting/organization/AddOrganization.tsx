@@ -83,7 +83,7 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
           </Button>
         )}
       </AlertDialogTrigger>
-      <AlertDialogContent className="sm:max-w-md">
+      <AlertDialogContent className="sm:max-w-md text-primary">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-primary">
             Create a new Organization
@@ -93,9 +93,10 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <div className="space-y-4 py-2">
+        <form onSubmit={handleSubmit} className="space-y-4 py-2">
           <Input
             id="orgName"
+            required
             placeholder="Organization Name"
             value={newOrg.name}
             onChange={(e) => setNewOrg({ ...newOrg, name: e.target.value })}
@@ -103,6 +104,7 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
           />
 
           <Select
+            required
             value={newOrg.company}
             onValueChange={(value) => setNewOrg({ ...newOrg, company: value })}
           >
@@ -117,19 +119,18 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
               ))}
             </SelectContent>
           </Select>
-        </div>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <LoadingButton
-            loading={isLoading}
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            {isLoading ? "Creating..." : "Create"}
-          </LoadingButton>
-        </AlertDialogFooter>
+          <AlertDialogFooter className="mt-10">
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <LoadingButton
+              type="submit"
+              loading={isLoading}
+              disabled={isLoading}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {isLoading ? "Creating..." : "Create"}
+            </LoadingButton>
+          </AlertDialogFooter>
+        </form>
       </AlertDialogContent>
     </AlertDialog>
   );

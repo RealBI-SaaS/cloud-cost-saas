@@ -26,7 +26,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import organization_service, {
+  MemberType,
   NewMemberType,
+  Organization,
 } from "@/services/organization_service";
 import InviteMemberDialog from "./InviteMemberDialog";
 import { WarningAlert } from "@/components/WarningAlert";
@@ -49,14 +51,14 @@ import UserTableView, {
 // }
 
 interface PendingInvitationsTabProps {
-  invitations: NewMemberType[];
-  orgId: string;
+  invitations: MemberType[];
+  organization: Organization;
   onUpdateInvitations: () => void;
 }
 
 const PendingInvitations = ({
   invitations,
-  orgId,
+  organization,
   onUpdateInvitations,
 }: PendingInvitationsTabProps) => {
   const handleRevokeInvitation = async (invitationId: string) => {
@@ -87,7 +89,13 @@ const PendingInvitations = ({
       header: "Expires",
       render: (invitation) => <ExpiryDateCell invitation={invitation} />,
     },
-    {
+  ];
+
+  const userCanEdit =
+    organization?.role === "owner" || organization.role === "admin";
+
+  if (userCanEdit) {
+    columns.push({
       key: "actions",
       header: <p className="text-end">Actions</p>,
       render: (invitation) => (
@@ -96,9 +104,8 @@ const PendingInvitations = ({
           onRevokeInvitation={handleRevokeInvitation}
         />
       ),
-    },
-  ];
-
+    });
+  }
   return (
     <Card className="shadow-lg border-border/50">
       <CardHeader className="pb-4">
@@ -114,10 +121,12 @@ const PendingInvitations = ({
               </CardDescription>
             </div>
           </div>
-          <InviteMemberDialog
-            orgId={orgId}
-            onInviteSent={onUpdateInvitations}
-          />
+          {userCanEdit && (
+            <InviteMemberDialog
+              orgId={organization.id}
+              onInviteSent={onUpdateInvitations}
+            />
+          )}
         </div>
       </CardHeader>
 
@@ -126,9 +135,9 @@ const PendingInvitations = ({
           data={pendingInvitations}
           columns={columns}
           emptyState={InvitationsEmptyState({
-            action: (
+            action: userCanEdit && (
               <InviteMemberDialog
-                orgId={orgId}
+                orgId={organization.id}
                 onInviteSent={onUpdateInvitations}
                 trigger={
                   <Button variant="secondary" className="gap-2">

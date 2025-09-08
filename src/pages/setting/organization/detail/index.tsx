@@ -13,21 +13,11 @@ import CustomTab from "@/components/CustomTab";
 import PendingInvitations from "./PendingInvitations";
 import CloudAccount from "./CloudAccount";
 
-interface Invitation {
-  id: string;
-  email: string;
-  role: string;
-  status: "pending" | "accepted" | "expired";
-  created_at: string;
-  expires_at: string;
-  invited_by: string;
-}
-
 const OrganizationDetail = () => {
   const { org_id } = useParams();
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [invitations, setInvitations] = useState<MemberType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -90,9 +80,9 @@ const OrganizationDetail = () => {
   };
 
   // Update only the invitations state when an invitation is removed
-  const handleInvitationRemoved = (invitationId: string) => {
-    setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
-  };
+  // const handleInvitationRemoved = (invitationId: string) => {
+  //   setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
+  // };
 
   if (isLoading) {
     return (
@@ -137,9 +127,8 @@ const OrganizationDetail = () => {
       content: (
         <PendingInvitations
           invitations={invitations}
-          orgId={org_id!}
+          organization={organization}
           onUpdateInvitations={loadInvitationsOnly}
-          onInvitationRemoved={handleInvitationRemoved}
         />
       ),
     },
@@ -147,7 +136,7 @@ const OrganizationDetail = () => {
       key: "cloud-accounts",
       name: "Data Integration",
       icon: Cloud,
-      content: <CloudAccount organization_id={org_id} />,
+      content: <CloudAccount organization={organization} />,
     },
   ];
 

@@ -92,6 +92,8 @@ const OrganizationInfo = ({ organization, onUpdate }: Props) => {
       company: organization.company || "",
     });
   };
+  const userCanEdit =
+    organization?.role === "owner" || organization.role === "admin";
 
   return (
     <div>
@@ -108,23 +110,25 @@ const OrganizationInfo = ({ organization, onUpdate }: Props) => {
               </CardDescription>
             </div>
           </div>
-          <Button
-            variant={isEditing ? "outline" : "default"}
-            onClick={() => setIsEditing(!isEditing)}
-            className="gap-2 shrink-0"
-          >
-            {isEditing ? (
-              <>
-                <X className="h-4 w-4" />
-                Cancel
-              </>
-            ) : (
-              <>
-                <Edit className="h-4 w-4" />
-                Edit Organization
-              </>
-            )}
-          </Button>
+          {userCanEdit && (
+            <Button
+              variant={isEditing ? "outline" : "default"}
+              onClick={() => setIsEditing(!isEditing)}
+              className="gap-2 shrink-0"
+            >
+              {isEditing ? (
+                <>
+                  <X className="h-4 w-4" />
+                  Cancel
+                </>
+              ) : (
+                <>
+                  <Edit className="h-4 w-4" />
+                  Edit Organization
+                </>
+              )}
+            </Button>
+          )}
         </CardHeader>
 
         <CardContent className="space-y-6">

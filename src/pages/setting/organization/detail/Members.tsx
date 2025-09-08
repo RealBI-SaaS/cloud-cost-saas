@@ -73,6 +73,8 @@ const Members = ({
       toast.error(err.message || "Failed to remove member");
     }
   };
+  const userCanEdit =
+    organization?.role === "owner" || organization.role === "admin";
 
   const columns: UserTableColumn[] = [
     {
@@ -96,14 +98,17 @@ const Members = ({
         />
       ),
     },
-    {
+  ];
+
+  if (userCanEdit) {
+    columns.push({
       key: "actions",
-      header: <p className="text-end">Actions</p>,
+      header: "Actions",
       render: (member) => (
         <RemoveMemberCell member={member} onRemoveMember={handleRemoveMember} />
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <Card className="shadow-lg border-border/50">
@@ -120,10 +125,12 @@ const Members = ({
               </CardDescription>
             </div>
           </div>
-          <InviteMemberDialog
-            orgId={organization.id}
-            onInviteSent={onInviteMember}
-          />
+          {userCanEdit && (
+            <InviteMemberDialog
+              orgId={organization.id}
+              onInviteSent={onInviteMember}
+            />
+          )}
         </div>
       </CardHeader>
 
@@ -132,7 +139,7 @@ const Members = ({
           data={members}
           columns={columns}
           emptyState={MembersEmptyState({
-            action: (
+            action: userCanEdit && (
               <InviteMemberDialog
                 orgId={organization.id}
                 onInviteSent={onUpdateMember}

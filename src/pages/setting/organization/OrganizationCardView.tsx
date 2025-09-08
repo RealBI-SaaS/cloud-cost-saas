@@ -80,6 +80,9 @@ const OrganizationCardView: React.FC<OrganizationCardViewProps> = ({
     }
   };
 
+  const userCanEdit = (organization) =>
+    organization?.role === "owner" || organization.role === "admin";
+
   return (
     <div className="w-full">
       {isLoading ? (
@@ -161,17 +164,11 @@ const OrganizationCardView: React.FC<OrganizationCardViewProps> = ({
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
+
                       <DropdownMenuContent
                         align="end"
                         className="border-border/100"
                       >
-                        <DropdownMenuItem
-                          onClick={() => handleEdit(org)}
-                          className="flex items-center gap-2"
-                        >
-                          <Pencil className="h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link
                             to={`/settings/org/details/${org.id}`}
@@ -181,20 +178,31 @@ const OrganizationCardView: React.FC<OrganizationCardViewProps> = ({
                             View Details
                           </Link>
                         </DropdownMenuItem>
-                        <WarningAlert
-                          message={`This will permanently delete organization "${org.name}" and all its data. This action cannot be undone.`}
-                          onConfirm={() => handleDelete(org.id)}
-                          triggerBtn={
+                        {userCanEdit(org) && (
+                          <>
                             <DropdownMenuItem
-                              variant="destructive"
-                              onSelect={(e) => e.preventDefault()}
-                              className="flex items-center gap-2 text-destructive focus:text-destructive"
+                              onClick={() => handleEdit(org)}
+                              className="flex items-center gap-2"
                             >
-                              <Trash2 className="h-4 w-4" />
-                              Delete
+                              <Pencil className="h-4 w-4" />
+                              Edit
                             </DropdownMenuItem>
-                          }
-                        />
+                            <WarningAlert
+                              message={`This will permanently delete organization "${org.name}" and all its data. This action cannot be undone.`}
+                              onConfirm={() => handleDelete(org.id)}
+                              triggerBtn={
+                                <DropdownMenuItem
+                                  variant="destructive"
+                                  onSelect={(e) => e.preventDefault()}
+                                  className="flex items-center gap-2 text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              }
+                            />
+                          </>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}

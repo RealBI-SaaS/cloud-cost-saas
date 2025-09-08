@@ -28,11 +28,16 @@ import {
 import { Progress } from "@/components/ui/progress";
 
 import SelectedOrgContext from "@/context/organizationContext";
-import { costBreakdown, recentActivity, usageStats } from "./mockData";
+import {
+  allOrganizations,
+  costBreakdown,
+  recentActivity,
+  usageStats,
+} from "./mockData";
 
 const Dashboard = () => {
   const { selectedOrg: currentOrg } = useContext(SelectedOrgContext);
-
+  const currentOrg_temp = allOrganizations;
   return (
     <div className="p-6 bg-background">
       {/* Header */}
@@ -56,27 +61,27 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${currentOrg.monthlyCost.toFixed(2)}
+              ${currentOrg_temp.monthlyCost.toFixed(2)}
             </div>
             <div
               className={`flex items-center text-xs mt-1 ${
-                currentOrg.costChange >= 0
+                currentOrg_temp.costChange >= 0
                   ? "text-green-600"
                   : "text-destructive"
               }`}
             >
-              {currentOrg.costChange >= 0 ? (
+              {currentOrg_temp.costChange >= 0 ? (
                 <ArrowUp className="h-3 w-3 mr-1" />
               ) : (
                 <ArrowDown className="h-3 w-3 mr-1" />
               )}
-              {Math.abs(currentOrg.costChange).toFixed(2)}%
+              {Math.abs(currentOrg_temp.costChange).toFixed(2)}%
             </div>
           </CardContent>
           <CardFooter className="pt-0">
             <p className="text-xs text-muted-foreground">
-              {currentOrg.costChange >= 0 ? "Increase" : "Decrease"} from last
-              month
+              {currentOrg_temp.costChange >= 0 ? "Increase" : "Decrease"} from
+              last month
             </p>
           </CardFooter>
         </Card>
@@ -93,26 +98,27 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {currentOrg.activeAccounts}
+              {currentOrg_temp.activeAccounts}
             </div>
             <div
               className={`flex items-center text-xs mt-1 ${
-                currentOrg.accountsChange >= 0
+                currentOrg_temp.accountsChange >= 0
                   ? "text-green-600"
                   : "text-destructive"
               }`}
             >
-              {currentOrg.accountsChange >= 0 ? (
+              {currentOrg_temp.accountsChange >= 0 ? (
                 <ArrowUp className="h-3 w-3 mr-1" />
               ) : (
                 <ArrowDown className="h-3 w-3 mr-1" />
               )}
-              {Math.abs(currentOrg.accountsChange)}
+              {Math.abs(currentOrg_temp.accountsChange)}
             </div>
           </CardContent>
           <CardFooter className="pt-0">
             <p className="text-xs text-muted-foreground">
-              {currentOrg.accountsChange >= 0 ? "Gained" : "Lost"} this month
+              {currentOrg_temp.accountsChange >= 0 ? "Gained" : "Lost"} this
+              month
             </p>
           </CardFooter>
         </Card>
@@ -128,25 +134,27 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentOrg.members}</div>
+            <div className="text-2xl font-bold">{currentOrg_temp.members}</div>
             <div
               className={`flex items-center text-xs mt-1 ${
-                currentOrg.membersChange >= 0
+                currentOrg_temp.membersChange >= 0
                   ? "text-green-600"
                   : "text-destructive"
               }`}
             >
-              {currentOrg.membersChange >= 0 ? (
+              {currentOrg_temp.membersChange >= 0 ? (
                 <ArrowUp className="h-3 w-3 mr-1" />
               ) : (
                 <ArrowDown className="h-3 w-3 mr-1" />
               )}
-              {Math.abs(currentOrg.membersChange)}
+              {Math.abs(currentOrg_temp.membersChange)}
             </div>
           </CardContent>
           <CardFooter className="pt-0">
             <p className="text-xs text-muted-foreground">
-              {currentOrg.membersChange >= 0 ? "New members" : "Members left"}{" "}
+              {currentOrg_temp.membersChange >= 0
+                ? "New members"
+                : "Members left"}{" "}
               this month
             </p>
           </CardFooter>
@@ -164,7 +172,8 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Math.round(currentOrg.members * 0.85)}/{currentOrg.members}
+              {Math.round(currentOrg_temp.members * 0.85)}/
+              {currentOrg_temp.members}
             </div>
             <div className="flex items-center text-xs text-green-600 mt-1">
               <ArrowUp className="h-3 w-3 mr-1" />

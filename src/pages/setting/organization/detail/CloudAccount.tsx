@@ -37,8 +37,8 @@ const CloudIcons = {
   default: () => <Cloud className="h-5 w-5 text-gray-500" />,
 };
 
-const CloudAccount = ({ organization_id }) => {
-  const { cloudAccounts, error, isLoading } = useCloudAccounts(organization_id);
+const CloudAccount = ({ organization }) => {
+  const { cloudAccounts, error, isLoading } = useCloudAccounts(organization.id);
 
   const getVendorIcon = (vendor: string) => {
     const IconComponent =
@@ -77,6 +77,8 @@ const CloudAccount = ({ organization_id }) => {
       </Card>
     );
   }
+  const userCanEdit =
+    organization?.role === "owner" || organization.role === "admin";
 
   return (
     <div className="space-y-6">
@@ -97,7 +99,7 @@ const CloudAccount = ({ organization_id }) => {
               </div>
             </div>
             {/* <DataIntegration /> */}
-            <IntegrationSources label={true} />
+            {userCanEdit && <IntegrationSources label={true} />}
           </div>
         </CardHeader>
 
@@ -192,7 +194,7 @@ const CloudAccount = ({ organization_id }) => {
                 </p>
               </div>
               <div className="opacity-40 hover:opacity-100">
-                <IntegrationSources label={true} />
+                {userCanEdit && <IntegrationSources label={true} />}
               </div>
             </div>
           )}
