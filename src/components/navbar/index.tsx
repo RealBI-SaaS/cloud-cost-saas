@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ProfileMenu from "./ProfileMenu";
 import { Button } from "../ui/button";
 import { Bell, Search, ChevronRight, X } from "lucide-react";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Notification from "./Notification";
+import OrganizationContext from "@/context/organizationContext";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,14 +19,15 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const pathname = window.location;
+  const { selectedOrg } = useContext(OrganizationContext);
   const page_header = [
     {
       id: "dashboard",
-      label: "Dashboard",
+      label: "Dashboard | " + selectedOrg.name,
     },
     {
       id: "cost-analysis",
-      label: "Cost Analysis",
+      label: "Cost Analysis | " + selectedOrg.name,
     },
     {
       id: "settings",

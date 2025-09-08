@@ -40,13 +40,6 @@ const Dashboard = () => {
   const currentOrg_temp = allOrganizations;
   return (
     <div className="p-6 bg-background">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Dashboard | {currentOrg.name}
-        </h1>
-      </div>
-
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {/* Monthly Cost Card */}
