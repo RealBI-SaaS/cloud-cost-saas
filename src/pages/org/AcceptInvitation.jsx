@@ -33,8 +33,8 @@ const AcceptInvitation = () => {
 
     try {
       setHasSentRequest(true);
-      const response = await axiosInstance.post(
-        `/company/invitations/accept/${token}/`,
+      const response = await axiosInstance.get(
+        `/organization/invitations/accept/${token}/`,
       );
 
       if (response.status === 200) {
