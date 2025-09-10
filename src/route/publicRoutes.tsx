@@ -10,6 +10,7 @@ import AskForPasswordReset from "@/pages/auth/AskForPasswordReset";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import AcceptInvitation from "@/pages/org/AcceptInvitation";
 import { AppRoute } from "./types";
+import PasswordLessRequest from "@/pages/auth/passworLess/PasswordLessRequest";
 
 export const publicRoutes: AppRoute[] = [
   { path: "/home", element: <Home /> },
@@ -36,4 +37,7 @@ export const publicRoutes: AppRoute[] = [
   { path: "/reset-password", element: <AskForPasswordReset /> },
   { path: "/password/reset/confirm/:uid/:token", element: <ResetPassword /> },
   { path: "/accept-invitation/:token", element: <AcceptInvitation /> },
+  // password less route
+
+  { path: "/login/password-less", element: <PasswordLessRequest /> },
 ];

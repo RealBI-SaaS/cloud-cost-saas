@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import logo_only from "/logo-only.png";
 import useUserStore from "@/stores/userStore";
+import PasswordLessRequest from "./passworLess/PasswordLessRequest";
 // import { useOrgInitializer } from '@/stores/OrgStore';
 
 const Login = () => {
@@ -117,9 +118,9 @@ const Login = () => {
       // console.log(error);
       toast.error(
         error?.response?.data?.detail ||
-          error?.response?.data?.email ||
-          error?.response?.data?.password ||
-          "An error occurred, try again or another account",
+        error?.response?.data?.email ||
+        error?.response?.data?.password ||
+        "An error occurred, try again or another account",
       );
       if (error?.response?.data?.password?.[0]) {
         toast.error(error.response.data.password[0]);
@@ -162,6 +163,7 @@ const Login = () => {
             {isSignUp
               ? "Enter your information below to create your account"
               : "Enter your email below to login to your account"}
+            <PasswordLessRequest />
           </CardDescription>
         </CardHeader>
         <CardContent>
