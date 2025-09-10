@@ -18,7 +18,6 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import logo_only from "/logo-only.png";
 import useUserStore from "@/stores/userStore";
-import PasswordLessRequest from "./passworLess/PasswordLessRequest";
 // import { useOrgInitializer } from '@/stores/OrgStore';
 
 const Login = () => {
@@ -154,7 +153,7 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto  w-full">
       <img src={logo_only} alt="logo" className=" h-20 object-contain " />
-      <Card className="w-100  border border-white/20 rounded-xl p-6 shadow-xl ">
+      <Card className="w-100  border border-primary/40  rounded-xl p-6 shadow-xl ">
         <CardHeader>
           <CardTitle className="text-xl text-primary">
             {isSignUp ? "Create an account" : "Login to your account"}
@@ -163,7 +162,6 @@ const Login = () => {
             {isSignUp
               ? "Enter your information below to create your account"
               : "Enter your email below to login to your account"}
-            <PasswordLessRequest />
           </CardDescription>
         </CardHeader>
         <CardContent>

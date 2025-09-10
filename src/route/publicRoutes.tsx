@@ -11,6 +11,7 @@ import ResetPassword from "@/pages/auth/ResetPassword";
 import AcceptInvitation from "@/pages/org/AcceptInvitation";
 import { AppRoute } from "./types";
 import PasswordLessRequest from "@/pages/auth/passworLess/PasswordLessRequest";
+import VerifyLink from "@/pages/auth/VerifyLink";
 
 export const publicRoutes: AppRoute[] = [
   { path: "/home", element: <Home /> },
@@ -40,4 +41,5 @@ export const publicRoutes: AppRoute[] = [
   // password less route
 
   { path: "/login/password-less", element: <PasswordLessRequest /> },
+  { path: "/magiclink-activation", element: <VerifyLink /> },
 ];

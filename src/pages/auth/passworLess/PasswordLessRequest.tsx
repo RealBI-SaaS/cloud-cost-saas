@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import my_auth_service from "@/services/my_auth_service";
 import { Mail, Link, KeyRound, RefreshCw } from "lucide-react";
 import { Link as RouterLink } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
 
 const PasswordLessRequest = () => {
   const [emailSent, setEmailSent] = useState(false);
@@ -41,7 +42,9 @@ const PasswordLessRequest = () => {
 
     authPromise
       .then((res) => {
-        toast.success(res.data.message);
+        toast.info(
+          "If an account exists, a message has been sent to your email"
+        );
         setEmailSent(true);
         setCountdown(30); // 30 second countdown for resend
       })
@@ -77,7 +80,7 @@ const PasswordLessRequest = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="w-full max-w-md mx-auto p-6 bg-primary/5 rounded-xl  border border-primary/40 shadow-md">
+      <div className="w-full max-w-md mx-auto p-6 bg-foreground/5 rounded-xl  border border-primary/40 shadow-md">
         <div className="space-y-6">
           <div className="text-center space-y-2">
             <div className="flex justify-center">
@@ -94,15 +97,15 @@ const PasswordLessRequest = () => {
           <div className="text-foreground">
             {emailSent ? (
               <div className="space-y-4 py-2">
-                <div className="bg-secondary p-4 rounded-lg border">
-                  <p className="text-secondary-foreground">
+                <div className=" text-center bg-secondary/50 p-4 rounded-lg ">
+                  <p className="  text-secondary-foreground">
                     We've sent a{" "}
                     {requestType.via === "magic_link"
                       ? "magic link"
                       : "verification code"}{" "}
                     to:
                   </p>
-                  <p className="font-medium text-foreground mt-1">
+                  <p className="font-medium text-foreground  mt-1">
                     {requestType.email}
                   </p>
                 </div>
@@ -126,13 +129,6 @@ const PasswordLessRequest = () => {
                     )}
                     Resend {countdown > 0 ? `(${countdown}s)` : ""}
                   </Button>
-
-                  <RouterLink
-                    to="/auth/login"
-                    className="text-center text-sm text-primary hover:underline"
-                  >
-                    Login with password instead
-                  </RouterLink>
                 </div>
               </div>
             ) : (
@@ -223,16 +219,15 @@ const PasswordLessRequest = () => {
             )}
           </div>
 
-          <div className="text-center pt-4 border-t">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <RouterLink
-                to="/auth/register"
-                className="text-primary hover:underline font-medium"
-              >
-                Sign up
-              </RouterLink>
-            </p>
+          <div className="text-center pt-4 space-y-2">
+            {" "}
+            <Separator />
+            <RouterLink
+              to="/login"
+              className="text-center text-sm text-primary hover:underline "
+            >
+              Login with password instead
+            </RouterLink>
           </div>
         </div>
       </div>
