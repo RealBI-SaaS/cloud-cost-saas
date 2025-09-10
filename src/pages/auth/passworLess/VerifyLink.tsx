@@ -18,8 +18,10 @@ function VerifyLink() {
   const navigate = useNavigate();
   const token = searchParams.get("token");
   const { fetchUserData } = useUserStore();
-  const [status, setStatus] = useState("verifying"); // verifying, success, error
-  const [countdown, setCountdown] = useState(5);
+  const [status, setStatus] = useState<"verifying" | "success" | "error">(
+    "verifying"
+  );
+  const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
     if (token) {
@@ -40,7 +42,7 @@ function VerifyLink() {
             setCountdown((prev) => {
               if (prev <= 1) {
                 clearInterval(timer);
-                navigate("/admin", { replace: true });
+                navigate("/dashboard", { replace: true });
                 return 0;
               }
               return prev - 1;
@@ -49,17 +51,21 @@ function VerifyLink() {
         })
         .catch((error) => {
           console.error("Verification error:", error);
-          toast.error("Invalid or expired link.");
+          toast.error(
+            error.response?.data?.message ||
+              "Invalid or expired verification link"
+          );
           setStatus("error");
         });
-    } else {
+    } else if (!token) {
+      // No token case
       setStatus("error");
-      toast.error("No verification token found.");
+      toast.error("No verification token found in the URL.");
     }
   }, [token, navigate, fetchUserData]);
 
   const handleManualRedirect = () => {
-    navigate("/admin", { replace: true });
+    navigate("/dashboard", { replace: true });
   };
 
   return (
@@ -67,7 +73,9 @@ function VerifyLink() {
       <Card className="w-full max-w-md mx-auto border border-primary/40 shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-foreground">
-            Verifying Your Login
+            {status === "verifying" && "Verifying Your Login"}
+            {status === "success" && "Login Successful!"}
+            {status === "error" && "Verification Failed"}
           </CardTitle>
           <CardDescription className="text-muted-foreground">
             {status === "verifying" &&
@@ -94,9 +102,9 @@ function VerifyLink() {
                 <div className="absolute -inset-2 rounded-full bg-primary/20 animate-pulse opacity-75"></div>
               </div>
               <div className="text-center space-y-2">
-                <p className="font-medium text-foreground">Login Successful!</p>
+                <p className="font-medium text-foreground">Welcome back!</p>
                 <p className="text-sm text-muted-foreground">
-                  Redirecting in {countdown} seconds...
+                  Redirecting to dashboard in {countdown} seconds...
                 </p>
               </div>
               <Button onClick={handleManualRedirect} className="w-full">
@@ -110,7 +118,7 @@ function VerifyLink() {
               <XCircle className="h-16 w-16 text-destructive" />
               <div className="text-center space-y-2">
                 <p className="font-medium text-foreground">
-                  Verification Failed
+                  Could not verify your link
                 </p>
                 <p className="text-sm text-muted-foreground">
                   This magic link is invalid or has expired. Please request a

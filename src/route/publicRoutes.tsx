@@ -10,8 +10,8 @@ import AskForPasswordReset from "@/pages/auth/AskForPasswordReset";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import AcceptInvitation from "@/pages/org/AcceptInvitation";
 import { AppRoute } from "./types";
-import PasswordLessRequest from "@/pages/auth/passworLess/PasswordLessRequest";
-import VerifyLink from "@/pages/auth/VerifyLink";
+import VerifyLink from "@/pages/auth/passworLess/VerifyLink";
+import PasswordLessRequest from "@/pages/auth/passworLess";
 
 export const publicRoutes: AppRoute[] = [
   { path: "/home", element: <Home /> },

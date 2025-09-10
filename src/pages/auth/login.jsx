@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { Eye, EyeClosed } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeClosed, LucideMailbox, Shield, Wand } from "lucide-react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 //import { useUser } from "../context/UserContext";
 import { validatePassword } from "../../utils/auth/password_validate";
 import { cn } from "@/utils/utils";
@@ -165,6 +165,7 @@ const Login = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <Button
               type="button"
@@ -176,6 +177,20 @@ const Login = () => {
               <FcGoogle className="mr-2 h-4 w-4" />
               Sign in with Google
             </Button>
+
+            <Link to="password-less">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full bg-foreground border !border-primary/60"
+              >
+                <Wand className="mr-2 h-4 w-4" />
+                Passwordless Login
+              </Button>
+
+
+            </Link>
+
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

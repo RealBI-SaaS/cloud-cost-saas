@@ -10,6 +10,11 @@ class MyAuthService {
         return axiosInstance.post(`/myauth/passwordless/magic-link/verify/`, {"token":token})
         
     }
+    verifyOtp(otp: string,email: string) {
+        
+        return axiosInstance.post(`/myauth/passwordless/otp/verify/`, {"code":otp,"email":email})
+        
+    }
     requestOtp(email: string) { 
        return axiosInstance.post(`/myauth/passwordless/otp/request/`, {"email":email})
     }

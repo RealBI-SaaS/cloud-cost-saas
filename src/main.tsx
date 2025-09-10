@@ -29,9 +29,9 @@ const AppWrapper = () => {
 };
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <AppWrapper />
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter>
+    <AppWrapper />
+  </BrowserRouter>
+  // </StrictMode>
 );
