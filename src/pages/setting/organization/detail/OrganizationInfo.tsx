@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import OrganizationContext from "@/context/organizationContext";
+import OrganizationContext from "@/context/OrganizationContext";
 import useCompany from "@/hooks/useCompany";
 import organization_service, {
   CreateOrgType,
@@ -154,6 +154,7 @@ const OrganizationInfo = ({ organization, onUpdate }: Props) => {
                     Company
                   </Label>
                   <Select
+                    disabled
                     value={editForm.company}
                     onValueChange={(value) =>
                       setEditForm({ ...editForm, company: value })

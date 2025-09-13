@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Header from "./homeSidebarComponents/OrgMenu";
 import Footer from "./homeSidebarComponents/footer";
-import SelectedOrgContext from "@/context/organizationContext";
+import SelectedOrgContext from "@/context/OrganizationContext";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import OrgMenu from "./homeSidebarComponents/OrgMenu";
 

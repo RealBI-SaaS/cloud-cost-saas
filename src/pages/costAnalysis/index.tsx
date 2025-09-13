@@ -1,4 +1,4 @@
-import SelectedOrgContext from "@/context/organizationContext";
+import SelectedOrgContext from "@/context/OrganizationContext";
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 

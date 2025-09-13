@@ -26,7 +26,7 @@ import OrganizationService, {
 } from "@/services/organization_service";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
-import OrganizationContext from "@/context/organizationContext";
+import OrganizationContext from "@/context/OrganizationContext";
 
 const AddOrganization = ({ variant }: { variant?: string }) => {
   const { setOrganizations, organizations } = useContext(OrganizationContext);
@@ -39,22 +39,27 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
   const { companies } = useCompany();
   const [isLoading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!newOrg.name || !newOrg.company) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const currentCompany = companies[0];
+    if (!newOrg.name) {
       toast.error("Please provide both organization name and company.");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await OrganizationService.createOrganization(newOrg);
+      const res = await OrganizationService.createOrganization({
+        name: newOrg.name,
+        company: currentCompany.id,
+      });
 
       // Find company name to attach
-      const selectedCompany = companies.find((c) => c.id === newOrg.company);
+      // const selectedCompany = companies.find((c) => c.id === newOrg.company);
 
       setOrganizations((prev) => [
         ...prev,
-        { ...res.data, company_name: selectedCompany?.name },
+        { ...res.data, company_name: currentCompany?.name },
       ]);
 
       toast.success("Organization created successfully ✅");
@@ -103,12 +108,20 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
             autoFocus
           />
 
-          <Select
-            required
+          {/* get the first company name */}
+
+          {/* {companies.length > 0 ? (
+            <div className=" flex rounded border p-1">{companies[0].name} </div>
+          ) : (
+            ""
+          )} */}
+
+          {/* <Select
+            // disabled
             value={newOrg.company}
             onValueChange={(value) => setNewOrg({ ...newOrg, company: value })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full ">
               <SelectValue placeholder="Select company" />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +131,7 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
           <AlertDialogFooter className="mt-10">
             <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
             <LoadingButton
