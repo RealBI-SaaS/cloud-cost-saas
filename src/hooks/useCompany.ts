@@ -24,7 +24,7 @@ const useCompany = () => {
 
         return () => cancel()
     }, [])
-    return {companies, error, isLoading}
+    return {companies, setCompany, error, isLoading}
 }
 
 export default useCompany

@@ -1,4 +1,3 @@
-import CompanyDetails from "./CompanyDetail";
 import DataIntegration from "../data/DataIntegration";
 import { useState } from "react";
 
@@ -15,6 +14,7 @@ import {
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
 import CompanyOrganization from "./organization";
 import CustomTab from "@/components/CustomTab";
+import CompanyDetail from "./CompanyDetail";
 
 const Settings = () => {
   const settingList = [
@@ -22,12 +22,7 @@ const Settings = () => {
       key: "general",
       name: "General",
       icon: Building2,
-      content: (
-        <div className=" flex gap-10">
-          <CompanyDetails />
-          <ThemeSwitcher />
-        </div>
-      ),
+      content: <CompanyDetail />,
     },
     {
       key: "organization",

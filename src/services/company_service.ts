@@ -38,8 +38,14 @@ class CompanyService{
     deleteCompany(id: string) {
         return axiosInstance.delete(`/company/${id}/`)
     }
-    CreateCompany(newOrg: Company) {
-        return  axiosInstance.post('/company', newOrg)
+    CreateCompany(companyDetails: any) {
+        return  axiosInstance.post('/company', companyDetails)
+    }
+    updateCompany(id: string, companyDetails: any) {
+        return  axiosInstance.patch(`/company/${id}/`, companyDetails)
+    }
+    getCompany(id: any) {
+        return axiosInstance.get(`/company/${id}/`)
     }
 }
 
