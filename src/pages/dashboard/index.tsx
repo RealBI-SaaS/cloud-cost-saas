@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
-import SelectedOrgContext from "@/context/organizationContext";
+import SelectedOrgContext from "@/context/OrganizationContext";
 import {
   allOrganizations,
   costBreakdown,

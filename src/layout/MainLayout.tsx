@@ -5,7 +5,7 @@ import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import { useState } from "react";
-import OrganizationContext from "@/context/organizationContext";
+import OrganizationContext from "@/context/OrganizationContext";
 import Navbar from "@/components/navbar";
 import { Organization } from "@/services/organization_service";
 import useOrganizations from "@/hooks/useOrganization";
