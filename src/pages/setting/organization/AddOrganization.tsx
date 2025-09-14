@@ -42,6 +42,7 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const currentCompany = companies[0];
+
     if (!newOrg.name) {
       toast.error("Please provide both organization name and company.");
       return;
@@ -82,7 +83,10 @@ const AddOrganization = ({ variant }: { variant?: string }) => {
             New organization
           </div>
         ) : (
-          <Button className="flex items-center gap-2">
+          <Button
+            disabled={companies.length === 0}
+            className="flex items-center gap-2"
+          >
             <Plus className="h-4 w-4" />
             Create Organization
           </Button>

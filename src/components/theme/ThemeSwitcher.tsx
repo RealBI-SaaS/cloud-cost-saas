@@ -18,7 +18,11 @@ import {
 import { Paintbrush } from "lucide-react";
 import { brandThemes } from "./brandThemes";
 
-export default function ThemeSwitcher() {
+interface Props {
+  disabled: boolean;
+}
+
+export default function ThemeSwitcher({ disabled }: Props) {
   const { brandTheme, setBrandTheme } = useTheme();
 
   return (
@@ -38,6 +42,7 @@ export default function ThemeSwitcher() {
           <Label htmlFor="theme-select">Interface Theme</Label>
           <Select
             value={brandTheme}
+            disabled={!disabled}
             onValueChange={(value) => setBrandTheme(value as any)}
           >
             <SelectTrigger id="theme-select" className="w-full">
