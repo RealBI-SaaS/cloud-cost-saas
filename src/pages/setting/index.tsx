@@ -31,12 +31,12 @@ const Settings = () => {
       content: <CompanyOrganization />,
     },
 
-    {
-      key: "data-integration",
-      name: "Data Integration",
-      icon: Database,
-      content: <DataIntegration />,
-    },
+    // {
+    //   key: "data-integration",
+    //   name: "Data Integration",
+    //   icon: Database,
+    //   content: <DataIntegration />,
+    // },
     {
       key: "alert",
       name: "Alert",
