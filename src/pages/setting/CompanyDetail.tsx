@@ -331,7 +331,7 @@ const CompanyDetail = () => {
                 <div className="text-center md:text-left ">
                   <p className="text-muted-foreground mb-5  bg-primary/10 p-4 text-sm font-thin">
                     You are viewing your organization's company profile. Only
-                    organization owners can make changes.
+                    owners can make changes.
                   </p>
                 </div>
 
@@ -387,7 +387,6 @@ const CompanyDetail = () => {
               {/* Left Column - Form */}
               <div className="space-y-4 pt-10">
                 <div className="text-center md:text-left py-4">
-                  <Plus className="h-12 w-12 text-primary mx-auto md:mx-0 mb-4" />
                   <h3 className="text-lg font-semibold">
                     Create Your Company Profile
                   </h3>
