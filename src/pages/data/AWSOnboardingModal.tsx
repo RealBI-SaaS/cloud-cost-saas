@@ -183,9 +183,8 @@ export default function AWSOnboardingModal({
               </p>
               <div className="flex items-center gap-2">
                 <Input
-                  className="rounded-xs"
                   value={externalId}
-                  className="dark:text-foreground"
+                  className="dark:text-foreground  rounded-xs"
                   readOnly
                 />
                 <Button

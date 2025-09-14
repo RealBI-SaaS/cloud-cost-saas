@@ -16,7 +16,7 @@ import {
   allOrganizations,
   Organization,
 } from "@/services/organization_service";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 import AddOrganization from "@/pages/setting/organization/AddOrganization";
 
 const OrgMenu = () => {
@@ -47,8 +47,8 @@ const OrgMenu = () => {
 
     setSortedOrganizations(
       organizations.filter((org) =>
-        org.name.toLowerCase().includes(search_text)
-      )
+        org.name.toLowerCase().includes(search_text),
+      ),
     );
   };
 

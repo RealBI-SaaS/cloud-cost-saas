@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useOrg } from "@/context/OrganizationContext";
+import { useOrg } from "@/context/organizationContext";
 
 export function TeamSwitcher({
   teams,

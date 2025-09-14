@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DownOutlined, TeamOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
-import { useOrg } from "../../context/OrganizationContext";
+import { useOrg } from "../../context/organizationContext";
 import { useEffect } from "react";
 
 const OrganizationDropDown = () => {

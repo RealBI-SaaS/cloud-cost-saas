@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Notification from "./Notification";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

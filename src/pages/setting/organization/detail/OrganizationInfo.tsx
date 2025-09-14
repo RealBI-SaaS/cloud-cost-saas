@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 import useCompany from "@/hooks/useCompany";
 import organization_service, {
   CreateOrgType,
@@ -67,8 +67,8 @@ const OrganizationInfo = ({ organization, onUpdate }: Props) => {
                   ...res.data,
                   role: organization?.role,
                 }
-              : org
-          )
+              : org,
+          ),
         );
         onUpdate({
           ...res.data,

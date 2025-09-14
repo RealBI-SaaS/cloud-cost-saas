@@ -19,7 +19,7 @@ import useCompanyStore from "@/stores/CompanyStore";
 import CreateCompanyForm from "../company/CreateCompanyForm";
 import { Separator } from "@/components/ui/separator";
 
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 export function CompanyDetailssssss() {
   const navigate = useNavigate();
   const { organizations } = useContext(OrganizationContext);
@@ -32,7 +32,7 @@ export function CompanyDetailssssss() {
   const [creatingCompany, setCreatingCompany] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(
-    userComp?.logo || null
+    userComp?.logo || null,
   );
 
   useEffect(() => {

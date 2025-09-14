@@ -26,7 +26,7 @@ import OrganizationService, {
 } from "@/services/organization_service";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/ui/loading-buton";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 
 const AddOrganization = ({ variant }: { variant?: string }) => {
   const { setOrganizations, organizations } = useContext(OrganizationContext);

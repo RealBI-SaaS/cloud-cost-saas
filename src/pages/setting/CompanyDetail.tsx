@@ -1,5 +1,5 @@
 import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 import useCompany from "@/hooks/useCompany";
 import company_service from "@/services/company_service";
 import {
@@ -89,14 +89,14 @@ const CompanyDetail = () => {
         toast.success(
           isUpdate
             ? "Company updated successfully"
-            : "Company created successfully"
+            : "Company created successfully",
         );
         setCompany([res.data]);
         setIsEditing(false);
       })
       .catch((e) => {
         toast.error(
-          e.response?.data?.message || e.message || "Operation failed"
+          e.response?.data?.message || e.message || "Operation failed",
         );
       })
       .finally(() => {

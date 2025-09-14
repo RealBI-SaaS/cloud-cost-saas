@@ -30,7 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import IntegrationSources from "@/pages/data/IntegrationSources";
 import MenuItem from "./menuItem";
 import useCloudAccounts from "@/hooks/useCloudAccounts";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 
 export function NavigationsList() {

@@ -19,7 +19,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useOrg } from "@/context/OrganizationContext";
+import { useOrg } from "@/context/organizationContext";
 import { StarOff, Plus, ChevronsUpDown, FolderX, Circle } from "lucide-react";
 import { act, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

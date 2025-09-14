@@ -5,7 +5,7 @@ import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { allOrganizations } from "@/pages/dashboard/mockData";
 import { useState } from "react";
-import OrganizationContext from "@/context/OrganizationContext";
+import OrganizationContext from "@/context/organizationContext";
 import Navbar from "@/components/navbar";
 import { Organization } from "@/services/organization_service";
 import useOrganizations from "@/hooks/useOrganization";
@@ -25,7 +25,7 @@ const MainLayout = () => {
 
   const { organizations, isLoading, setOrganizations } = useOrganizations();
   const [selectedOrg, setSelectedOrg] = useState<Organization>(
-    organizations[0]
+    organizations[0],
   );
   return (
     <OrganizationContext.Provider
