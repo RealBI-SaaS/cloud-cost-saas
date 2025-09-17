@@ -42,7 +42,7 @@ export default function ThemeSwitcher({ disabled }: Props) {
           <Label htmlFor="theme-select">Interface Theme</Label>
           <Select
             value={brandTheme}
-            disabled={!disabled}
+            // disabled={disabled}
             onValueChange={(value) => setBrandTheme(value as any)}
           >
             <SelectTrigger id="theme-select" className="w-full">
