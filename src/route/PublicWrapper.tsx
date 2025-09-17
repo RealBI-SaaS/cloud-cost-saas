@@ -12,9 +12,9 @@ export const PublicWrapper = ({ children }: PublicWrapperProps) => {
   const loading = useUserStore((state) => state.loading);
   const location = useLocation();
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   if (user) {
     return <Navigate to="/home" state={{ from: location }} replace />;

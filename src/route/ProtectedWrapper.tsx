@@ -16,9 +16,9 @@ export const ProtectedWrapper = ({ children }: ProtectedWrapperProps) => {
   const location = useLocation();
   const userComp = useCompany((state) => state.userComp);
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   if (!user) {
     return <Login redirectTo={location.pathname} />;

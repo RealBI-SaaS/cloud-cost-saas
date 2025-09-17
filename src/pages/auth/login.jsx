@@ -32,8 +32,7 @@ const Login = () => {
   });
 
   //const { error, setError, login, signup, user } = useUser();
-  const user = useUserStore((state) => state.user);
-  const error = useUserStore((state) => state.error);
+
   const setError = useUserStore((state) => state.setError);
   const login = useUserStore((state) => state.login);
   const signup = useUserStore((state) => state.signup);
@@ -75,6 +74,7 @@ const Login = () => {
         const passwordError = validatePassword(formData.password);
         if (passwordError) {
           setError(passwordError);
+          toast.error(passwordError);
           setLoading(false);
           return;
         }
@@ -287,14 +287,18 @@ const Login = () => {
 
             {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
 
-            <Button type="submit" disabled={loading} className="!text-white">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+              size="lg"
+            >
+              {loading ? (
+                <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+              ) : null}
               {loading
-                ? isSignUp
-                  ? "Signing up..."
-                  : "Signing in..."
-                : isSignUp
-                  ? "Sign Up"
-                  : "Sign In"}
+                ? isSignUp ? "Creating Account..." : "Signing In..."
+                : isSignUp ? "Create Account" : "Sign In"}
             </Button>
             <Button
               variant="link"
