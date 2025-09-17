@@ -238,7 +238,7 @@ const Login = () => {
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="m@example.com"
+                placeholder="your.email@example.com"
                 required
               />
             </div>
@@ -248,6 +248,7 @@ const Login = () => {
                 <Label htmlFor="password">Password</Label>
                 {!isSignUp && (
                   <Button
+                    type="button"
                     onClick={() => {
                       navigate("/reset-password");
                     }}
