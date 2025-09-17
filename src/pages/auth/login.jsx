@@ -129,27 +129,51 @@ const Login = () => {
       setLoading(false);
     }
   };
-  const handleGoogleSignIn = async () => {
+  // const handleGoogleSignIn = async () => {
+  //   const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  //   const state = crypto.randomUUID(16).toString("hex");
+  //   localStorage.setItem("latestCSRFToken", state);
+
+  //   const redirectUri = `${import.meta.env.VITE_BASE_URL}/myauth/google/oauth2/callback/`;
+  //   const scope = "email profile";
+
+  //   const link =
+  //     `https://accounts.google.com/o/oauth2/v2/auth?` +
+  //     `client_id=${client_id}` +
+  //     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+  //     `&response_type=code` +
+  //     `&scope=${encodeURIComponent(scope)}` +
+  //     `&state=${state}` +
+  //     `&access_type=offline` +
+  //     `&prompt=consent`;
+
+  //   window.location.href = link;
+  // };
+  const handleGoogleSignIn = () => {
     const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const state = crypto.randomUUID(16).toString("hex");
+    const from = location.state?.redirectTo || "/dashboard";
+
+    const state = JSON.stringify({
+      csrfToken: crypto.randomUUID(),
+      redirectTo: from
+    });
+
     localStorage.setItem("latestCSRFToken", state);
 
     const redirectUri = `${import.meta.env.VITE_BASE_URL}/myauth/google/oauth2/callback/`;
     const scope = "email profile";
 
-    const link =
-      `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${client_id}` +
-      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-      `&response_type=code` +
-      `&scope=${encodeURIComponent(scope)}` +
-      `&state=${state}` +
-      `&access_type=offline` +
-      `&prompt=consent`;
+    const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+    authUrl.searchParams.append("client_id", client_id);
+    authUrl.searchParams.append("redirect_uri", redirectUri);
+    authUrl.searchParams.append("response_type", "code");
+    authUrl.searchParams.append("scope", scope);
+    authUrl.searchParams.append("state", encodeURIComponent(state));
+    authUrl.searchParams.append("access_type", "offline");
+    authUrl.searchParams.append("prompt", "consent");
 
-    window.location.href = link;
+    window.location.href = authUrl.toString();
   };
-
   return (
     <div className="flex flex-col items-center min-h-screen  justify-center align-center gap-6  mx-auto  w-full">
       <img src={logo_only} alt="logo" className=" h-20 object-contain " />
