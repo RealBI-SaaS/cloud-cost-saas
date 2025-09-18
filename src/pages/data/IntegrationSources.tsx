@@ -12,7 +12,7 @@ import { toast } from "sonner";
 interface props {
   label?: boolean;
 }
-const IntegrationSources = ({ label }: props) => {
+const IntegrationSources = ({ label, organizationId }: props) => {
   const userComp = useCompany((state) => state.userComp);
 
   // for aws
@@ -96,6 +96,7 @@ const IntegrationSources = ({ label }: props) => {
           setAWSExternalId={setAWSExternalId}
           setAWSARN={setAWSARN}
           connectionName={connectionName}
+          organizationId={organizationId}
         />
         {/* <AWSOnboardingModal /> */}
       </div>

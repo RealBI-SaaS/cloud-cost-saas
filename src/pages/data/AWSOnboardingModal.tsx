@@ -52,6 +52,7 @@ export default function AWSOnboardingModal({
   open,
   onOpenChange,
   connectionName,
+  organizationId,
   // setAWSExternalId,
   // setAWSARN,
 }) {
@@ -87,9 +88,11 @@ export default function AWSOnboardingModal({
       toast("Copy failed");
     }
   };
+  console.log(organizationId);
 
   const submitRoleArn = async () => {
-    if (!roleArn || !userComp || !externalId || !connectionName)
+    // FIX: better/specific error messages
+    if (!roleArn || !externalId || !connectionName)
       return toast.error("Missing values, enter them! ");
     setLoading(true);
     const trimmedRoleArn = roleArn.trim();
@@ -98,7 +101,7 @@ export default function AWSOnboardingModal({
     try {
       // call your backend to register integration and validate by attempting assumerole/costexplorer
       const resp = await axiosInstance.post("/data/aws/register-role/", {
-        company_id: userComp.id,
+        organization_id: organizationId,
         role_arn: trimmedRoleArn,
         external_id: externalId,
         name: connectionName,

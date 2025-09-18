@@ -99,7 +99,12 @@ const CloudAccount = ({ organization }) => {
               </div>
             </div>
             {/* <DataIntegration /> */}
-            {userCanEdit && <IntegrationSources label={true} />}
+            {userCanEdit && (
+              <IntegrationSources
+                label={true}
+                organizationId={organization.id}
+              />
+            )}
           </div>
         </CardHeader>
 
