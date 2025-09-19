@@ -9,7 +9,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -128,23 +130,31 @@ export const RoleSelectCell = ({
   ) : (
     <Select
       disabled={member.role === "owner"}
-      value={member.role}
       onValueChange={(value) => onUpdateMemberRole(member.id, value)}
     >
       <SelectTrigger className="w-28 h-8">
-        <SelectValue />
+        <SelectValue
+          placeholder={
+            member.role.charAt(0).toUpperCase() + member.role.slice(1)
+          }
+        />
       </SelectTrigger>
+
       <SelectContent>
-        <SelectItem value="admin">
-          <div className="flex items-center">
-            <Shield className="h-4 w-4 mr-2" />
-            Admin
-          </div>
-        </SelectItem>
-        <SelectItem value="member">
-          <User2 className="h-4 w-4 mr-2"  />
-          Member
-        </SelectItem>
+        <SelectGroup>
+          <SelectLabel>Select a role</SelectLabel>
+
+          <SelectItem value="admin">
+            <div className="flex items-center">
+              <Shield className="h-4 w-4 mr-2" />
+              Admin
+            </div>
+          </SelectItem>
+          <SelectItem value="member">
+            <User2 className="h-4 w-4 mr-2" />
+            Member
+          </SelectItem>
+        </SelectGroup>
       </SelectContent>
     </Select>
   );

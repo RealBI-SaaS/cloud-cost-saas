@@ -25,9 +25,26 @@ import {
   Calendar,
   RefreshCw,
   AlertCircle,
+  MoreHorizontal,
+  SquarePen,
+  Trash,
+  Trash2,
 } from "lucide-react";
 import DataIntegration from "@/pages/data/DataIntegration";
 import IntegrationSources from "@/pages/data/IntegrationSources";
+
+import { DataEditModal } from "@/components/DataEditModal";
+
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import { WarningAlert } from "@/components/WarningAlert";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 // Cloud vendor icons mapping
 const CloudIcons = {
@@ -68,8 +85,7 @@ const CloudAccount = ({ organization }) => {
             <div>
               <p className="font-medium">Error loading cloud accounts</p>
               <p className="text-sm text-muted-foreground">
-                {error?.message ||
-                  "Failed to load cloud accounts. Please try again."}
+                {error || "Failed to load cloud accounts. Please try again."}
               </p>
             </div>
           </div>
@@ -129,12 +145,15 @@ const CloudAccount = ({ organization }) => {
                   <TableHead>Cloud Provider</TableHead>
                   <TableHead>Account Details</TableHead>
                   <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Status</TableHead>
+                  <TableHead className="text-right pe-10">Status </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {cloudAccounts.map((account) => (
-                  <TableRow key={account.id} className="hover:bg-muted/50">
+                  <TableRow
+                    key={account.id}
+                    className="hover:bg-muted/50 group"
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-lg">
@@ -164,13 +183,79 @@ const CloudAccount = ({ organization }) => {
                         {new Date(account.created_at).toLocaleDateString()}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right flex items-center gap-2 justify-end">
                       <Badge
                         variant="outline"
                         className="bg-green-50 text-green-700 border-green-200"
                       >
                         Connected
                       </Badge>
+                      {/* </TableCell>
+
+                    <TableCell className="text-right max-w-"> */}
+                      <Menubar className="border-none p-0  bg-transparent shadow-none justify-end">
+                        <MenubarMenu>
+                          <MenubarTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0 opacity-80 group-hover:text-primary group-hover:opacity-100 transition-opacity"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </MenubarTrigger>
+                          <MenubarContent
+                            align="end"
+                            className="w-28 p-1 rounded-lg border-border/60"
+                          >
+                            <MenubarItem asChild>
+                              <DataEditModal
+                                triggerBtn={
+                                  <div className="flex cursor-pointer items-center hover:bg-secondary/90  h-full py-1.5 px-2 rounded-sm">
+                                    <SquarePen className="mr-2 h-4 w-4" />
+                                    Edit
+                                  </div>
+                                }
+                                title="Update Cloud Connection  "
+                                // message="Change vendor details below"
+                                fields={[
+                                  { name: "Vendor", value: "AWS" },
+                                  {
+                                    name: "Connection Name",
+                                    value: "Test",
+                                    placeholder: "Enter connection",
+                                  },
+                                  {
+                                    name: "Cost Limit",
+                                    type: "number",
+                                    value: "500",
+                                  },
+                                ]}
+                                onConfirm={(data) => {
+                                  console.log("Updated data:", data);
+                                  // send to API or update state
+                                }}
+                              />
+                            </MenubarItem>
+                            <MenubarSeparator />
+
+                            <WarningAlert
+                              message={`This will permanently delete organization "${account.account_name}" and all its data. This action cannot be undone.`}
+                              onConfirm={() => {}}
+                              triggerBtn={
+                                <MenubarItem
+                                  // variant="destructive"
+                                  onSelect={(e) => e.preventDefault()}
+                                  className="flex items-center gap-2 text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  Delete
+                                </MenubarItem>
+                              }
+                            />
+                          </MenubarContent>
+                        </MenubarMenu>
+                      </Menubar>
                     </TableCell>
                   </TableRow>
                 ))}
