@@ -22,7 +22,7 @@ const useCloudAccounts = (organization_id: string) => {
             })
 
         return () => cancel()
-    }, [])
+    }, [organization_id])
     return {cloudAccounts, error, isLoading}
 }
 

@@ -31,15 +31,12 @@ import IntegrationSources from "@/pages/data/IntegrationSources";
 import MenuItem from "./menuItem";
 import useCloudAccounts from "@/hooks/useCloudAccounts";
 import OrganizationContext from "@/context/OrganizationContext";
-import { allOrganizations } from "@/pages/dashboard/mockData";
 
 export function NavigationsList() {
   const { isMobile } = useSidebar(); // not used currently, maybe for future conditional rendering
   const [isAccountsOpen, setIsAccountsOpen] = useState(false);
-  // const { accounts, currentAccount, setCurrentAccount, loading } =
-  //   useCloudAccountsStore();
   const { selectedOrg } = useContext(OrganizationContext);
-
+  const [currentAccount, setCurrentAccount] = useState(null);
   const { cloudAccounts, isLoading, error } = useCloudAccounts(selectedOrg.id);
 
   return (

@@ -20,9 +20,14 @@ class DataService{
         const controller = new AbortController();
         const response = axiosInstance
             .get<CloudAccountApiData>(`/data/organizations/${id}/cloud-accounts/`, {
+                // /data/organizations/{organization_id}/cloud-accounts/{id}/
                 signal: controller.signal
             })
         return {response, cancel:()=>controller.abort()}
+    }
+    getCloudAccount(org_id: string,id: string) {
+        return axiosInstance.get(`/data/organizations/${org_id}/cloud-accounts/${id}/`)
+        
     }
 
 }
